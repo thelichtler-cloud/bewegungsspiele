@@ -26,7 +26,7 @@ button{font:inherit;color:inherit}
 
 /* Kopf */
 .appbar{background:var(--orange);color:#fff;padding:18px 16px 0;position:sticky;top:0;z-index:5}
-.appbar h1{margin:0;font-size:1.35rem}
+.appbar h1{margin:0;font-size:1.35rem;padding-right:110px}
 .appbar .sub{opacity:.92;font-size:.85rem}
 .navtabs{display:flex;gap:4px;margin-top:12px}
 .navtabs button{flex:1;border:0;background:rgba(255,255,255,.2);color:#fff;padding:10px;border-radius:12px 12px 0 0;font-weight:800;cursor:pointer}
@@ -168,6 +168,7 @@ body.gesperrt .app{visibility:hidden}
 .tipp{font-size:.72rem;color:var(--muted);font-weight:600}
 .neu{display:inline-block;margin-left:6px;background:var(--gruen);color:#fff;font-size:.62rem;font-weight:800;padding:1px 6px;border-radius:999px;vertical-align:1px}
 .tab-klein{flex:0 0 auto!important;padding:10px 12px!important}
+@media (max-width:520px){.navtabs{gap:3px}.navtabs button,.tab-klein{flex:1 1 0!important;padding:9px 2px!important;font-size:.8rem;min-width:0;line-height:1.2}}
 textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .installhint[hidden]{display:none}
 .installhint{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#FFF1E2;border:2px solid #F7C79A;border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:.88rem}
@@ -188,7 +189,59 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .gcard.fehlt{opacity:.55}
 .pill.lang{white-space:normal}
 .note.gross{border-left:6px solid var(--gelb);margin:0 0 10px}
-.teilbtn{background:var(--gruen);box-shadow:0 6px 18px rgba(59,170,92,.3);margin-top:10px}
+.teilbtn{background:var(--gruen);box-shadow:0 6px 18px rgba(59,170,92,.3)}
+.teilrow{grid-template-columns:1fr 1fr!important;margin-top:10px}
+.tagbtn{background:#fff;color:var(--ink);border:2px solid var(--gruen);box-shadow:none}
+.teilpanel{margin-top:12px}
+/* Tagesplan */
+.tagkarte{background:#fff;border-radius:16px;padding:10px 14px 12px;margin-bottom:10px;border-left:8px solid var(--orange)}
+.tagkarte.parcours{border-left-color:var(--tuerkis)}
+.tk-kopf{display:flex;align-items:center;gap:10px}.tk-zeit{width:150px;font-weight:800;font-size:1.1rem;padding:6px 8px}
+.tk-bis{font-weight:700;color:var(--muted);flex:1}.tk-weg{border:0;background:var(--soft);width:40px;height:40px;border-radius:50%;font-size:1.05rem;cursor:pointer}
+.tagkarte h4{margin:8px 0 0;font-size:1.05rem}.tagkarte small{color:var(--muted)}.tagkarte ul{margin:6px 0 0;padding-left:18px;font-size:.9rem}
+.leerbox{background:#fff;border-radius:16px;padding:16px;text-align:left;margin-bottom:10px}.leerbox .gross{font-size:2.6rem;text-align:center}
+.leerbox ol{padding-left:20px;line-height:1.9}
+/* Hilfe */
+.hilfebtn{position:absolute;right:14px;top:16px;border:0;background:#fff;color:var(--orange);font-weight:900;font-size:1rem;border-radius:999px;padding:9px 14px;box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer}
+.appbar{position:sticky}
+.hilfehinweis{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#E8F5EC;border:2px solid #9BD3AE;border-radius:14px;padding:12px;margin-bottom:12px;font-size:1rem}
+.hilfehinweis[hidden]{display:none}
+.hilfehinweis button{border:0;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;background:#fff;font-size:.95rem}
+#hilfehinweis-auf{background:var(--gruen);color:#fff}
+#hilfe{position:fixed;inset:0;background:var(--paper);overflow:auto;z-index:30}
+#hilfe[hidden]{display:none}
+#hilfe-inhalt{max-width:640px;margin:0 auto;padding:10px 16px 40px;font-size:1.12rem}
+.hilfe-kopf h2{font-size:1.8rem;margin:8px 0 4px}.hilfe-kopf p{margin:0 0 14px;color:var(--muted)}
+.hkachel{background:#fff;border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(45,49,66,.08)}
+.hk-oben{display:flex;gap:12px;align-items:center}.hk-icon{font-size:2.2rem;width:54px;text-align:center;flex:none}
+.hkachel h3{margin:0;font-size:1.2rem}.hkachel p{margin:2px 0 0;color:var(--muted);font-size:1rem}
+.hk-knoepfe{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.hk-knoepfe button{border:0;border-radius:14px;padding:14px 8px;font-weight:800;font-size:1.02rem;cursor:pointer}
+.hk-zeig{background:var(--blau);color:#fff}.hk-lies{background:var(--soft);color:var(--ink)}
+.hk-knoepfe button:only-child{grid-column:1/-1}
+.hk-schritte{margin:14px 0 2px;padding-left:24px;line-height:1.7}.hk-schritte li{margin-bottom:8px}
+.demo{display:inline-block;font-weight:800;font-size:.9em;border-radius:10px;padding:1px 9px;line-height:1.6;white-space:nowrap}
+.demo.tab{background:var(--orange);color:#fff}.demo.blau{background:var(--blau);color:#fff}.demo.gruen{background:var(--gruen);color:#fff}
+.demo.weiss{background:#fff;border:2px solid var(--ink)}.demo.rund{background:var(--soft);border-radius:50%;padding:1px 8px}
+.demo.play{background:#1b1f27;color:#fff;border-radius:50%;padding:1px 9px}
+/* Tour */
+#tour{position:fixed;inset:0;z-index:500}
+#tour[hidden]{display:none}
+.tring{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(20,22,30,.62);border:4px solid #FFD84D;pointer-events:none;transition:all .25s;animation:puls 1.4s ease-in-out infinite}
+@keyframes puls{50%{border-color:#fff}}
+.tblase{position:fixed;background:#fff;border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:1.18rem;line-height:1.45}
+.ttext{font-weight:700;margin-bottom:14px}
+.tknopfreihe{display:flex;align-items:center;gap:8px}
+.tknopfreihe button{border:0;border-radius:12px;padding:12px 12px;font-weight:800;font-size:1rem;cursor:pointer;white-space:nowrap}
+.tweiter{background:var(--blau);color:#fff;margin-left:auto;padding:12px 18px!important}
+.tzu{background:var(--soft)}.tzurueck{background:var(--soft)}.tzurueck:disabled{opacity:.35}
+.tnr{font-size:.85rem;color:var(--muted);font-weight:700;margin-bottom:4px}
+@media (prefers-reduced-motion:reduce){.tring{animation:none;transition:none}}
+/* Meldung unten */
+#meldung{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));background:var(--ink);color:#fff;border-radius:16px;padding:14px 16px;z-index:450;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+#meldung[hidden]{display:none}
+#meldung span{flex:1 1 200px}
+#meldung button{border:0;background:#fff;color:var(--ink);border-radius:10px;padding:10px 12px;font-weight:800;white-space:nowrap;cursor:pointer}
 #teilen{margin-top:12px}
 .tfeld{display:flex;flex-direction:column;font-size:.78rem;font-weight:800;color:var(--muted);gap:3px}
 .zrow{padding:7px 0;border-bottom:1px solid var(--soft)}.zrow:last-child{border-bottom:0}
@@ -355,12 +408,14 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 </div>
 <div class="app">
   <header class="appbar">
+    <button class="hilfebtn" id="hilfe-auf" aria-label="Hilfe öffnen">❓ Hilfe</button>
     <h1>Bewegungsspiele</h1>
     <div class="sub" id="subtitle">Nachmittagsbetreuung · Klasse 1–4</div>
     <nav class="navtabs">
       <button class="on" data-view="plan">AG planen</button>
       <button data-view="spiele">Alle Spiele</button>
       <button data-view="parcours">Parcours</button>
+      <button data-view="tag" class="tab-klein">📅 Tag</button>
       <button data-view="idee" class="tab-klein">＋ Idee</button>
     </nav>
   </header>
@@ -370,6 +425,10 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div class="installhint" id="installhint" hidden>
       <div><b>Tipp:</b> <span id="installtext"></span></div>
       <div class="ih-btns"><button id="installbtn" hidden>Installieren</button><button id="installzu" aria-label="Hinweis schließen">✕</button></div>
+    </div>
+    <div class="hilfehinweis" id="hilfehinweis" hidden>
+      <div><b>👋 Neu hier?</b> Die App zeigt dir alles Schritt für Schritt.</div>
+      <div class="ih-btns"><button id="hilfehinweis-auf">❓ Hilfe</button><button id="hilfehinweis-zu" aria-label="Hinweis schließen">✕</button></div>
     </div>
     <div id="p-fragen">
       <div class="q"><p>Wie viele Kinder sind da?</p>
@@ -388,19 +447,8 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div class="sum" id="p-sum"></div>
       <div class="plan" id="plan"></div>
       <div class="row2"><button class="ghost" id="aendern">← Angaben ändern</button><button class="bigbtn" id="mischen">🎲 Neu mischen</button></div>
-      <button class="bigbtn teilbtn" id="teilen-auf">📤 Plan fürs Team teilen</button>
-      <div id="teilen" hidden>
-        <div class="q"><p>Kopf des Plans</p>
-          <input class="search" id="t-titel" maxlength="60" placeholder="Titel, z. B. Bewegungs-AG Klasse 2">
-          <div class="grid2" style="margin-top:6px"><label class="tfeld">Datum<input class="search" id="t-datum" type="date"></label><label class="tfeld">Beginn<input class="search" id="t-beginn" type="time"></label></div></div>
-        <div class="q"><p>Wer ist heute dabei?</p>
-          <input class="search" id="t-namen" maxlength="200" placeholder="Vornamen oder Kürzel, mit Komma: Anna, Tom, Lisa">
-          <small class="hint" style="display:block;margin:6px 0 0">Nur auf diesem Handy gespeichert.</small></div>
-        <div class="q"><p>Wer macht was?</p><div id="t-zuteilung"></div></div>
-        <div class="q"><p>Vorschau</p><img id="t-vorschau" alt="Vorschau des Plans" class="tvorschau"></div>
-        <div class="grid3 tknoepfe"><button class="opt" id="t-bild">🖼<br>Bild</button><button class="opt" id="t-folge">🗂<br>Bildfolge</button><button class="opt" id="t-pdf">📄<br>PDF</button></div>
-        <p class="hint" id="t-status">Bild = eine Übersicht für WhatsApp · Bildfolge = Übersicht + eine Seite pro Block · PDF = alles zum Drucken.</p>
-      </div>
+      <div class="row2 teilrow"><button class="bigbtn teilbtn" id="ag-teilen-auf">📤 Teilen</button><button class="bigbtn tagbtn" id="ag-zumtag">📅 Zum Tagesplan</button></div>
+      <div id="teilen-ag" class="teilpanel" hidden></div>
     </div>
   </main>
 
@@ -425,6 +473,8 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
         <p class="hint">Station antippen = Aufbau-Anleitung · ⟳ tauscht eine Station · 🎲 mischt alles neu.</p>
         <div class="row2"><button class="ghost" id="pz-aendern">← Angaben ändern</button><button class="bigbtn" id="pz-mischen">🎲 Neu mischen</button></div>
         <button class="ghost breit" id="pz-druck">🖨 Parcours als Karte / drucken</button>
+        <div class="row2 teilrow"><button class="bigbtn teilbtn" id="pz-teilen-auf">📤 Teilen</button><button class="bigbtn tagbtn" id="pz-zumtag">📅 Zum Tagesplan</button></div>
+        <div id="teilen-pz" class="teilpanel" hidden></div>
       </div>
     </div>
     <div id="pz-module" hidden>
@@ -439,6 +489,19 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div class="q" id="halle-liste"></div>
       <p class="hint" id="halle-info"></p>
     </div>
+  </main>
+
+  <!-- Tagesplan: mehrere Einheiten eines Tages -->
+  <main class="view" id="v-tag">
+    <div class="q"><p>Tagesplan für</p><input class="search" id="tag-datum" type="date"></div>
+    <div class="q"><p>Wer ist heute dabei?</p><input class="search" id="tag-namen" maxlength="200" placeholder="Vornamen, mit Komma: Anna, Tom, Lisa">
+      <small class="hint" style="display:block;margin:6px 0 0">Nur auf diesem Handy gespeichert.</small></div>
+    <div id="tag-liste"></div>
+    <div id="tag-teilen" class="q" hidden><p>Den ganzen Tag verschicken</p>
+      <img id="tag-vorschau" class="tvorschau" alt="Vorschau Tagesplan">
+      <div class="grid3 tknoepfe" style="margin-top:10px"><button class="opt" data-art="bild">🖼<br>Bild</button><button class="opt" data-art="folge">🗂<br>Bildfolge</button><button class="opt" data-art="pdf">📄<br>PDF</button></div>
+      <p class="hint" id="tag-status">Bild = der Tag auf einen Blick · Bildfolge / PDF = zusätzlich eine Seite pro Stunde.</p>
+      <button class="ghost breit" id="tag-leeren">🗑 Tagesplan leeren</button></div>
   </main>
 
   <!-- Spiel vorschlagen -->
@@ -479,6 +542,15 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
   <button class="fab" id="zufall">🎲 Zufallsspiel vorschlagen</button>
 </div>
 
+<div id="hilfe" role="dialog" aria-modal="true" aria-label="Hilfe" hidden>
+  <div class="dbar"><button id="hilfe-zu">← Zurück</button></div>
+  <div id="hilfe-inhalt"></div>
+</div>
+<div id="tour" hidden><div class="tring"></div>
+  <div class="tblase" role="dialog" aria-live="polite"><div class="tnr"></div><div class="ttext"></div>
+    <div class="tknopfreihe"><button class="tzu">Beenden</button><button class="tzurueck" aria-label="Schritt zurück">◀</button><button class="tweiter">Weiter ▶</button></div></div>
+</div>
+<div id="meldung" role="status" hidden></div>
 <div id="detail" role="dialog" aria-modal="true">
   <div class="dbar"><button id="zurueck">← Zurück</button><button class="pr" id="drucken">Karte drucken</button></div>
   <div id="sheet"></div>
@@ -517,7 +589,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.9 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 2.0 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -6876,7 +6948,7 @@ function bloecke(){
 
 function neuerPlan(){
   plan.listen={}; plan.idx={}; plan.parcours = mitParcours() ? parcoursVorschlag(plan.kinder,"mix") : [];
-  if (typeof teilen !== "undefined") teilen.wer = {};
+  if (typeof QUELLEN !== "undefined") QUELLEN.ag.wer = {};
   for (const b of bloecke()){
     if (b.parcours) continue;
     if (b.ph==="warm"||b.ph==="haupt") plan.listen[b.key]=listeFuer(b.ph,b.min);
@@ -6951,7 +7023,7 @@ function renderPlan(){
   $("#plan").innerHTML = html + `<div class="note"><b>Material:</b> ${m.length ? esc(m.join(", ")) : (plan.parcours.length ? "" : "nichts nötig ✔")}${plan.parcours.length ? `${m.length?" · ":""}${esc(geraetText(pg.s))}${pg.klein.length?", "+esc(pg.klein.join(", ")):""}` : ""}</div>
     ${plan.parcours.length ? `<div class="note"><b>Parcours aufbauen:</b> ca. ${pAufbau} Min – am besten vor der AG oder gemeinsam mit den Kindern.</div>` : ""}
     <p class="hint">Tippen öffnet die Karte · ⟳ tauscht einen Block · 🎲 mischt die ganze Stunde neu.</p>`;
-  if ($("#teilen") && !$("#teilen").hidden) renderTeilen();
+  if (typeof panelAktualisieren === "function") panelAktualisieren("ag");
 }
 $("#plan").onclick = e => {
   const s = e.target.closest(".swap"); if (s){ if (s.dataset.k==="parcours"){ plan.parcours = parcoursVorschlag(plan.kinder,"mix"); plan.zusatzIdx=(plan.zusatzIdx||0)+1; } else plan.idx[s.dataset.k]++; renderPlan(); return; }
@@ -7208,6 +7280,7 @@ function renderParcours(){
   $("#pz-mehr").disabled = pz.wahl.length >= maxStationen(); $("#pz-weniger").disabled = pz.wahl.length <= 1;
   $("#pz-plan").innerHTML = pz.wahl.length ? parcoursHTML(pz.wahl, pz.kinder, false, pz.zusatzIdx)
     : `<div class="empty">Mit den Geräten eurer Halle passt leider kein Modul.<br>Bitte bei „Unsere Halle“ nachsehen.</div>`;
+  if (typeof panelAktualisieren === "function") panelAktualisieren("pz");
 }
 function renderPzFragen(){
   $("#pz-kinder").value = pz.kinder; $("#pz-betreuer").value = team.betreuer; renderHalleKurz();
@@ -7217,7 +7290,7 @@ function renderPzFragen(){
 $("#pz-fokus").onclick = e => { const b=e.target.closest("button"); if(!b) return; pz.fokus=b.dataset.v; renderPzFragen(); };
 $("#pz-minus").onclick = () => { pz.kinder=Math.max(2,pz.kinder-1); renderPzFragen(); };
 $("#pz-plus").onclick = () => { pz.kinder=Math.min(MAX_KINDER,pz.kinder+1); renderPzFragen(); };
-$("#pz-los").onclick = () => { zaehle("/parcours-geplant",true); pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus); renderParcours(); $("#pz-fragen").hidden=true; $("#pz-ergebnis").hidden=false; window.scrollTo(0,0); };
+$("#pz-los").onclick = () => { if (typeof QUELLEN !== "undefined") QUELLEN.pz.wer = {}; zaehle("/parcours-geplant",true); pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus); renderParcours(); $("#pz-fragen").hidden=true; $("#pz-ergebnis").hidden=false; window.scrollTo(0,0); };
 $("#pz-mischen").onclick = () => { pz.zusatzIdx++; pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length); renderParcours(); };
 $("#pz-aendern").onclick = () => { $("#pz-ergebnis").hidden=true; $("#pz-fragen").hidden=false; window.scrollTo(0,0); };
 $("#pz-weniger").onclick = () => { if (pz.wahl.length>1){ pz.wahl.pop(); pz.wahl=ordneWand(pz.wahl); renderParcours(); } };
@@ -7264,53 +7337,65 @@ const betreuerAendern = d => { team.betreuer = Math.max(1, Math.min(MAX_BETREUER
 $("#bt-minus").onclick = () => betreuerAendern(-1); $("#bt-plus").onclick = () => betreuerAendern(1);
 $("#pzb-minus").onclick = () => betreuerAendern(-1); $("#pzb-plus").onclick = () => betreuerAendern(1);
 
-/* ===================== Plan teilen: Übersichtsbild, Bildfolge, PDF ===================== */
-// Betreuer-Namen, Titel und Beginn werden nur auf diesem Gerät gespeichert.
+/* ===================== Teilen & Tagesplan ===================== */
+// Ein Plan (AG-Stunde oder Parcours) wird als „Einheit“ festgehalten und kann geteilt oder in den Tagesplan gelegt werden.
+// Namen, Titel, Beginn und der Tagesplan werden nur auf diesem Gerät gespeichert.
 const heuteISO = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
-const teilen = { titel: lies("t-titel")||"", beginn: lies("t-beginn")||"14:30", datum: heuteISO(),
-  namen: (lies("t-namen")||"").split(",").map(s=>s.trim()).filter(Boolean), wer:{} };
 const zuMin = t => { const [h,m]=String(t||"0:0").split(":").map(Number); return (h||0)*60+(m||0); };
 const zuZeit = m => `${String(Math.floor(m/60)%24).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`;
 const datumText = iso => { try { return new Date(iso+"T12:00").toLocaleDateString("de-DE",{weekday:"short",day:"2-digit",month:"2-digit",year:"numeric"}); } catch(e){ return iso; } };
-
-// Blöcke der geplanten Stunde mit Uhrzeiten
-function planBloecke(){
-  const wahl = auswahl(); let t = zuMin(teilen.beginn); const out = [];
-  for (const b of bloecke()){
-    const e = {key:b.key, ph:b.ph, min:b.min, von:t, bis:t+b.min, nr:b.nr};
-    if (b.parcours){ e.typ="parcours"; e.wahl=plan.parcours; e.z=zusatzGruppe(plan.kinder, plan.parcours, plan.zusatzIdx||0); e.titel=`Parcours · ${plan.parcours.length} Station${plan.parcours.length===1?"":"en"}`; }
-    else if (b.ph==="warm"||b.ph==="haupt"){ const x=wahl[b.key]; e.typ="spiel"; e.sp=x&&x.sp; e.titel=e.sp?e.sp.name:"–"; }
-    else if (b.ph==="ritual"){ e.typ="ritual"; e.r=RITUALE[plan.idx.ritual % RITUALE.length]; e.titel=e.r.name; }
-    else { e.typ="raeumen"; e.titel="Aufräumen"; }
-    out.push(e); t += b.min;
-  }
-  return out;
-}
-// Zuteilung: Spiele → die ersten zwei Namen, Stationen → je ein Name, Zusatzspiel → die nächsten zwei
-function standardWer(key){
-  const N = teilen.namen, n = plan.parcours.length;
+const teilen = { namen: (lies("t-namen")||"").split(",").map(s=>s.trim()).filter(Boolean), datum: heuteISO() };
+const namenMerken = () => merke("t-namen", teilen.namen.join(","));
+const QUELLEN = {
+  ag: { id:"ag", titel: lies("t-titel")||"", beginn: lies("t-beginn")||"14:30", wer:{}, gesetzt:false },
+  pz: { id:"pz", titel: lies("t-titel-pz")||"", beginn: lies("t-beginn-pz")||"14:30", dauer: +(lies("t-dauer-pz")||30), wer:{}, gesetzt:false }
+};
+// Zuteilung: Spiele → die ersten zwei Namen, Stationen → je ein Name, Zusatzspiel → die zwei danach
+function standardWer(key, nSt){ const N = teilen.namen;
   if (key.startsWith("st")) { const i=+key.slice(2); return N[i] ? [N[i]] : []; }
-  if (key==="zusatz") return N.slice(n, n+2);
+  if (key==="zusatz") return N.slice(nSt, nSt+2);
   return N.slice(0,2);
 }
-const wer = key => (teilen.wer[key] || standardWer(key)).filter(x=>teilen.namen.includes(x));
-const werText = (key, anzahl) => { const w=wer(key); return w.length ? w.join(", ") : (teilen.namen.length ? "noch offen" : `${anzahl} Betreuer`); };
+const werAus = (werMap, key, nSt) => (werMap[key] || standardWer(key, nSt)).filter(x=>teilen.namen.includes(x));
+const SP = id => SPIELE.find(s=>s.id===id), MO = id => MODULE.find(m=>m.id===id), RI = id => RITUALE.find(r=>r.id===id);
 
-function hinweiseText(){
+// ---- Einheit aus dem AG-Plan bzw. dem Parcours-Plan
+function einheitAG(){
+  const q = QUELLEN.ag, wahl = auswahl(), nSt = plan.parcours.length, bl = [];
+  for (const b of bloecke()){
+    const e = {ph:b.ph, min:b.min, nr:b.nr||0};
+    if (b.parcours){ const z = zusatzGruppe(plan.kinder, plan.parcours, plan.zusatzIdx||0);
+      Object.assign(e, {typ:"parcours", module:plan.parcours.map(m=>m.id), zusatz: z ? {n:z.n, helfer:!!z.helfer, spiel:z.sp?z.sp.id:null} : null}); }
+    else if (b.ph==="warm"||b.ph==="haupt"){ const x = wahl[b.key]; Object.assign(e, {typ:"spiel", key:b.key, spiel: x&&x.sp ? x.sp.id : null}); }
+    else if (b.ph==="ritual") Object.assign(e, {typ:"ritual", ritual: RITUALE[plan.idx.ritual % RITUALE.length].id});
+    else Object.assign(e, {typ:"raeumen", abbau: nSt>0});
+    bl.push(e);
+  }
   const h = [];
   if (plan.kinder > GROSS) h.push(`Große Gruppe: Spiele in 2 Gruppen parallel (je ca. ${gruppeFuerSpiel()} Kinder)`);
   if (team.betreuer < 2) h.push("Nur 1 Betreuer: nur ruhige, einfache Spiele");
-  if (mitParcours() && plan.parcours.length){ const b=betreuerBedarf(plan.kinder, plan.parcours, plan.zusatzIdx||0); if (b.fehlen) h.push(`Parcours: es fehlen ${b.fehlen} Betreuer`); }
-  return h;
+  if (nSt){ const bb = betreuerBedarf(plan.kinder, plan.parcours, plan.zusatzIdx||0); if (bb.fehlen) h.push(`Parcours: es fehlen ${bb.fehlen} Betreuer`); }
+  const mat = new Set(); bl.forEach(e=>{ if (e.spiel) SP(e.spiel).material.forEach(m=>{ if(!/Musik/.test(m)) mat.add(m.replace(/ \(.*\)/,"")); }); });
+  const material = [[...mat].join(", "), nSt ? geraetText(geraeteSumme(plan.parcours).s) : ""].filter(Boolean).join(" · ") || "nichts nötig";
+  return {art:"ag", titel:q.titel||"AG-Stunde", beginn:zuMin(q.beginn), kinder:plan.kinder, ort:plan.ort, nSt, wer:{...q.wer},
+    hinweise:h, material, aufbau: plan.parcours.reduce((a,m)=>a+m.aufbau,0), bloecke:bl};
 }
-function materialText(){
-  const mat = new Set(); planBloecke().forEach(e=>{ if (e.sp) e.sp.material.forEach(m=>mat.add(m.replace(/ \(.*\)/,""))); });
-  const m=[...mat].filter(x=>!/Musik/.test(x)), pg=geraeteSumme(plan.parcours);
-  return [m.join(", "), plan.parcours.length ? geraetText(pg.s) : ""].filter(Boolean).join(" · ") || "nichts nötig";
+function einheitPZ(){
+  const q = QUELLEN.pz, nSt = pz.wahl.length, z = zusatzGruppe(pz.kinder, pz.wahl, pz.zusatzIdx), bb = betreuerBedarf(pz.kinder, pz.wahl, pz.zusatzIdx);
+  return {art:"parcours", titel:q.titel||"Parcours", beginn:zuMin(q.beginn), kinder:pz.kinder, ort:"halle", nSt, wer:{...q.wer},
+    hinweise: bb.fehlen ? [`Es fehlen ${bb.fehlen} Betreuer`] : [], material: geraetText(geraeteSumme(pz.wahl).s),
+    aufbau: pz.wahl.reduce((a,m)=>a+m.aufbau,0),
+    bloecke:[{typ:"parcours", ph:"haupt", min:q.dauer, nr:0, module:pz.wahl.map(m=>m.id), zusatz: z ? {n:z.n, helfer:!!z.helfer, spiel:z.sp?z.sp.id:null} : null}]};
 }
+const einheitVon = qid => qid==="ag" ? einheitAG() : einheitPZ();
+const dauerVon = E => E.bloecke.reduce((a,b)=>a+b.min,0);
+const zeitenVon = E => { let t = E.beginn; return E.bloecke.map(b=>{ const v=t; t+=b.min; return {von:v, bis:t}; }); };
+const werText = (E, key, anzahl) => { const w = werAus(E.wer, key, E.nSt); return w.length ? w.join(", ") : (teilen.namen.length ? "noch offen" : `${anzahl} Betreuer`); };
+const blockTitel = b => b.typ==="spiel" ? (b.spiel ? SP(b.spiel).name : "–") : b.typ==="parcours" ? `Parcours · ${b.module.length} Station${b.module.length===1?"":"en"}` : b.typ==="ritual" ? RI(b.ritual).name : "Aufräumen";
+const teamText = () => teilen.namen.length ? "Team: "+teilen.namen.join(", ") : `${team.betreuer} Betreuer`;
 
-/* ---------- Zeichnen als SVG (wird dann zu PNG/JPEG) ---------- */
-const TF = "Helvetica, Arial, sans-serif";
+/* ---------- Zeichnen als SVG (wird zu PNG/JPEG) ---------- */
+const TF = "Helvetica, Arial, sans-serif", INK="#2D3142", GRAU="#6B7080";
 const mctx = document.createElement("canvas").getContext("2d");
 const breite = (t, gr, fett) => { mctx.font = `${fett?700:400} ${gr}px ${TF}`; return mctx.measureText(t).width; };
 function umbrechen(t, gr, fett, max, maxZ=99){
@@ -7324,107 +7409,137 @@ const txt = (x, y, zeilen, gr, fett, farbe, lh=1.28, anker="start") => zeilen.ma
 const einbetten = (svg, x, y, w, h) => svg.replace(/^<svg /, `<svg x="${x}" y="${y}" width="${w}" height="${h}" `);
 const symbole = () => { const d=document.querySelector('body > svg[aria-hidden="true"] defs'); return d ? d.outerHTML : ""; };
 const rahmenSVG = (w, h, inhalt) => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${symbole()}<style>text{font-family:${TF}}</style><rect width="${w}" height="${h}" fill="#FFF8EE"/>${inhalt}</svg>`;
-const INK="#2D3142", GRAU="#6B7080";
+function kopfSVG(W, P, farbe, titel, zeilen){
+  const tz = umbrechen(titel, 50, true, W-2*P, 2), zl = zeilen.flatMap((z,i)=>umbrechen(z, 30, i===0, W-2*P, 2).map(t=>[t,i===0]));
+  const h = 40 + tz.length*62 + zl.length*40 + 22;
+  return {h, svg: `<rect width="${W}" height="${h}" fill="${farbe}"/>` + txt(P, 78, tz, 50, true, "#fff", 1.24) + zl.map(([t,f],i)=>txt(P, 78+tz.length*62+i*40, [t], 30, f, "#fff")).join("")};
+}
+function hinweisSVG(W, P, y, h){ if (!h.length) return {h:0, svg:""};
+  const zl = h.flatMap(t=>umbrechen("⚠ "+t, 26, true, W-2*P-40)); const hh = zl.length*34+26;
+  return {h: hh+20, svg: `<rect x="${P}" y="${y}" width="${W-2*P}" height="${hh}" rx="16" fill="#FFF1C9" stroke="#F5C542" stroke-width="3"/>` + txt(P+20, y+40, zl, 26, true, INK, 1.3)};
+}
 
-// Übersichtsbild: alle Blöcke der Stunde auf einer Seite
-function uebersichtSVG(){
-  const W=1080, P=40, B = planBloecke(); let y=0, s="";
-  const titel = teilen.titel || "AG-Stunde";
-  const zeile2 = `${datumText(teilen.datum)} · ${zuZeit(B[0].von)}–${zuZeit(B[B.length-1].bis)} · ${ORTE[plan.ort]}`;
-  const zeile3 = `${plan.kinder} Kinder · ${teilen.namen.length ? "Team: "+teilen.namen.join(", ") : team.betreuer+" Betreuer"}`;
-  const tz = umbrechen(titel, 50, true, W-2*P, 2), z3 = umbrechen(zeile3, 30, false, W-2*P, 2);
-  const kopfH = 40 + tz.length*62 + 44 + z3.length*38 + 24;
-  s += `<rect width="${W}" height="${kopfH}" fill="${FARBEN.orange}"/>` + txt(P, 78, tz, 50, true, "#fff", 1.24)
-     + txt(P, 78+tz.length*62+2, [zeile2], 30, true, "#fff") + txt(P, 78+tz.length*62+42, z3, 30, false, "#fff");
-  y = kopfH + 26;
-  const hw = hinweiseText();
-  if (hw.length){ const zl = hw.flatMap(h=>umbrechen("⚠ "+h, 26, true, W-2*P-40)); const h = zl.length*34+26;
-    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="16" fill="#FFF1C9" stroke="#F5C542" stroke-width="3"/>` + txt(P+20, y+40, zl, 26, true, INK, 1.3); y += h+20; }
-  for (const e of B){
+// Übersicht einer Einheit (AG-Stunde oder Parcours) auf einer Seite
+function einheitSVG(E){
+  const W=1080, P=40, Z = zeitenVon(E); let s="", y=0;
+  const k = kopfSVG(W, P, E.art==="ag" ? FARBEN.orange : FARBEN.tuerkis, E.titel,
+    [`${datumText(teilen.datum)} · ${zuZeit(E.beginn)}–${zuZeit(E.beginn+dauerVon(E))} · ${ORTE[E.ort]}`, `${E.kinder} Kinder · ${teamText()}`]);
+  s += k.svg; y = k.h + 26;
+  const hw = hinweisSVG(W, P, y, E.hinweise); s += hw.svg; y += hw.h;
+  E.bloecke.forEach((b, bi) => {
     const TX = 450, TW = W-P-TX-20; let inhalt = "", th = 0;
-    const kopf = umbrechen(e.titel, 36, true, TW, 2);
+    const kopf = umbrechen(blockTitel(b), 36, true, TW, 2);
     inhalt += txt(TX, y+50, kopf, 36, true, INK); th = 50 + (kopf.length-1)*46;
     const unter = [];
-    if (e.typ==="spiel" && e.sp){
-      unter.push([umbrechen(e.sp.kurz, 26, false, TW, 2), 26, false, GRAU]);
-      unter.push([umbrechen("👤 "+werText(e.key,2), 26, true, TW, 2), 26, true, FARBEN.blau]);
-      if (e.sp.material.length) unter.push([umbrechen("Material: "+e.sp.material.map(m=>m.replace(/ \(.*\)/,"")).join(", "), 24, false, TW, 2), 24, false, GRAU]);
-    } else if (e.typ==="parcours"){
-      e.wahl.forEach((m,i)=>unter.push([umbrechen(`${i+1} ${m.name} – ${werText("st"+i,1)}`, 25, false, TW, 1), 25, false, INK]));
-      if (e.z && !e.z.helfer) unter.push([umbrechen(`+ ${e.z.n} Kinder: ${e.z.sp?e.z.sp.name:"ruhiges Spiel"} – ${werText("zusatz",2)}`, 25, true, TW, 2), 25, true, FARBEN.lila]);
-      if (e.z && e.z.helfer) unter.push([umbrechen(`+ ${e.z.n} Stationschef${e.z.n>1?"s":""}`, 25, false, TW, 1), 25, false, GRAU]);
-    } else if (e.typ==="ritual"){
-      unter.push([umbrechen(e.r.kurz, 26, false, TW, 2), 26, false, GRAU]);
-    } else {
-      unter.push([umbrechen(plan.parcours.length ? "Parcours abbauen – alle helfen mit." : "Material wegräumen, trinken, umziehen.", 26, false, TW, 2), 26, false, GRAU]);
-    }
+    if (b.typ==="spiel" && b.spiel){ const sp = SP(b.spiel);
+      unter.push([umbrechen(sp.kurz, 26, false, TW, 2), 26, false, GRAU]);
+      unter.push([umbrechen("👤 "+werText(E, b.key, 2), 26, true, TW, 2), 26, true, FARBEN.blau]);
+      if (sp.material.length) unter.push([umbrechen("Material: "+sp.material.map(m=>m.replace(/ \(.*\)/,"")).join(", "), 24, false, TW, 2), 24, false, GRAU]);
+    } else if (b.typ==="parcours"){
+      b.module.forEach((id,i)=>unter.push([umbrechen(`${i+1} ${MO(id).name} – ${werText(E, "st"+i, 1)}`, 25, false, TW, 1), 25, false, INK]));
+      if (b.zusatz && !b.zusatz.helfer) unter.push([umbrechen(`+ ${b.zusatz.n} Kinder: ${b.zusatz.spiel?SP(b.zusatz.spiel).name:"ruhiges Spiel"} – ${werText(E, "zusatz", 2)}`, 25, true, TW, 2), 25, true, FARBEN.lila]);
+      if (b.zusatz && b.zusatz.helfer) unter.push([umbrechen(`+ ${b.zusatz.n} Stationschef${b.zusatz.n>1?"s":""}`, 25, false, TW, 1), 25, false, GRAU]);
+    } else if (b.typ==="ritual") unter.push([umbrechen(RI(b.ritual).kurz, 26, false, TW, 2), 26, false, GRAU]);
+    else unter.push([umbrechen(b.abbau ? "Parcours abbauen – alle helfen mit." : "Material wegräumen, trinken, umziehen.", 26, false, TW, 2), 26, false, GRAU]);
     for (const [zl, gr, f, fb] of unter){ th += 10 + gr*0.3; inhalt += txt(TX, y+th+gr, zl, gr, f, fb); th += zl.length*gr*1.28; }
     const h = Math.max(190, th + 34);
     let bild = "";
-    if (e.typ==="spiel" && e.sp) bild = einbetten(feldSVG(e.sp,true), 225, y+20, 200, 142);
-    else if (e.typ==="parcours" && e.wahl.length) bild = einbetten(hallenplanSVG(e.wahl), 225, y+20, 200, 133);
-    else bild = `<text x="325" y="${y+h/2+26}" font-size="70" text-anchor="middle">${e.typ==="ritual"?"🤝":"🧺"}</text>`;
-    const pf = PHASE_FARBE[e.ph], dunkel = e.ph==="warm";
+    if (b.typ==="spiel" && b.spiel) bild = einbetten(feldSVG(SP(b.spiel),true), 225, y+20, 200, 142);
+    else if (b.typ==="parcours" && b.module.length) bild = einbetten(hallenplanSVG(b.module.map(MO)), 225, y+20, 200, 133);
+    else bild = `<text x="325" y="${y+h/2+26}" font-size="70" text-anchor="middle">${b.typ==="ritual"?"🤝":"🧺"}</text>`;
+    const pf = PHASE_FARBE[b.ph], dunkel = b.ph==="warm", tf = dunkel?INK:"#fff";
     s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="20" fill="#fff"/>`
        + `<rect x="${P}" y="${y}" width="165" height="${h}" rx="20" fill="${pf}"/><rect x="${P+140}" y="${y}" width="25" height="${h}" fill="${pf}"/>`
-       + txt(P+82, y+h/2-8, [zuZeit(e.von)], 38, true, dunkel?INK:"#fff", 1.2, "middle")
-       + txt(P+82, y+h/2+28, [`${e.min} Min`], 24, false, dunkel?INK:"#fff", 1.2, "middle")
-       + txt(P+82, y+h/2+58, [PHASEN[e.ph]+(e.nr?" "+e.nr:"")], 20, true, dunkel?INK:"#fff", 1.2, "middle")
-       + bild + inhalt;
+       + txt(P+82, y+h/2-8, [zuZeit(Z[bi].von)], 38, true, tf, 1.2, "middle") + txt(P+82, y+h/2+28, [`${b.min} Min`], 24, false, tf, 1.2, "middle")
+       + txt(P+82, y+h/2+58, [PHASEN[b.ph]+(b.nr?" "+b.nr:"")], 20, true, tf, 1.2, "middle") + bild + inhalt;
     y += h + 16;
-  }
-  const mz = umbrechen("Material: "+materialText(), 26, false, W-2*P-40);
-  const pa = plan.parcours.length ? umbrechen(`Parcours vorher aufbauen: ca. ${plan.parcours.reduce((a,m)=>a+m.aufbau,0)} Min`, 26, true, W-2*P-40) : [];
+  });
+  const mz = umbrechen("Material: "+E.material, 26, false, W-2*P-40);
+  const pa = E.aufbau ? umbrechen(`Parcours vorher aufbauen: ca. ${E.aufbau} Min`, 26, true, W-2*P-40) : [];
   const fh = (mz.length+pa.length)*34 + 30;
   s += `<rect x="${P}" y="${y+4}" width="${W-2*P}" height="${fh}" rx="16" fill="#fff"/>` + txt(P+20, y+42, mz, 26, false, INK, 1.3) + txt(P+20, y+42+mz.length*34, pa, 26, true, INK, 1.3);
-  y += fh + 30;
-  s += txt(W/2, y+10, ["Details und Schrittbilder: Bewegungsspiele-App"], 22, false, GRAU, 1.2, "middle");
-  y += 40;
+  y += fh + 30; s += txt(W/2, y+10, ["Details und Schrittbilder: Bewegungsspiele-App"], 22, false, GRAU, 1.2, "middle"); y += 40;
   return {svg: rahmenSVG(W, y, s), w: W, h: y};
 }
 
-// Eine Seite pro Block (für die Bildfolge und das PDF)
-function blockSVG(e){
-  const W=1080, P=40; let s="", y=0;
-  const pf = PHASE_FARBE[e.ph], dunkel = e.ph==="warm", tf = dunkel ? INK : "#fff";
-  const kopf = umbrechen(e.titel, 54, true, W-2*P, 2);
-  const kh = 70 + kopf.length*64 + 20;
-  s += `<rect width="${W}" height="${kh}" fill="${pf}"/>` + txt(P, 56, [`${zuZeit(e.von)}–${zuZeit(e.bis)} · ${PHASEN[e.ph]}${e.nr?" "+e.nr:""} · ${e.min} Min`], 30, true, tf) + txt(P, 56+68, kopf, 54, true, tf, 1.18);
+// Einzelseiten: Spiel, Parcours-Übersicht, jede Station, Ritual
+function seiteSVG(farbe, dunkel, zeile1, titel, fuellen){
+  const W=1080, P=40; let s="", y=0; const tf = dunkel ? INK : "#fff";
+  const kopf = umbrechen(titel, 54, true, W-2*P, 2), kh = 70 + kopf.length*64 + 20;
+  s += `<rect width="${W}" height="${kh}" fill="${farbe}"/>` + txt(P, 56, [zeile1], 30, true, tf) + txt(P, 56+68, kopf, 54, true, tf, 1.18);
   y = kh + 24;
-  const absatz = (t, gr=30, fett=false, farbe=INK, maxZ=99) => { const zl = umbrechen(t, gr, fett, W-2*P, maxZ); s += txt(P, y+gr, zl, gr, fett, farbe); y += zl.length*gr*1.3 + 14; };
-  if (e.typ==="spiel" && e.sp){
-    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${(W-2*P)*2/3}" rx="18" fill="#fff"/>` + einbetten(feldSVG(e.sp,false), P, y, W-2*P, (W-2*P)*2/3);
-    y += (W-2*P)*2/3 + 26;
-    absatz(e.sp.kurz, 32, false, GRAU, 3);
-    absatz("👤 "+werText(e.key,2), 32, true, FARBEN.blau);
-    absatz("Material: "+(e.sp.material.length ? e.sp.material.join(", ") : "keins"), 28, false, INK, 2);
-    if (e.sp.vorbereitung) absatz("Vorbereitung: "+e.sp.vorbereitung, 28, false, INK, 3);
-    absatz("So geht's", 30, true, INK);
-    e.sp.ablauf.forEach((a,i)=>absatz(`${i+1}. ${a}`, 27, false, INK, 2));
-  } else if (e.typ==="parcours"){
-    if (e.wahl.length){ s += einbetten(hallenplanSVG(e.wahl), P, y, W-2*P, (W-2*P)*2/3); y += (W-2*P)*2/3 + 26; }
-    e.wahl.forEach((m,i)=>absatz(`${i+1}  ${m.name} (${m.kat}) – ${werText("st"+i,1)}`, 30, false, INK, 2));
-    if (e.z && !e.z.helfer) absatz(`+ ${e.z.n} Kinder: ${e.z.sp?e.z.sp.name:"ruhiges Spiel am Rand"} – ${werText("zusatz",2)}`, 30, true, FARBEN.lila, 2);
-    if (e.z && e.z.helfer) absatz(`+ ${e.z.n} Stationschef${e.z.n>1?"s":""}: helfen an einer Station mit`, 28, false, GRAU, 2);
-    absatz(`Wechsel alle 3–4 Minuten auf Signal, im Uhrzeigersinn. Höchstens ${PRO_STATION} Kinder pro Station.`, 28, false, GRAU, 3);
-    absatz(`Aufbau vorher: ca. ${e.wahl.reduce((a,m)=>a+m.aufbau,0)} Min · Geräte: ${geraetText(geraeteSumme(e.wahl).s)}`, 26, false, INK, 4);
-  } else if (e.typ==="ritual"){
-    absatz(e.r.kurz, 32, false, GRAU, 3);
-    e.r.ablauf.forEach((a,i)=>absatz(`${i+1}. ${a}`, 28, false, INK, 3));
+  const api = {
+    absatz: (t, gr=30, fett=false, fb=INK, maxZ=99) => { const zl = umbrechen(t, gr, fett, W-2*P, maxZ); s += txt(P, y+gr, zl, gr, fett, fb); y += zl.length*gr*1.3 + 14; },
+    bild: (svg) => { const h=(W-2*P)*2/3; s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="18" fill="#fff"/>` + einbetten(svg, P, y, W-2*P, h); y += h + 26; }
+  };
+  fuellen(api); y += 20;
+  return {svg: rahmenSVG(W, y, s), w: W, h: y};
+}
+function einheitSeiten(E){
+  const Z = zeitenVon(E), seiten = [];
+  E.bloecke.forEach((b, bi) => {
+    const zeit = `${zuZeit(Z[bi].von)}–${zuZeit(Z[bi].bis)} · ${PHASEN[b.ph]}${b.nr?" "+b.nr:""} · ${b.min} Min`, pf = PHASE_FARBE[b.ph], dk = b.ph==="warm";
+    if (b.typ==="spiel" && b.spiel){ const sp = SP(b.spiel);
+      seiten.push(seiteSVG(pf, dk, zeit, sp.name, a => { a.bild(feldSVG(sp,false)); a.absatz(sp.kurz, 32, false, GRAU, 3);
+        a.absatz("👤 "+werText(E, b.key, 2), 32, true, FARBEN.blau); a.absatz("Material: "+(sp.material.length ? sp.material.join(", ") : "keins"), 28, false, INK, 2);
+        if (sp.vorbereitung) a.absatz("Vorbereitung: "+sp.vorbereitung, 28, false, INK, 3);
+        a.absatz("So geht's", 30, true); sp.ablauf.forEach((t,i)=>a.absatz(`${i+1}. ${t}`, 27, false, INK, 2)); }));
+    } else if (b.typ==="parcours"){ const ms = b.module.map(MO);
+      seiten.push(seiteSVG(pf, dk, zeit, blockTitel(b), a => { if (ms.length) a.bild(hallenplanSVG(ms));
+        ms.forEach((m,i)=>a.absatz(`${i+1}  ${m.name} (${m.kat}) – ${werText(E, "st"+i, 1)}`, 30, false, INK, 2));
+        if (b.zusatz && !b.zusatz.helfer) a.absatz(`+ ${b.zusatz.n} Kinder: ${b.zusatz.spiel?SP(b.zusatz.spiel).name:"ruhiges Spiel am Rand"} – ${werText(E,"zusatz",2)}`, 30, true, FARBEN.lila, 2);
+        if (b.zusatz && b.zusatz.helfer) a.absatz(`+ ${b.zusatz.n} Stationschef${b.zusatz.n>1?"s":""}: helfen an einer Station mit`, 28, false, GRAU, 2);
+        a.absatz(`Wechsel alle 3–4 Minuten auf Signal, im Uhrzeigersinn. Höchstens ${PRO_STATION} Kinder pro Station.`, 28, false, GRAU, 3);
+        a.absatz(`Aufbau vorher: ca. ${ms.reduce((x,m)=>x+m.aufbau,0)} Min · Geräte: ${geraetText(geraeteSumme(ms).s)}`, 26, false, INK, 4); }));
+      ms.forEach((m,i) => seiten.push(seiteSVG(FARBEN[m.farbe], m.farbe==="gelb", `Station ${i+1} · ${m.kat} · 👤 ${werText(E,"st"+i,1)}`, m.name, a => {
+        a.bild(feldSVG(m,false)); a.absatz(m.kurz, 30, false, GRAU, 3); a.absatz("Geräte: "+geraetText(m.geraete), 28, true, INK, 2);
+        a.absatz("Aufbau & Ablauf", 30, true); m.ablauf.forEach((t,j)=>a.absatz(`${j+1}. ${t}`, 26, false, INK, 3));
+        a.absatz("Aufgaben", 30, true); ["Leicht","Mittel","Schwer"].forEach((l,j)=>a.absatz(`${l}: ${m.stufen[j]}`, 26, false, INK, 2));
+        a.absatz("Achtung: "+m.sicherheit, 26, true, "#B03A2E", 4); })));
+    } else if (b.typ==="ritual"){ const r = RI(b.ritual);
+      seiten.push(seiteSVG(pf, dk, zeit, r.name, a => { a.absatz(r.kurz, 32, false, GRAU, 3); r.ablauf.forEach((t,i)=>a.absatz(`${i+1}. ${t}`, 28, false, INK, 3)); }));
+    }
+  });
+  return seiten;
+}
+
+// Tagesplan: alle Einheiten auf einer Seite, pro Block eine Zeile
+function tagSVG(){
+  const W=1080, P=40, E = tagSortiert(); let s="", y=0;
+  const k = kopfSVG(W, P, FARBEN.blau, "Tagesplan", [datumText(tag.datum), teamText()]); s += k.svg; y = k.h + 26;
+  if (!E.length){ s += txt(P, y+40, ["Noch keine Einheiten."], 30, false, GRAU); y += 80; }
+  for (const e of E){
+    const Z = zeitenVon(e), zl = [];
+    e.bloecke.forEach((b,bi)=>{
+      const wer = b.typ==="spiel" ? werText(e, b.key, 2) : b.typ==="parcours" ? b.module.map((_,i)=>werAus(e.wer,"st"+i,e.nSt)).flat().filter((x,i,a)=>a.indexOf(x)===i).join(", ") || (teilen.namen.length?"noch offen":`${b.module.length} Betreuer`) : "";
+      zl.push(...umbrechen(`${zuZeit(Z[bi].von)}  ${PHASEN[b.ph]}: ${blockTitel(b)}${wer?" – "+wer:""}`, 26, false, W-2*P-60, 2));
+    });
+    (e.hinweise||[]).forEach(h=>zl.push(...umbrechen("⚠ "+h, 24, true, W-2*P-60, 2)));
+    const kopf = umbrechen(`${zuZeit(e.beginn)}–${zuZeit(e.beginn+dauerVon(e))}  ${e.titel}`, 36, true, W-2*P-60, 2);
+    const unter = umbrechen(`${e.art==="ag"?"AG-Stunde":"Parcours"} · ${ORTE[e.ort]} · ${e.kinder} Kinder${e.aufbau?` · Aufbau vorher ca. ${e.aufbau} Min`:""}`, 24, false, W-2*P-60, 2);
+    const h = 36 + kopf.length*46 + unter.length*32 + 12 + zl.length*34 + 20;
+    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="20" fill="#fff"/><rect x="${P}" y="${y}" width="14" height="${h}" rx="7" fill="${e.art==="ag"?FARBEN.orange:FARBEN.tuerkis}"/>`
+       + txt(P+40, y+50, kopf, 36, true, INK, 1.28) + txt(P+40, y+50+kopf.length*46, unter, 24, false, GRAU, 1.33)
+       + txt(P+40, y+50+kopf.length*46+unter.length*32+18, zl, 26, false, INK, 1.31);
+    y += h + 16;
   }
-  y += 20;
+  y += 20; s += txt(W/2, y, ["Einzelheiten: Bildfolge oder Bewegungsspiele-App"], 22, false, GRAU, 1.2, "middle"); y += 40;
   return {svg: rahmenSVG(W, y, s), w: W, h: y};
 }
 
-// SVG → Bild-Datei (PNG oder JPEG)
-function svgZuBlob(bild, typ="image/png"){
+/* ---------- Dateien erzeugen und teilen ---------- */
+// Scharf rendern: das SVG wird in „faktor“-facher Größe gezeichnet (Standard 2,5× → ca. 2700 px breit).
+// Obergrenze ~16 Mio. Pixel, weil iPhones größere Bilder nicht zeichnen können.
+function svgZuBlob(bild, typ="image/png", faktor=2.5){
+  const f = Math.max(1, Math.min(faktor, Math.sqrt(16e6/(bild.w*bild.h)))), W = Math.round(bild.w*f), H = Math.round(bild.h*f);
+  const svg = bild.svg.replace(`width="${bild.w}" height="${bild.h}"`, `width="${W}" height="${H}"`);
   return new Promise((ok, fehler) => {
     const img = new Image();
-    img.onload = () => { const c = document.createElement("canvas"); c.width = bild.w; c.height = bild.h;
-      const g = c.getContext("2d"); g.fillStyle = "#FFF8EE"; g.fillRect(0,0,c.width,c.height); g.drawImage(img, 0, 0);
-      c.toBlob(b => b ? ok(b) : fehler(new Error("Bild")), typ, 0.9); };
+    img.onload = () => { const c = document.createElement("canvas"); c.width = W; c.height = H;
+      const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.fillStyle = "#FFF8EE"; g.fillRect(0,0,W,H); g.drawImage(img, 0, 0, W, H);
+      c.toBlob(b => { if (!b) return fehler(new Error("Bild")); b.pw = W; b.ph = H; ok(b); }, typ, 0.93); };
     img.onerror = () => fehler(new Error("SVG"));
-    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(bild.svg);
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   });
 }
 // Kleiner PDF-Baukasten: jede Seite = ein JPEG-Bild auf A4
@@ -7448,68 +7563,302 @@ async function pdfAusBildern(bilder){
   add(`trailer\n<< /Size ${anz} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
   return new Blob(teile, {type:"application/pdf"});
 }
-const blockSeiten = () => planBloecke().filter(e => e.typ!=="raeumen" && (e.typ!=="spiel" || e.sp));
-const dateiName = (rest, endung) => `AG-Plan_${teilen.datum}${rest?"_"+rest:""}.${endung}`;
-async function teileDateien(files, info){
-  try { if (navigator.canShare && navigator.canShare({files})) { await navigator.share({files, title:"AG-Plan"}); return "Geteilt ✔"; } }
+async function teileDateien(files){
+  try { if (navigator.canShare && navigator.canShare({files})) { await navigator.share({files, title:"Plan"}); return "Geteilt ✔"; } }
   catch(e){ if (e && e.name === "AbortError") return ""; }
   files.forEach(f => { const a=document.createElement("a"); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); a.remove(); });
-  return `${info} gespeichert (Downloads) – von dort teilen oder drucken.`;
+  return "Gespeichert (Ordner „Downloads“) – von dort teilen oder drucken.";
 }
-async function teilenAktion(art){
-  const st = $("#t-status"); st.textContent = "Wird erstellt …";
+// art: "bild" = nur erste Seite, "folge" = alle Seiten als Bilder, "pdf" = alle Seiten als PDF
+async function seitenTeilen(seiten, name, art, statusEl){
+  statusEl.textContent = "Wird erstellt …";
   try {
-    zaehle("/plan-geteilt-"+art, true);
-    if (art === "bild"){ const b = await svgZuBlob(uebersichtSVG());
-      st.textContent = await teileDateien([new File([b], dateiName("", "png"), {type:"image/png"})], "Bild"); }
-    else if (art === "folge"){ const seiten = [uebersichtSVG(), ...blockSeiten().map(blockSVG)];
-      const files = []; for (let i=0;i<seiten.length;i++){ const b = await svgZuBlob(seiten[i]); files.push(new File([b], dateiName(`${i+1}`, "png"), {type:"image/png"})); }
-      st.textContent = await teileDateien(files, `${files.length} Bilder`); }
-    else { const seiten = [uebersichtSVG(), ...blockSeiten().map(blockSVG)], bilder = [];
-      for (const sv of seiten){ const b = await svgZuBlob(sv, "image/jpeg"); bilder.push({w:sv.w, h:sv.h, bytes:new Uint8Array(await b.arrayBuffer())}); }
-      const pdf = await pdfAusBildern(bilder);
-      st.textContent = await teileDateien([new File([pdf], dateiName("", "pdf"), {type:"application/pdf"})], "PDF"); }
-  } catch(e){ st.textContent = "Das hat leider nicht geklappt. Bitte nochmal versuchen."; }
+    zaehle(`/geteilt-${name.split("_")[0].toLowerCase()}-${art}`, true);
+    let files = [];
+    if (art === "pdf"){ const bilder = [];
+      for (const sv of seiten){ const b = await svgZuBlob(sv, "image/jpeg", 2.5); bilder.push({w:b.pw, h:b.ph, bytes:new Uint8Array(await b.arrayBuffer())}); }
+      files = [new File([await pdfAusBildern(bilder)], `${name}.pdf`, {type:"application/pdf"})]; }
+    else { const liste = art === "bild" ? seiten.slice(0,1) : seiten;
+      for (let i=0;i<liste.length;i++){ const b = await svgZuBlob(liste[i]); files.push(new File([b], liste.length>1 ? `${name}_${i+1}.png` : `${name}.png`, {type:"image/png"})); } }
+    statusEl.textContent = await teileDateien(files);
+  } catch(e){ statusEl.textContent = "Das hat leider nicht geklappt. Bitte nochmal versuchen."; }
 }
 
-/* ---------- Oberfläche ---------- */
-let vorschauUrl = null, vorschauTimer = 0;
-function vorschauAktualisieren(){
-  clearTimeout(vorschauTimer);
-  vorschauTimer = setTimeout(async () => { try { const b = await svgZuBlob(uebersichtSVG());
-    if (vorschauUrl) URL.revokeObjectURL(vorschauUrl); vorschauUrl = URL.createObjectURL(b); $("#t-vorschau").src = vorschauUrl; } catch(e){} }, 250);
+/* ---------- Tagesplan (Speicher) ---------- */
+const tag = (() => { try { const t = JSON.parse(lies("tagesplan")||"null"); if (t && Array.isArray(t.einheiten)) return t; } catch(e){} return {datum: heuteISO(), einheiten: []}; })();
+tag.einheiten = tag.einheiten.filter(e => e.bloecke.every(b => (!b.spiel || SP(b.spiel)) && (!b.module || b.module.every(MO)) && (!b.ritual || RI(b.ritual))));
+const tagMerken = () => merke("tagesplan", JSON.stringify(tag));
+const tagSortiert = () => [...tag.einheiten].sort((a,b)=>a.beginn-b.beginn);
+function zumTag(qid){
+  const q = QUELLEN[qid], E = einheitVon(qid);
+  if (!q.gesetzt && tag.einheiten.length) E.beginn = Math.max(...tag.einheiten.map(e=>e.beginn+dauerVon(e)));
+  E.id = Date.now().toString(36); tag.einheiten.push(E); tagMerken(); renderTag();
+  zaehle("/tagesplan-dazu", true);
+  meldung(`„${E.titel}“ ist im Tagesplan (${zuZeit(E.beginn)}–${zuZeit(E.beginn+dauerVon(E))}).`, "Tagesplan ansehen", () => geheZuReiter("tag"));
 }
-function renderTeilen(){
-  $("#t-titel").value = teilen.titel; $("#t-datum").value = teilen.datum; $("#t-beginn").value = teilen.beginn;
-  $("#t-namen").value = teilen.namen.join(", ");
-  const N = teilen.namen, B = planBloecke();
-  const chips = key => N.map(n => `<button class="nchip ${wer(key).includes(n)?"on":""}" data-k="${key}" data-n="${esc(n)}">${esc(n)}</button>`).join("");
+
+/* ---------- Teilen-Bereich (für AG-Stunde und Parcours gleich) ---------- */
+let vorschauUrls = {}, vorschauTimer = {};
+function vorschauSetzen(img, bildFn, key){
+  clearTimeout(vorschauTimer[key]);
+  vorschauTimer[key] = setTimeout(async () => { try { const b = await svgZuBlob(bildFn(), "image/png", 1.5);
+    if (vorschauUrls[key]) URL.revokeObjectURL(vorschauUrls[key]); vorschauUrls[key] = URL.createObjectURL(b); img.src = vorschauUrls[key]; } catch(e){} }, 250);
+}
+function panelAufbauen(qid){
+  const q = QUELLEN[qid], el = $("#teilen-"+qid);
+  el.innerHTML = `
+    <div class="q"><p>1. Kopf des Plans</p>
+      <input class="search" data-f="titel" maxlength="60" placeholder="${qid==="ag"?"Titel, z. B. Bewegungs-AG Klasse 2":"Titel, z. B. Parcours Klasse 3/4"}" value="${esc(q.titel)}">
+      <div class="${qid==="pz"?"grid3":"grid2"}" style="margin-top:6px"><label class="tfeld">Datum<input class="search" data-f="datum" type="date" value="${teilen.datum}"></label>
+      <label class="tfeld">Beginn<input class="search" data-f="beginn" type="time" value="${q.beginn}"></label>
+      ${qid==="pz" ? `<label class="tfeld">Dauer<select class="search" data-f="dauer">${[15,20,25,30,45,60].map(m=>`<option value="${m}" ${m===q.dauer?"selected":""}>${m} Min</option>`).join("")}</select></label>` : ""}</div></div>
+    <div class="q"><p>2. Wer ist heute dabei?</p>
+      <input class="search" data-f="namen" maxlength="200" placeholder="Vornamen, mit Komma: Anna, Tom, Lisa" value="${esc(teilen.namen.join(", "))}">
+      <small class="hint" style="display:block;margin:6px 0 0">Nur auf diesem Handy gespeichert.</small></div>
+    <div class="q"><p>3. Wer macht was?</p><div class="t-zuteilung"></div></div>
+    <div class="q"><p>4. So sieht es aus</p><img class="tvorschau" alt="Vorschau"></div>
+    <div class="q"><p>5. Verschicken</p>
+      <div class="grid3 tknoepfe"><button class="opt" data-art="bild">🖼<br>Bild</button><button class="opt" data-art="folge">🗂<br>Bildfolge</button><button class="opt" data-art="pdf">📄<br>PDF</button></div>
+      <p class="hint t-status">Bild = eine Übersicht für WhatsApp · Bildfolge = Übersicht + eine Seite pro Teil${qid==="pz"||plan.parcours.length?" und pro Station":""} · PDF = alles zum Drucken.</p></div>`;
+  el.oninput = e => { const f = e.target.dataset.f; if (f==="titel"){ q.titel = e.target.value; merke(qid==="ag"?"t-titel":"t-titel-pz", q.titel); panelVorschau(qid); } };
+  el.onchange = e => { const f = e.target.dataset.f, v = e.target.value;
+    if (f==="datum") teilen.datum = v || heuteISO();
+    if (f==="beginn"){ q.beginn = v || "14:30"; q.gesetzt = true; merke(qid==="ag"?"t-beginn":"t-beginn-pz", q.beginn); }
+    if (f==="dauer"){ q.dauer = +v; merke("t-dauer-pz", String(q.dauer)); }
+    if (f==="namen"){ teilen.namen = [...new Set(v.split(/[,;]+/).map(s=>s.trim()).filter(Boolean))].slice(0,12); namenMerken(); q.wer = {}; renderTag(); }
+    panelAktualisieren(qid); };
+  el.onclick = e => {
+    const c = e.target.closest(".nchip"); if (c){ const E = einheitVon(qid), k = c.dataset.k, n = c.dataset.n, akt = werAus(q.wer, k, E.nSt);
+      q.wer[k] = akt.includes(n) ? akt.filter(x=>x!==n) : [...akt, n]; panelAktualisieren(qid); return; }
+    const b = e.target.closest("[data-art]"); if (b){ const E = einheitVon(qid);
+      seitenTeilen([einheitSVG(E), ...einheitSeiten(E)], `${qid==="ag"?"AG-Plan":"Parcours"}_${teilen.datum}`, b.dataset.art, el.querySelector(".t-status")); }
+  };
+  panelAktualisieren(qid);
+}
+function panelAktualisieren(qid){
+  const el = $("#teilen-"+qid); if (!el || el.hidden || !el.innerHTML) return;
+  const q = QUELLEN[qid], E = einheitVon(qid), N = teilen.namen;
+  const chips = key => N.map(n => `<button class="nchip ${werAus(q.wer,key,E.nSt).includes(n)?"on":""}" data-k="${key}" data-n="${esc(n)}">${esc(n)}</button>`).join("");
   let h = "";
-  if (!N.length) h = `<p class="hint" style="margin:0">Namen oben eintragen, dann kann hier jedem Block jemand zugeteilt werden.</p>`;
-  else for (const e of B){
-    if (e.typ==="spiel" && e.sp) h += `<div class="zrow"><b>${zuZeit(e.von)} ${esc(e.titel)}</b><div>${chips(e.key)}</div></div>`;
-    if (e.typ==="parcours"){ e.wahl.forEach((m,i)=>{ h += `<div class="zrow"><b>${i+1} ${esc(m.name)}</b><div>${chips("st"+i)}</div></div>`; });
-      if (e.z && !e.z.helfer) h += `<div class="zrow"><b>Zusatzspiel (${e.z.n} Kinder)</b><div>${chips("zusatz")}</div></div>`; }
-  }
-  $("#t-zuteilung").innerHTML = h;
-  vorschauAktualisieren();
+  if (!N.length) h = `<p class="hint" style="margin:0">Erst bei 2. die Namen eintragen – dann kann man hier antippen, wer was macht.</p>`;
+  else { const Z = zeitenVon(E); E.bloecke.forEach((b,bi) => {
+    if (b.typ==="spiel" && b.spiel) h += `<div class="zrow"><b>${zuZeit(Z[bi].von)} ${esc(blockTitel(b))}</b><div>${chips(b.key)}</div></div>`;
+    if (b.typ==="parcours"){ b.module.forEach((id,i)=>{ h += `<div class="zrow"><b>Station ${i+1}: ${esc(MO(id).name)}</b><div>${chips("st"+i)}</div></div>`; });
+      if (b.zusatz && !b.zusatz.helfer) h += `<div class="zrow"><b>Zusatzspiel (${b.zusatz.n} Kinder)</b><div>${chips("zusatz")}</div></div>`; }
+  }); }
+  el.querySelector(".t-zuteilung").innerHTML = h;
+  panelVorschau(qid);
 }
-$("#teilen-auf").onclick = () => { const t=$("#teilen"); t.hidden = !t.hidden; if (!t.hidden){ renderTeilen(); t.scrollIntoView({behavior:"smooth", block:"start"}); } };
-$("#t-titel").oninput = e => { teilen.titel = e.target.value; merke("t-titel", teilen.titel); vorschauAktualisieren(); };
-$("#t-datum").onchange = e => { teilen.datum = e.target.value || heuteISO(); vorschauAktualisieren(); };
-$("#t-beginn").onchange = e => { teilen.beginn = e.target.value || "14:30"; merke("t-beginn", teilen.beginn); renderTeilen(); };
-$("#t-namen").onchange = e => { teilen.namen = [...new Set(e.target.value.split(/[,;]+/).map(s=>s.trim()).filter(Boolean))].slice(0,12); teilen.wer = {}; merke("t-namen", teilen.namen.join(",")); renderTeilen(); };
-$("#t-zuteilung").onclick = e => { const b=e.target.closest(".nchip"); if(!b) return; const k=b.dataset.k, n=b.dataset.n, akt=wer(k);
-  teilen.wer[k] = akt.includes(n) ? akt.filter(x=>x!==n) : [...akt, n]; renderTeilen(); };
-$("#t-bild").onclick = () => teilenAktion("bild");
-$("#t-folge").onclick = () => teilenAktion("folge");
-$("#t-pdf").onclick = () => teilenAktion("pdf");
+const panelVorschau = qid => { const el = $("#teilen-"+qid); if (el && !el.hidden) vorschauSetzen(el.querySelector(".tvorschau"), () => einheitSVG(einheitVon(qid)), qid); };
+function panelUmschalten(qid){ const el = $("#teilen-"+qid); el.hidden = !el.hidden; if (!el.hidden){ panelAufbauen(qid); el.scrollIntoView({behavior:"smooth", block:"start"}); } }
+$("#ag-teilen-auf").onclick = () => panelUmschalten("ag");
+$("#pz-teilen-auf").onclick = () => panelUmschalten("pz");
+$("#ag-zumtag").onclick = () => zumTag("ag");
+$("#pz-zumtag").onclick = () => zumTag("pz");
+
+/* ---------- Reiter „Tag“ ---------- */
+function renderTag(){
+  const E = tagSortiert();
+  $("#tag-datum").value = tag.datum; $("#tag-namen").value = teilen.namen.join(", ");
+  let h = "";
+  if (!E.length) h = `<div class="leerbox"><div class="gross">📅</div><p><b>Noch nichts im Tagesplan.</b></p>
+    <ol><li>Eine AG-Stunde oder einen Parcours planen.</li><li>Darunter auf <span class="demo gruen">📅 Zum Tagesplan</span> tippen.</li><li>Hier den ganzen Tag ansehen und verschicken.</li></ol>
+    <div class="row2" style="grid-template-columns:1fr 1fr"><button class="ghost" data-geh="plan">AG planen</button><button class="ghost" data-geh="parcours">Parcours planen</button></div></div>`;
+  E.forEach((e,i) => {
+    const ende = e.beginn + dauerVon(e), ueber = i>0 && e.beginn < E[i-1].beginn + dauerVon(E[i-1]);
+    h += `<div class="tagkarte ${e.art}"><div class="tk-kopf"><input type="time" class="search tk-zeit" data-id="${e.id}" value="${zuZeit(e.beginn)}" aria-label="Beginn">
+      <span class="tk-bis">bis ${zuZeit(ende)}</span><button class="tk-weg" data-weg="${e.id}" aria-label="Entfernen">✕</button></div>
+      <h4>${e.art==="ag"?"⚽":"🧗"} ${esc(e.titel)}</h4><small>${e.kinder} Kinder · ${ORTE[e.ort]}${e.aufbau?` · Aufbau vorher ca. ${e.aufbau} Min`:""}</small>
+      <ul>${e.bloecke.map(b=>`<li>${esc(PHASEN[b.ph])}: ${esc(blockTitel(b))}</li>`).join("")}</ul>
+      ${ueber ? `<p class="warn">⚠ Überschneidet sich mit der Einheit davor.</p>` : ""}</div>`;
+  });
+  $("#tag-liste").innerHTML = h;
+  $("#tag-teilen").hidden = !E.length;
+  if (E.length) vorschauSetzen($("#tag-vorschau"), tagSVG, "tag");
+}
+$("#tag-liste").onclick = e => {
+  const w = e.target.closest("[data-weg]"); if (w){ if (confirm("Diese Einheit aus dem Tagesplan nehmen?")){ tag.einheiten = tag.einheiten.filter(x=>x.id!==w.dataset.weg); tagMerken(); renderTag(); } return; }
+  const g = e.target.closest("[data-geh]"); if (g) geheZuReiter(g.dataset.geh);
+};
+$("#tag-liste").onchange = e => { const t = e.target.closest(".tk-zeit"); if (!t) return; const x = tag.einheiten.find(y=>y.id===t.dataset.id); if (x && t.value){ x.beginn = zuMin(t.value); tagMerken(); renderTag(); } };
+$("#tag-datum").onchange = e => { tag.datum = e.target.value || heuteISO(); tagMerken(); renderTag(); };
+$("#tag-namen").onchange = e => { teilen.namen = [...new Set(e.target.value.split(/[,;]+/).map(s=>s.trim()).filter(Boolean))].slice(0,12); namenMerken(); renderTag(); };
+$("#tag-leeren").onclick = () => { if (confirm("Den ganzen Tagesplan leeren?")){ tag.einheiten = []; tag.datum = heuteISO(); tagMerken(); renderTag(); } };
+$("#tag-teilen").onclick = e => { const b = e.target.closest("[data-art]"); if (!b) return;
+  const alt = teilen.datum; teilen.datum = tag.datum;
+  seitenTeilen([tagSVG(), ...tagSortiert().map(einheitSVG)], `Tagesplan_${tag.datum}`, b.dataset.art, $("#tag-status")).finally(()=>{ teilen.datum = alt; }); };
+
+/* ---------- Kleine Meldung unten ---------- */
+function meldung(text, knopf, aktion){
+  const m = $("#meldung"); m.innerHTML = `<span>${esc(text)}</span>${knopf?`<button>${esc(knopf)}</button>`:""}`; m.hidden = false;
+  if (knopf) m.querySelector("button").onclick = () => { m.hidden = true; aktion(); };
+  clearTimeout(m._t); m._t = setTimeout(()=>m.hidden = true, 7000);
+}
+renderTag();
+
+/* ===================== Hilfe: einfache Anleitungen + „Zeig es mir“ ===================== */
+const geheZuReiter = v => { const b = document.querySelector(`.navtabs button[data-view="${v}"]`); if (b) b.click(); };
+const warte = ms => new Promise(r => setTimeout(r, ms));
+// kleine Nachbauten der Knöpfe, damit man sie wiedererkennt
+const D = {
+  tab: t => `<span class="demo tab">${t}</span>`, blau: t => `<span class="demo blau">${t}</span>`, gruen: t => `<span class="demo gruen">${t}</span>`,
+  rund: t => `<span class="demo rund">${t}</span>`, weiss: t => `<span class="demo weiss">${t}</span>`, play: `<span class="demo play">▶</span>`
+};
+function agBereit(){ geheZuReiter("plan"); if ($("#p-ergebnis").hidden) $("#los").click(); }
+function agFragen(){ geheZuReiter("plan"); $("#p-ergebnis").hidden = true; $("#p-fragen").hidden = false; }
+function pzReiter(t){ geheZuReiter("parcours"); const b = $(`#pz-tabs button[data-t="${t}"]`); if (b) b.click(); }
+function pzFragen(){ pzReiter("planen"); $("#pz-ergebnis").hidden = true; $("#pz-fragen").hidden = false; }
+function pzBereit(){ pzReiter("planen"); if ($("#pz-ergebnis").hidden) $("#pz-los").click(); }
+const erstesSpiel = () => { const b = $("#liste .gcard"); return b ? b.dataset.id : SPIELE[0].id; };
+
+const HILFE = [
+ { id:"ag", icon:"📋", titel:"Eine AG-Stunde planen", kurz:"Die App stellt eine ganze Stunde zusammen.",
+   lesen:[`Oben auf ${D.tab("AG planen")} tippen.`, "Die Fragen beantworten: Wie viele Kinder? Wie viele Betreuer? Wo? Wie lange?", `Auf ${D.blau("Stunde zusammenstellen →")} tippen.`,
+     `Fertig! Gefällt ein Spiel nicht, auf ${D.rund("⟳")} tippen. Ein Spiel antippen zeigt die Anleitung.`],
+   tour:[ {vorher:agFragen, sel:'.navtabs [data-view="plan"]', text:"Hier oben ist „AG planen“. Da fängt alles an."},
+     {sel:"#pkinder", text:"Wie viele Kinder sind da? Mit − und + ändern. Oder auf die Zahl tippen und eintippen."},
+     {sel:"#pbetreuer", text:"Wie viele Erwachsene sind dabei?"},
+     {sel:'[data-p="ort"]', text:"Turnhalle oder Schulhof? Einfach antippen."},
+     {sel:'[data-p="stimmung"]', text:"Wie sind die Kinder heute drauf?"},
+     {sel:'[data-p="dauer"]', text:"Wie lange dauert die AG?"},
+     {sel:"#los", text:"Zum Schluss auf diesen blauen Knopf tippen."},
+     {vorher:()=>$("#los").click(), sel:"#plan .phase", text:"Fertig! Das ist die Stunde – von oben nach unten: Aufwärmen, Hauptteil, Abschluss, Aufräumen."},
+     {sel:"#plan .swap", text:"Gefällt ein Spiel nicht? Auf diesen Kreis-Pfeil tippen – dann kommt ein anderes."},
+     {sel:"#plan .open", text:"Ein Spiel antippen – dann kommt die ganze Anleitung mit Bildern."},
+     {sel:"#mischen", text:"Mit dem Würfel wird die ganze Stunde neu gemischt."} ]},
+ { id:"spiel", icon:"🎬", titel:"Ein Spiel anschauen", kurz:"Anleitung lesen und den kleinen Film abspielen.",
+   lesen:[`Oben auf ${D.tab("Alle Spiele")} tippen.`, "Ein Spiel antippen.", `Auf ${D.play} tippen: Die Kinder im Bild zeigen, wie es geht.`,
+     "Darunter stehen die Schritte. Einen Schritt antippen zeigt das Bild dazu.", `Zurück geht es oben mit ${D.weiss("← Zurück")}.`],
+   tour:[ {vorher:()=>geheZuReiter("spiele"), sel:'.navtabs [data-view="spiele"]', text:"Unter „Alle Spiele“ sind alle 100 Spiele."},
+     {sel:"#suche", text:"Hier kann man nach einem Namen suchen, zum Beispiel „Fangen“."},
+     {sel:'[data-f="kinder"]', text:"Oder mit diesen Knöpfen aussuchen: zum Beispiel wie viele Kinder da sind."},
+     {sel:"#liste .gcard", text:"Ein Spiel antippen …"},
+     {vorher:()=>zeige(erstesSpiel()), sel:"#bs", text:"… dann kommt oben ein kleiner Film."},
+     {sel:()=>$("#pb-gross:not([hidden])")||$("#pb-play"), text:"Auf ▶ tippen: Die Kinder im Bild zeigen Schritt für Schritt, wie es geht."},
+     {sel:"#sheet .steps", text:"Hier stehen die Schritte. Einen Schritt antippen zeigt das Bild dazu."},
+     {sel:"#pb-tempo", text:"Zu schnell? Hier langsamer stellen."},
+     {sel:"#pb-voll", text:"Großes Bild – gut zum Zeigen für die Kinder."},
+     {sel:"#drucken", text:"Die Karte kann man auch ausdrucken."},
+     {sel:"#zurueck", text:"Mit „Zurück“ geht es wieder zur Liste.", nachher:()=>schliessen()} ]},
+ { id:"parcours", icon:"🧗", titel:"Einen Parcours planen", kurz:"Stationen aus Turngeräten, mit Hallenplan.",
+   lesen:[`Oben auf ${D.tab("Parcours")} tippen.`, "Kinder und Betreuer eintragen, einen Schwerpunkt wählen.", `Auf ${D.blau("Parcours zusammenstellen →")} tippen.`,
+     "Oben ist der Plan für die Halle, darunter die Stationen. Eine Station antippen zeigt, wie man sie aufbaut."],
+   tour:[ {vorher:pzFragen, sel:'.navtabs [data-view="parcours"]', text:"Hier ist der Parcours."},
+     {sel:"#pz-kinder", text:"Wie viele Kinder sind da?"},
+     {sel:"#pz-betreuer", text:"Wie viele Erwachsene? Pro Station braucht es einen."},
+     {sel:"#pz-fokus", text:"Was sollen die Kinder vor allem machen? Oder einfach „Bunt gemischt“."},
+     {sel:"#pz-hallekurz", text:"Hier steht, welche Geräte eure Halle hat. Die App nimmt nur Stationen, die ihr aufbauen könnt."},
+     {sel:"#pz-los", text:"Dann auf diesen Knopf tippen."},
+     {vorher:()=>$("#pz-los").click(), sel:".hplan-box", text:"So stellt ihr die Stationen in der Halle auf. Die Kinder gehen im Kreis von Station zu Station."},
+     {sel:"#pz-plan .stationen .open", text:"Eine Station antippen – dann kommt ein kleiner Film, wie man sie aufbaut."},
+     {sel:"#pz-plan .swap", text:"Diese Station gefällt nicht? Kreis-Pfeil antippen."},
+     {sel:".anzst", text:"Hier kann man Stationen dazunehmen oder weglassen."} ]},
+ { id:"halle", icon:"🏟", titel:"Geräte der Halle eintragen", kurz:"Einmal eintragen, was es in eurer Halle gibt.",
+   lesen:[`Oben auf ${D.tab("Parcours")} tippen, dann auf ${D.weiss("Unsere Halle")}.`, `Tipp: erst ${D.weiss("Alles auf 0")} tippen.`,
+     "Dann bei jedem Gerät die Zahl eintippen oder mit + hochzählen.", "Das Handy merkt es sich. Das macht man nur einmal."],
+   tour:[ {vorher:()=>pzReiter("halle"), sel:'#pz-tabs [data-t="halle"]', text:"Unter „Unsere Halle“ stehen alle Geräte."},
+     {sel:"#halle-null", text:"Tipp: Erst hier alles auf 0 setzen …"},
+     {sel:"#halle-liste .hzeile", text:"… dann bei jedem Gerät die Zahl eintippen oder mit + hochzählen."},
+     {sel:"#halle-info", text:"Hier steht, wie viele Stationen ihr damit aufbauen könnt. Fertig – das Handy merkt es sich."} ]},
+ { id:"teilen", icon:"📤", titel:"Plan ans Team schicken", kurz:"Als Bild per WhatsApp oder als PDF zum Drucken.",
+   lesen:["Erst eine AG-Stunde oder einen Parcours planen.", `Darunter auf ${D.gruen("📤 Teilen")} tippen.`, "Namen vom Team eintragen – mit Komma dazwischen.",
+     `Auf ${D.weiss("🖼 Bild")} tippen. Dann WhatsApp auswählen und die Gruppe antippen.`],
+   tour:[ {vorher:agBereit, sel:"#ag-teilen-auf", text:"Unter der fertigen Stunde ist dieser grüne Knopf. Antippen …"},
+     {vorher:()=>{ if ($("#teilen-ag").hidden) panelUmschalten("ag"); }, sel:'#teilen-ag [data-f="titel"]', text:"Oben kann man einen Titel eintragen, zum Beispiel „Bewegungs-AG Klasse 2“."},
+     {sel:'#teilen-ag [data-f="namen"]', text:"Hier die Namen vom Team eintragen, mit Komma dazwischen: Anna, Tom, Lisa."},
+     {sel:"#teilen-ag .t-zuteilung", text:"Die App verteilt die Namen selbst. Ändern: einfach die Namen antippen."},
+     {sel:"#teilen-ag .tvorschau", text:"So sieht das Bild aus, das die Kolleginnen bekommen."},
+     {sel:'#teilen-ag [data-art="bild"]', text:"Auf „Bild“ tippen. Dann WhatsApp auswählen und die Gruppe antippen. Fertig!"} ]},
+ { id:"tag", icon:"📅", titel:"Den ganzen Tag planen", kurz:"Mehrere Stunden zu einem Tagesplan zusammenfassen.",
+   lesen:["Eine AG-Stunde oder einen Parcours planen.", `Darunter auf ${D.gruen("📅 Zum Tagesplan")} tippen.`, "Das mit weiteren Stunden wiederholen.",
+     `Oben auf ${D.tab("Tag")} tippen: Da steht alles mit Uhrzeit. Unten kann man den Tag verschicken.`],
+   tour:[ {vorher:agBereit, sel:"#ag-zumtag", text:"Mit diesem Knopf kommt die Stunde in den Tagesplan."},
+     {vorher:()=>geheZuReiter("tag"), sel:'.navtabs [data-view="tag"]', text:"Unter „Tag“ steht dann alles, was heute ansteht."},
+     {sel:"#tag-liste", text:"Jede Stunde mit Uhrzeit. Die Uhrzeit kann man hier ändern, mit ✕ nimmt man eine Stunde wieder raus."},
+     {sel:()=>$("#tag-teilen:not([hidden])")||$("#tag-liste"), text:"Unten den ganzen Tag als Bild oder PDF verschicken."} ]},
+ { id:"idee", icon:"💡", titel:"Eine Spielidee schicken", kurz:"Eigene Spiele für die Sammlung vorschlagen.",
+   lesen:[`Oben auf ${D.tab("＋ Idee")} tippen.`, "Name und Ablauf eintragen.", `Auf ${D.blau("Idee teilen")} tippen und in WhatsApp verschicken.`],
+   tour:[ {vorher:()=>geheZuReiter("idee"), sel:'.navtabs [data-view="idee"]', text:"Unter „＋ Idee“ kann man eigene Spiele vorschlagen."},
+     {sel:"#i-name", text:"Hier den Namen vom Spiel eintragen …"}, {sel:"#i-ablauf", text:"… und kurz erklären, wie es geht."},
+     {sel:"#i-teilen", text:"Dann hier antippen und per WhatsApp verschicken."} ]},
+ { id:"handy", icon:"📱", titel:"App aufs Handy holen", kurz:"Damit sie wie eine richtige App auf dem Startbildschirm liegt.",
+   lesen:["<b>iPhone:</b> Den Link in <b>Safari</b> öffnen. Unten auf das Teilen-Zeichen tippen (Viereck mit Pfeil nach oben). Nach unten wischen und „Zum Home-Bildschirm“ antippen.",
+     "<b>Android:</b> Den Link in <b>Chrome</b> öffnen. Oben rechts auf die drei Punkte ⋮ tippen. „App installieren“ oder „Zum Startbildschirm hinzufügen“ antippen.",
+     "Danach geht die App auch ohne Internet."], tour:null }
+];
+
+function renderHilfe(){
+  $("#hilfe-inhalt").innerHTML = `<div class="hilfe-kopf"><h2>Hilfe</h2><p>Was möchtest du machen? Tippe auf <b>Zeig es mir</b> – die App zeigt dir jeden Schritt.</p></div>`
+    + HILFE.map(h => `<section class="hkachel" id="hk-${h.id}"><div class="hk-oben"><span class="hk-icon">${h.icon}</span><div><h3>${h.titel}</h3><p>${h.kurz}</p></div></div>
+      <div class="hk-knoepfe">${h.tour ? `<button class="hk-zeig" data-tour="${h.id}">▶ Zeig es mir</button>` : ""}<button class="hk-lies" data-lies="${h.id}">📖 Anleitung lesen</button></div>
+      <ol class="hk-schritte" hidden>${h.lesen.map(s=>`<li>${s}</li>`).join("")}</ol></section>`).join("")
+    + `<p class="hint" style="text-align:center">Fragen? Einfach die Kollegin fragen, die die App eingerichtet hat 🙂</p>`;
+}
+function hilfeAuf(){ merke("hilfe-hinweis-weg","1"); $("#hilfehinweis").hidden = true; renderHilfe(); $("#hilfe").hidden = false; $("#hilfe").scrollTop = 0; document.body.style.overflow = "hidden"; zaehle("/hilfe"); }
+function hilfeZu(){ $("#hilfe").hidden = true; document.body.style.overflow = ""; }
+$("#hilfe-auf").onclick = hilfeAuf;
+$("#hilfe-zu").onclick = hilfeZu;
+$("#hilfe-inhalt").onclick = e => {
+  const l = e.target.closest("[data-lies]"); if (l){ const ol = $(`#hk-${l.dataset.lies} .hk-schritte`); ol.hidden = !ol.hidden; l.textContent = ol.hidden ? "📖 Anleitung lesen" : "📖 Anleitung zuklappen"; return; }
+  const t = e.target.closest("[data-tour]"); if (t){ const h = HILFE.find(x=>x.id===t.dataset.tour); hilfeZu(); zaehle("/tour-"+h.id); tourStart(h.tour); }
+};
+
+/* ---------- „Zeig es mir“: Stelle einrahmen und erklären ---------- */
+const tour = {schritte:[], i:0, el:null};
+function tourStart(liste){ tour.schritte = liste; tour.i = 0; $("#tour").hidden = false; tourZeige(); }
+function tourEnde(){ const s = tour.schritte[tour.i]; $("#tour").hidden = true; tour.el = null; if (s && s.nachher) try { s.nachher(); } catch(e){} }
+async function tourZeige(){
+  const s = tour.schritte[tour.i]; if (!s) return tourEnde();
+  $("#tour .tblase").style.visibility = "hidden";
+  if (s.vorher){ try { s.vorher(); } catch(e){} await warte(400); }
+  let el = typeof s.sel === "function" ? s.sel() : document.querySelector(s.sel);
+  if (el && !el.getClientRects().length) el = null;
+  tour.el = el;
+  if (el){ el.scrollIntoView({block:"center", inline:"nearest"}); await warte(120); }
+  $("#tour .ttext").textContent = s.text;
+  $("#tour .tnr").textContent = `${tour.i+1} von ${tour.schritte.length}`;
+  $("#tour .tweiter").textContent = tour.i === tour.schritte.length-1 ? "Fertig ✔" : "Weiter ▶";
+  $("#tour .tzurueck").disabled = tour.i === 0;
+  tourPosition();
+  $("#tour .tblase").style.visibility = "visible";
+}
+function tourPosition(){
+  if ($("#tour").hidden) return;
+  const ring = $("#tour .tring"), blase = $("#tour .tblase"), vw = window.innerWidth, vh = window.innerHeight;
+  let r = tour.el ? tour.el.getBoundingClientRect() : null;
+  if (r){ const p = 8, x = Math.max(4, r.left-p), y = Math.max(4, r.top-p), w = Math.min(vw-8, r.width+2*p), h = Math.min(vh-8, r.height+2*p);
+    Object.assign(ring.style, {left:x+"px", top:y+"px", width:w+"px", height:h+"px", display:"block"}); r = {top:y, bottom:y+h, left:x, width:w}; }
+  else ring.style.display = "none";
+  const bh = blase.offsetHeight, bw = Math.min(420, vw-24);
+  blase.style.width = bw+"px"; blase.style.left = Math.round((vw-bw)/2)+"px";
+  let top;
+  if (!r) top = (vh-bh)/2;
+  else if (vh - r.bottom > bh + 24) top = r.bottom + 14;
+  else if (r.top > bh + 24) top = r.top - bh - 14;
+  else top = vh - bh - 12;
+  blase.style.top = Math.max(8, Math.round(top))+"px";
+  blase.classList.toggle("unten", !!r && top > r.top);
+}
+$("#tour .tweiter").onclick = () => { const s = tour.schritte[tour.i]; if (tour.i >= tour.schritte.length-1) return tourEnde(); if (s.nachher) try { s.nachher(); } catch(e){} tour.i++; tourZeige(); };
+$("#tour .tzurueck").onclick = () => { if (tour.i > 0){ tour.i--; tourZeige(); } };
+$("#tour .tzu").onclick = tourEnde;
+window.addEventListener("resize", tourPosition);
+document.addEventListener("scroll", tourPosition, true);
+
+// Beim ersten Öffnen: freundlicher Hinweis auf die Hilfe
+(function(){
+  if (lies("hilfe-hinweis-weg")) return;
+  const b = $("#hilfehinweis"); b.hidden = false;
+  $("#hilfehinweis-auf").onclick = () => { b.hidden = true; merke("hilfe-hinweis-weg","1"); hilfeAuf(); };
+  $("#hilfehinweis-zu").onclick = () => { b.hidden = true; merke("hilfe-hinweis-weg","1"); };
+})();
 
 /* ===================== Navigation ===================== */
 document.querySelectorAll(".navtabs button").forEach(b => b.onclick = () => {
   document.querySelectorAll(".navtabs button").forEach(x=>x.classList.toggle("on",x===b));
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on", v.id==="v-"+b.dataset.view));
   $("#zufall").style.display = b.dataset.view==="spiele" ? "" : "none";
+  if (b.dataset.view==="tag" && typeof renderTag==="function") renderTag();
   window.scrollTo(0,0);
 });
 $("#zufall").style.display = "none";
