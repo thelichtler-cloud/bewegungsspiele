@@ -1,6 +1,6 @@
 /* Offline-Speicher für die Bewegungsspiele-App.
    WICHTIG: Bei jedem Update die Versionsnummer unten erhöhen. */
-const VERSION = "bewegung-v1.7";
+const VERSION = "bewegung-v1.8";
 const DATEIEN = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

@@ -166,6 +166,7 @@ body.gesperrt .app{visibility:hidden}
 .neu{display:inline-block;margin-left:6px;background:var(--gruen);color:#fff;font-size:.62rem;font-weight:800;padding:1px 6px;border-radius:999px;vertical-align:1px}
 .tab-klein{flex:0 0 auto!important;padding:10px 12px!important}
 textarea.search{resize:vertical;font:inherit;line-height:1.4}
+.installhint[hidden]{display:none}
 .installhint{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#FFF1E2;border:2px solid #F7C79A;border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:.88rem}
 .ih-btns{display:flex;gap:6px;flex:none}
 .ih-btns button{border:0;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer;background:#fff}
@@ -173,6 +174,22 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .ico{width:54px;height:46px;flex:none;border-radius:9px;background:var(--soft);display:grid;place-items:center;font-size:1.5rem}
 .phase .body > span:last-child h4{margin:0}
 .phase .body > span small{color:var(--muted);font-size:.75rem}
+.subtabs{display:flex;gap:4px;background:#fff;border-radius:14px;padding:4px;margin-bottom:12px}
+.subtabs button{flex:1;border:0;background:none;border-radius:10px;padding:9px 4px;font-weight:800;font-size:.85rem;cursor:pointer;color:var(--muted)}
+.subtabs button.on{background:var(--ink);color:#fff}
+.hzeile{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--soft);font-weight:700}
+.hzeile:last-child{border-bottom:0}.hzeile.null{color:var(--muted)}.hzeile.null span:first-child{text-decoration:line-through}
+.hst{display:inline-flex;align-items:center;gap:10px}.hst b{min-width:22px;text-align:center}
+.hst button{width:34px;height:34px;border-radius:50%;border:0;background:var(--soft);font-size:1.2rem;font-weight:800;cursor:pointer}
+.anzst{display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.gcard.fehlt{opacity:.55}
+.pill.lang{white-space:normal}
+.hplan-box{margin-bottom:10px}.hplan{border-radius:12px}
+.stationen .phase .t{font-size:1.2rem}
+.breit{width:100%;margin-top:8px}
+.stufenliste{list-style:none;padding:0!important}.stufenliste li{margin-bottom:4px}
+.stl{display:inline-block!important;color:#fff;font-size:.68rem;border-radius:6px;padding:1px 7px;margin:0 4px 0 0!important}
+.stl.l1{background:var(--gruen)}.stl.l2{background:var(--orange)}.stl.l3{background:#E5533D}
 .grp h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--c);margin:18px 2px 8px}
 
 @media print{
@@ -257,6 +274,49 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <path d="M0 50 C0 44 12 44 12 50 C9 47.5 3 47.5 0 50Z" fill="#5B3A29"/>
       <circle cx="4.5" cy="52" r="1" fill="#2D3142"/><circle cx="7.5" cy="52" r="1" fill="#2D3142"/>
     </symbol>
+    <!-- Zusatz-Posen für Parcours (Seitenansicht) -->
+    <symbol id="k-balance" viewBox="0 0 40 62">
+      <line x1="16" y1="42" x2="13" y2="58" stroke="#2D3142" stroke-width="6" stroke-linecap="round"/>
+      <line x1="24" y1="42" x2="27" y2="58" stroke="#2D3142" stroke-width="6" stroke-linecap="round"/>
+      <line x1="12" y1="27" x2="0" y2="25" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="28" y1="27" x2="40" y2="25" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <rect x="10" y="22" width="20" height="22" rx="7" fill="currentColor"/>
+      <use href="#kopf"/>
+      <path d="M16.5 17.5 Q20 20 23.5 17.5" stroke="#2D3142" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="k-kletter" viewBox="0 0 40 62">
+      <polyline points="16,42 9,48 13,57" stroke="#2D3142" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="24" y1="42" x2="27" y2="58" stroke="#2D3142" stroke-width="6" stroke-linecap="round"/>
+      <line x1="12" y1="27" x2="9" y2="5" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="28" y1="27" x2="32" y2="9" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <rect x="10" y="22" width="20" height="22" rx="7" fill="currentColor"/>
+      <use href="#kopf"/>
+      <path d="M16.5 17.5 Q20 20 23.5 17.5" stroke="#2D3142" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="k-haeng" viewBox="0 0 40 62">
+      <line x1="17" y1="42" x2="16" y2="58" stroke="#2D3142" stroke-width="6" stroke-linecap="round"/>
+      <line x1="23" y1="42" x2="24" y2="58" stroke="#2D3142" stroke-width="6" stroke-linecap="round"/>
+      <line x1="13" y1="26" x2="12" y2="2" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="27" y1="26" x2="28" y2="2" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <rect x="10" y="22" width="20" height="22" rx="7" fill="currentColor"/>
+      <use href="#kopf"/>
+      <path d="M16.5 17.5 Q20 20 23.5 17.5" stroke="#2D3142" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="k-sprung" viewBox="0 0 40 62">
+      <polyline points="16,42 9,49 15,55" stroke="#2D3142" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="24,42 31,49 25,55" stroke="#2D3142" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="12" y1="27" x2="4" y2="10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="28" y1="27" x2="36" y2="10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <rect x="10" y="22" width="20" height="22" rx="7" fill="currentColor"/>
+      <use href="#kopf"/>
+      <ellipse cx="20" cy="18.5" rx="2.4" ry="1.8" fill="#2D3142"/>
+    </symbol>
+    <symbol id="k-krabbel" viewBox="0 0 40 62">
+      <polyline points="31,44 30,57 39,57" stroke="#2D3142" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="15" y1="42" x2="14" y2="58" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <rect x="11" y="35" width="23" height="13" rx="6.5" fill="currentColor"/>
+      <g transform="translate(-10,23) scale(.85)"><use href="#kopf"/></g>
+    </symbol>
   </defs>
 </svg>
 
@@ -277,6 +337,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <nav class="navtabs">
       <button class="on" data-view="plan">AG planen</button>
       <button data-view="spiele">Alle Spiele</button>
+      <button data-view="parcours">Parcours</button>
       <button data-view="idee" class="tab-klein">＋ Idee</button>
     </nav>
   </header>
@@ -294,12 +355,46 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div class="q"><p>Wie ist die Stimmung?</p><div class="grid3" data-p="stimmung"></div></div>
       <div class="q"><p>Wie lange dauert die AG?</p><div class="grid3" data-p="dauer"></div></div>
       <div class="q"><p>Habt ihr Material (Hütchen, Bälle …)?</p><div class="grid2" data-p="material"></div></div>
+      <div class="q" id="q-haupt"><p>Was soll im Hauptteil passieren?</p><div class="grid2" data-p="haupt"></div></div>
       <button class="bigbtn" id="los">Stunde zusammenstellen →</button>
     </div>
     <div id="p-ergebnis" hidden>
       <div class="sum" id="p-sum"></div>
       <div class="plan" id="plan"></div>
       <div class="row2"><button class="ghost" id="aendern">← Angaben ändern</button><button class="bigbtn" id="mischen">🎲 Neu mischen</button></div>
+    </div>
+  </main>
+
+  <!-- Parcours: planen, Module ansehen, eigene Halle -->
+  <main class="view" id="v-parcours">
+    <div class="subtabs" id="pz-tabs"><button class="on" data-t="planen">Planen</button><button data-t="module">Alle Module</button><button data-t="halle">Unsere Halle</button></div>
+    <div id="pz-planen">
+      <div id="pz-fragen">
+        <div class="q"><p>Wie viele Kinder sind da?</p>
+          <div class="stepper"><button id="pz-minus" aria-label="weniger">−</button><b id="pz-kinder">12</b><button id="pz-plus" aria-label="mehr">+</button></div></div>
+        <div class="q"><p>Schwerpunkt</p><div class="grid2" id="pz-fokus"></div></div>
+        <p class="hint">Die App nimmt nur Stationen, für die eure Halle genug Geräte hat (siehe „Unsere Halle“).</p>
+        <button class="bigbtn" id="pz-los">Parcours zusammenstellen →</button>
+      </div>
+      <div id="pz-ergebnis" hidden>
+        <div class="sum" id="pz-sum"></div>
+        <div class="q anzst"><span>Stationen</span><span class="hst"><button id="pz-weniger" aria-label="eine Station weniger">−</button><b id="pz-anz"></b><button id="pz-mehr" aria-label="eine Station mehr">+</button></span></div>
+        <div class="plan" id="pz-plan"></div>
+        <p class="hint">Station antippen = Aufbau-Anleitung · ⟳ tauscht eine Station · 🎲 mischt alles neu.</p>
+        <div class="row2"><button class="ghost" id="pz-aendern">← Angaben ändern</button><button class="bigbtn" id="pz-mischen">🎲 Neu mischen</button></div>
+        <button class="ghost breit" id="pz-druck">🖨 Parcours als Karte / drucken</button>
+      </div>
+    </div>
+    <div id="pz-module" hidden>
+      <div class="flabel">Bewegungsart</div>
+      <div class="chips" id="m-kat"></div>
+      <div class="count"><span id="m-anzahl"></span><button class="chip" id="m-halle">nur mit unseren Geräten</button></div>
+      <div id="m-liste"></div>
+    </div>
+    <div id="pz-halle" hidden>
+      <div class="q"><p>Welche Geräte habt ihr – und wie viele?</p><small class="hint" style="margin:0">Wird auf diesem Gerät gespeichert. 0 = nicht vorhanden. Reifen, Seile, Hütchen und Bälle gibt es immer.</small></div>
+      <div class="q" id="halle-liste"></div>
+      <p class="hint" id="halle-info"></p>
     </div>
   </main>
 
@@ -351,7 +446,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 // Zugangscode wird nur als Prüfsumme gespeichert. Neuen Code setzen: Claude fragen.
 const CODE_PRUEF = "5c811ec7";
 // Anonymer Nutzungszähler (GoatCounter). Eigenen Namen eintragen, z. B. "bewegung-asgs" – leer = aus.
-const ZAEHLER = "";
+const ZAEHLER = "bewegung-asgs";
 function pruefsumme(s){ let h=0x811c9dc5; for (const b of new TextEncoder().encode(s)){ h^=b; h=Math.imul(h,0x01000193)>>>0; } return h.toString(16).padStart(8,"0"); }
 function zaehle(pfad, ereignis){
   if (!ZAEHLER || !navigator.onLine) return;
@@ -379,7 +474,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.7 · Stand 28.09.2026 · 100 Spiele";
+const VERSION = "Version 1.8 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -4389,6 +4484,1905 @@ Object.assign(SCHRITTE, {
 
 for (const [id, v] of Object.entries(SCHRITTE)) { const sp = SPIELE.find(s => s.id === id); if (sp) Object.assign(sp, v); }
 
+/* ===================== Parcours-Module (Seitenansicht) ===================== */
+const MODULE = [];
+/*MODULE-DATEN*/
+MODULE.push(
+{
+  id:"bank-bruecke", name:"Bank-Brücke", kat:"Balancieren",
+  kinder:4, klassen:"1–4", aufbau:5, platz:[9,2], wand:false,
+  geraete:{kasten:2, bank:2, weich:1}, klein:[],
+  kurz:"Über eine schräge Bank auf den Kasten, oben über die Brücke balancieren und auf den Weichboden springen.",
+  foerdert:"Gleichgewicht, Mut, Körperspannung, Sprungkraft",
+  ablauf:[
+    "Zwei Kästen (je 3 Teile) mit etwa 2,5 m Abstand hinstellen.",
+    "Eine Bank als Brücke längs über beide Kastendeckel legen – 4 Kinder tragen sie gemeinsam.",
+    "Die zweite Bank mit dem Haken am ersten Kasten einhängen – das ist die Rampe.",
+    "Den Weichboden direkt an das Ende des zweiten Kastens legen.",
+    "Los geht's: Rampe hoch, über die Brücke balancieren, auf den Weichboden springen – immer nur ein Kind auf der Brücke."
+  ],
+  stufen:[
+    "Rampe hochkrabbeln, Brücke im Vierfüßlergang, vom Kasten hinunterklettern.",
+    "Rampe hochgehen, Brücke frei balancieren, Strecksprung auf den Weichboden.",
+    "Brücke rückwärts oder mit Ball in den Händen, Sprung mit halber Drehung."
+  ],
+  sicherheit:"Die Bank tragen immer 4 Kinder. Der Haken muss ganz über dem Kastendeckel greifen – vorher selbst prüfen. Immer nur ein Kind auf der Brücke, der Weichboden muss frei sein.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:40,y:125,c:"orange",p:"krabbel",r:-19},
+      {x:150,y:105,c:"blau",p:"balance"},
+      {x:258,y:78,c:"gruen",p:"sprung"},
+      {x:8,y:143,c:"gelb",p:"steh"},
+      {x:260,y:127,c:"lila",p:"sitz"},
+      {x:106,y:105,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"kasten",x:98,w:44,teile:3},{typ:"kasten",x:196,w:44,teile:3},
+      {typ:"sbank",x1:22,y1:180,x2:104,y2:150,haken:2},
+      {typ:"sbank",x1:106,y1:148,x2:236,y2:148},
+      {typ:"weich",x:244,w:52,text:"Weich"}
+    ],
+    pfeile:[{von:[34,160],nach:[88,132],dash:1},{von:[130,94],nach:[222,94],dash:1},{von:[236,110],nach:[270,72],dash:1,bogen:-14}]
+  },
+  schritte:[
+    { kinder:[{x:60,y:143,c:"orange",p:"arme"},{x:150,y:143,c:"blau",p:"steh"},{x:250,y:143,c:"gruen",p:"arme",flip:1},{x:8,y:143,c:"gelb",p:"steh"},{x:180,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"kasten",x:98,w:44,teile:3},{typ:"kasten",x:196,w:44,teile:3}],
+      extra:[{typ:"blase",x:170,y:40,text:"ca. 2,5 m Abstand"}],
+      pfeile:[{von:[146,118],nach:[190,118],c:"ink"},{von:[190,118],nach:[146,118],c:"ink"}] },
+    { kinder:[{x:66,y:143,c:"orange",p:"arme"},{x:150,y:143,c:"blau",p:"steh"},{x:248,y:143,c:"gruen",p:"arme",flip:1},{x:8,y:143,c:"gelb",p:"steh"},{x:180,y:143,c:"lila",p:"steh"},{x:36,y:143,c:"rot",p:"arme"}],
+      plus:[{typ:"sbank",x1:106,y1:148,x2:236,y2:148}],
+      extra:[{typ:"blase",x:170,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:58,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"blau",p:"steh"},{x:250,y:143,c:"gruen",p:"steh",flip:1},{x:8,y:143,c:"gelb",p:"arme"},{x:180,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"sbank",x1:22,y1:180,x2:104,y2:150,haken:2}],
+      extra:[{typ:"blase",x:100,y:40,text:"Haken prüfen!"}],
+      pfeile:[{von:[100,52],nach:[104,138],dash:1}] },
+    { kinder:[{x:60,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"blau",p:"steh"},{x:256,y:127,c:"gruen",p:"arme"},{x:8,y:143,c:"gelb",p:"steh"},{x:180,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"weich",x:244,w:52,text:"Weich"}],
+      extra:[{typ:"blase",x:240,y:40,text:"Direkt anlegen"}] },
+    { kinder:[{x:40,y:125,c:"orange",p:"krabbel",r:-19},{x:150,y:105,c:"blau",p:"balance"},{x:258,y:78,c:"gruen",p:"sprung"},{x:8,y:143,c:"gelb",p:"steh"},{x:260,y:127,c:"lila",p:"sitz"},{x:106,y:105,c:"rot",p:"steh"}],
+      pfeile:[{von:[34,160],nach:[88,132],dash:1},{von:[130,94],nach:[222,94],dash:1},{von:[236,110],nach:[270,72],dash:1,bogen:-14}],
+      extra:[{typ:"blase",x:190,y:40,text:"Einer nach dem anderen"}] }
+  ]
+},
+{
+  id:"sprossen-rutsche", name:"Sprossenwand-Rutsche", kat:"Klettern",
+  kinder:4, klassen:"1–4", aufbau:3, platz:[6,2], wand:true,
+  geraete:{sprossen:1, bank:1, matte:2}, klein:[],
+  kurz:"An der Sprossenwand hochklettern, oben auf die eingehängte Bank umsteigen und herunterrutschen.",
+  foerdert:"Klettern, Kraft, Mut, Körpergefühl",
+  ablauf:[
+    "Eine Matte unten vor die Sprossenwand legen.",
+    "Die Bank mit dem Haken in eine Sprosse einhängen – etwa auf Brusthöhe eines Erwachsenen.",
+    "Prüfen, ob der Haken über die ganze Breite auf der Sprosse liegt und nicht rutscht.",
+    "Eine zweite Matte an das untere Ende der Bank legen.",
+    "Los geht's: hochklettern, auf die Bank setzen und mit den Füßen voran herunterrutschen."
+  ],
+  stufen:[
+    "Bank tief einhängen, im Sitzen rutschen, die Betreuerin hilft beim Umsteigen.",
+    "Bank höher einhängen, auf dem Bauch mit den Füßen voran rutschen.",
+    "Die Bank hinauflaufen und an der Sprossenwand wieder hinunterklettern."
+  ],
+  sicherheit:"Nie mit dem Kopf voran rutschen. Oben immer nur ein Kind. Die Betreuerin steht an der Stelle, wo die Kinder von der Wand auf die Bank umsteigen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:14,y:95,c:"lila",p:"kletter"},
+      {x:92,y:115,c:"orange",p:"sitz",r:24},
+      {x:178,y:137,c:"gruen",p:"arme"},
+      {x:212,y:143,c:"gelb",p:"steh",flip:1},
+      {x:238,y:143,c:"blau",p:"steh",flip:1},
+      {x:264,y:143,c:"rot",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"sprossen",x:14,oben:62},
+      {typ:"smatte",x:0,w:60},
+      {typ:"sbank",x1:44,y1:118,x2:160,y2:180,haken:1},
+      {typ:"smatte",x:150,w:62}
+    ],
+    pfeile:[{von:[54,176],nach:[54,112],dash:1},{von:[74,108],nach:[150,150],dash:1},{von:[210,120],nach:[40,56],dash:1,bogen:30}]
+  },
+  schritte:[
+    { kinder:[{x:70,y:143,c:"lila",p:"arme"},{x:110,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:212,y:143,c:"gelb",p:"steh",flip:1},{x:238,y:143,c:"blau",p:"steh",flip:1},{x:264,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"sprossen",x:14,oben:62},{typ:"smatte",x:0,w:60}],
+      extra:[{typ:"blase",x:120,y:40,text:"Matte vor die Wand"}] },
+    { kinder:[{x:60,y:143,c:"lila",p:"arme"},{x:100,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:212,y:143,c:"gelb",p:"steh",flip:1},{x:238,y:143,c:"blau",p:"steh",flip:1},{x:264,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:44,y1:118,x2:160,y2:180,haken:1}],
+      extra:[{typ:"blase",x:130,y:40,text:"Einhängen"}],
+      pfeile:[{von:[110,60],nach:[52,112],dash:1}] },
+    { kinder:[{x:54,y:143,c:"lila",p:"steh",flip:1},{x:100,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:212,y:143,c:"gelb",p:"steh",flip:1},{x:238,y:143,c:"blau",p:"steh",flip:1},{x:264,y:143,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:130,y:40,text:"Haken fest? Prüfen!"},{typ:"kreis",cx:47,cy:120,r:13}] },
+    { kinder:[{x:70,y:143,c:"lila",p:"steh"},{x:110,y:143,c:"orange",p:"steh"},{x:178,y:137,c:"gruen",p:"arme"},{x:212,y:143,c:"gelb",p:"steh",flip:1},{x:238,y:143,c:"blau",p:"steh",flip:1},{x:264,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:150,w:62}],
+      extra:[{typ:"blase",x:190,y:40,text:"Matte ans Ende"}] },
+    { kinder:[{x:14,y:95,c:"lila",p:"kletter"},{x:92,y:115,c:"orange",p:"sitz",r:24},{x:178,y:137,c:"gruen",p:"arme"},{x:212,y:143,c:"gelb",p:"steh",flip:1},{x:238,y:143,c:"blau",p:"steh",flip:1},{x:264,y:143,c:"rot",p:"steh",flip:1}],
+      pfeile:[{von:[54,176],nach:[54,112],dash:1},{von:[74,108],nach:[150,150],dash:1}],
+      extra:[{typ:"blase",x:190,y:40,text:"Füße voran!"}] }
+  ]
+},
+{
+  id:"kastentreppe", name:"Kastentreppe", kat:"Springen",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[8,2], wand:false,
+  geraete:{kasten:3, weich:1}, klein:[],
+  kurz:"Eine Treppe aus Kästen hochsteigen und vom höchsten Kasten auf den Weichboden springen.",
+  foerdert:"Sprungkraft, Mut, sicheres Landen",
+  ablauf:[
+    "Den höchsten Kasten (5 Teile) hinstellen.",
+    "Davor einen Kasten mit 3 Teilen und einen mit 1 Teil stellen – dicht aneinander, ohne Lücke.",
+    "Den Weichboden längs vor den höchsten Kasten legen, dahinter mindestens 2 m frei lassen.",
+    "Los geht's: Stufe für Stufe hoch, oben kurz stehen bleiben, dann springen und im Stand landen.",
+    "Nach der Landung sofort vom Weichboden runter – erst dann springt das nächste Kind."
+  ],
+  stufen:[
+    "Hochsteigen, oben hinsetzen und auf den Weichboden rutschen.",
+    "Strecksprung oder Hocksprung, im Stand landen.",
+    "Sprung mit Figur (Hampelmann, halbe Drehung), Landung in den Sitz."
+  ],
+  sicherheit:"Weichboden nie an eine Wand schieben. Das nächste Kind springt erst, wenn der Weichboden frei ist. Kastenteile tragen immer zwei Kinder.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:18,y:128,c:"blau",p:"lauf"},
+      {x:58,y:112,c:"rot",p:"lauf"},
+      {x:102,y:94,c:"gelb",p:"arme"},
+      {x:170,y:60,c:"gruen",p:"sprung"},
+      {x:214,y:127,c:"tuerkis",p:"steh"},
+      {x:258,y:127,c:"orange",p:"lauf"}
+    ],
+    dinge:[
+      {typ:"kasten",x:14,w:40,teile:1},{typ:"kasten",x:54,w:40,teile:3},{typ:"kasten",x:94,w:46,teile:5},
+      {typ:"weich",x:146,w:146}
+    ],
+    pfeile:[{von:[20,118],nach:[96,82],dash:1},{von:[134,78],nach:[196,120],dash:1,bogen:-24},{von:[240,150],nach:[290,150],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:40,y:143,c:"blau",p:"steh"},{x:70,y:143,c:"rot",p:"steh"},{x:150,y:143,c:"gelb",p:"arme"},{x:190,y:143,c:"gruen",p:"steh"},{x:230,y:143,c:"tuerkis",p:"steh"},{x:260,y:143,c:"orange",p:"steh"}],
+      plus:[{typ:"kasten",x:94,w:46,teile:5}],
+      extra:[{typ:"blase",x:117,y:40,text:"5 Teile"}] },
+    { kinder:[{x:14,y:120,c:"blau",p:"steh"},{x:150,y:143,c:"rot",p:"steh"},{x:180,y:143,c:"gelb",p:"steh"},{x:210,y:143,c:"gruen",p:"steh"},{x:236,y:143,c:"tuerkis",p:"steh"},{x:262,y:143,c:"orange",p:"steh"}],
+      plus:[{typ:"kasten",x:54,w:40,teile:3},{typ:"kasten",x:14,w:40,teile:1}],
+      extra:[{typ:"blase",x:78,y:40,text:"Ohne Lücke!"}] },
+    { kinder:[{x:14,y:120,c:"blau",p:"steh"},{x:150,y:127,c:"rot",p:"arme"},{x:180,y:127,c:"gelb",p:"steh"},{x:210,y:127,c:"gruen",p:"steh"},{x:236,y:127,c:"tuerkis",p:"steh"},{x:262,y:127,c:"orange",p:"arme"}],
+      plus:[{typ:"weich",x:146,w:146}],
+      extra:[{typ:"blase",x:218,y:40,text:"2 m frei dahinter"}] },
+    { kinder:[{x:18,y:128,c:"blau",p:"lauf"},{x:58,y:112,c:"rot",p:"lauf"},{x:102,y:94,c:"gelb",p:"arme"},{x:170,y:60,c:"gruen",p:"sprung"},{x:216,y:127,c:"tuerkis",p:"steh",flip:1},{x:262,y:127,c:"orange",p:"steh",flip:1}],
+      pfeile:[{von:[20,118],nach:[96,82],dash:1},{von:[134,78],nach:[196,120],dash:1,bogen:-24}],
+      extra:[{typ:"blase",x:230,y:40,text:"Im Stand landen"}] },
+    { kinder:[{x:18,y:128,c:"blau",p:"steh"},{x:58,y:112,c:"rot",p:"steh"},{x:102,y:94,c:"gelb",p:"steh"},{x:196,y:127,c:"gruen",p:"steh"},{x:262,y:127,c:"tuerkis",p:"lauf"},{x:232,y:127,c:"orange",p:"steh",flip:1}],
+      pfeile:[{von:[226,110],nach:[290,110],dash:1}],
+      extra:[{typ:"blase",x:120,y:40,text:"Erst wenn frei!"}] }
+  ]
+}
+);
+MODULE.push(
+{
+  id:"wackelbank", name:"Wackelbank", kat:"Balancieren",
+  kinder:4, klassen:"1–4", aufbau:2, platz:[6,2], wand:false,
+  geraete:{bank:1, matte:2}, klein:[],
+  kurz:"Über eine umgedrehte Bank balancieren – die schmale Seite oben macht es richtig wackelig.",
+  foerdert:"Gleichgewicht, Körperspannung, Konzentration",
+  ablauf:[
+    "Eine Bank zu viert umdrehen und mit der schmalen Seite (dem Unterholm) nach oben auf den Boden legen – so entsteht ein schmaler, niedriger Steg.",
+    "Links und rechts neben die Bank je eine Turnmatte längs legen (in der Seitenansicht liegen sie hintereinander).",
+    "Los geht's: Die Kinder balancieren nacheinander vorwärts über die Bank, die Arme seitlich ausgestreckt. Wer runtertritt, steigt einfach wieder auf.",
+    "Los geht's: Erst losgehen, wenn das Kind davor die Mitte erreicht hat. Am Ende absteigen und außen herum zurück zum Start."
+  ],
+  stufen:[
+    "Seitwärts im Nachstellschritt balancieren, die Betreuerin gibt bei Bedarf die Hand.",
+    "Vorwärts frei balancieren, in der Mitte kurz auf einem Bein stehen.",
+    "Rückwärts balancieren oder einen Ball auf beiden Händen tragen."
+  ],
+  sicherheit:"Die Bank tragen und umdrehen immer 4 Kinder, Finger weg von den Bankbeinen. Die Matten liegen dicht an der Bank. Nicht drängeln – Abstand halten, niemand schubst oder überholt.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"rot",p:"steh"},
+      {x:70,y:136,c:"orange",p:"balance"},
+      {x:130,y:136,c:"blau",p:"balance"},
+      {x:190,y:136,c:"gruen",p:"balance"},
+      {x:252,y:143,c:"lila",p:"arme"}
+    ],
+    dinge:[
+      {typ:"smatte",x:50,w:196},
+      {typ:"sbank",x1:60,y1:179,x2:236,y2:179}
+    ],
+    pfeile:[{von:[76,124],nach:[236,124],dash:1},{von:[262,120],nach:[30,120],dash:1,bogen:30}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:62,y:143,c:"orange",p:"arme"},{x:110,y:143,c:"blau",p:"arme"},{x:176,y:143,c:"gruen",p:"arme"},{x:224,y:143,c:"lila",p:"arme"}],
+      plus:[{typ:"sbank",x1:60,y1:179,x2:236,y2:179}],
+      extra:[{typ:"blase",x:148,y:40,text:"Zu viert umdrehen!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:70,y:137,c:"orange",p:"arme"},{x:130,y:137,c:"blau",p:"steh"},{x:190,y:137,c:"gruen",p:"steh"},{x:252,y:143,c:"lila",p:"arme"}],
+      plus:[{typ:"smatte",x:50,w:196}],
+      dinge:[{typ:"smatte",x:50,w:196},{typ:"sbank",x1:60,y1:179,x2:236,y2:179}],
+      extra:[{typ:"blase",x:148,y:40,text:"Matten links + rechts"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:70,y:136,c:"orange",p:"balance"},{x:130,y:136,c:"blau",p:"balance"},{x:190,y:136,c:"gruen",p:"balance"},{x:252,y:143,c:"lila",p:"arme"}],
+      dinge:[{typ:"smatte",x:50,w:196},{typ:"sbank",x1:60,y1:179,x2:236,y2:179}],
+      pfeile:[{von:[76,124],nach:[236,124],dash:1}],
+      extra:[{typ:"blase",x:148,y:40,text:"Arme zur Seite!"}] },
+    { kinder:[{x:22,y:143,c:"gelb",p:"steh"},{x:44,y:143,c:"rot",p:"steh"},{x:100,y:136,c:"orange",p:"balance"},{x:160,y:136,c:"blau",p:"balance"},{x:252,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"lila",p:"lauf",flip:1}],
+      dinge:[{typ:"smatte",x:50,w:196},{typ:"sbank",x1:60,y1:179,x2:236,y2:179}],
+      pfeile:[{von:[76,124],nach:[236,124],dash:1},{von:[262,120],nach:[30,120],dash:1,bogen:30}],
+      extra:[{typ:"blase",x:148,y:40,text:"Abstand halten!"}] }
+  ]
+},
+{
+  id:"balken-wanderung", name:"Balken-Wanderung", kat:"Balancieren",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[6,2], wand:false,
+  geraete:{balken:1, matte:2}, klein:["Reifen (1)","Hütchen (1)"],
+  kurz:"Über den Schwebebalken balancieren, dabei über einen Reifen steigen und am Ende das Hütchen antippen.",
+  foerdert:"Gleichgewicht, Konzentration, Koordination",
+  ablauf:[
+    "Den Schwebebalken auf niedriger Höhe frei in die Halle stellen – die Betreuerin trägt mit zwei Kindern.",
+    "Zwei Turnmatten längs links und rechts neben den Balken legen, dicht an die Füße des Balkens.",
+    "Ein Hütchen ans Ende des Balkens stellen. Die Betreuerin hält einen Reifen senkrecht in der Mitte auf den Balken.",
+    "Los geht's: Über den Balken balancieren, über den Reifen steigen, am Ende in die Hocke gehen, das Hütchen antippen und auf die Matte absteigen.",
+    "Los geht's: Höchstens drei Kinder mit Abstand auf dem Balken. Wer fertig ist, läuft außen herum zurück zum Start."
+  ],
+  stufen:[
+    "Ohne Reifen balancieren, die Betreuerin gibt die Hand.",
+    "Über den Reifen steigen und das Hütchen antippen.",
+    "Durch den Reifen hindurchsteigen oder das Hütchen hochheben, umdrehen und zurückbalancieren."
+  ],
+  sicherheit:"Der Balken steht auf niedriger Stufe und wackelt nicht – vorher prüfen. Höchstens drei Kinder mit Abstand auf dem Balken, niemand überholt. Die Betreuerin hält den Reifen locker und lässt sofort los, wenn ein Kind hängen bleibt. Abgestiegen wird nur auf die Matte, nicht gesprungen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"rot",p:"steh"},
+      {x:64,y:113,c:"orange",p:"balance"},
+      {x:118,y:113,c:"blau",p:"kletter"},
+      {x:244,y:143,c:"lila",p:"arme"},
+      {x:184,y:113,c:"gruen",p:"balance"}
+    ],
+    dinge:[
+      {typ:"balken",x:60,w:160,h:30},
+      {typ:"smatte",x:50,w:180},
+      {typ:"huetchen",x:210,y:147},
+      {typ:"reifen",x:142,y:142,r:14,c:"tuerkis"}
+    ],
+    pfeile:[{von:[70,100],nach:[210,100],dash:1},{von:[222,120],nach:[246,160],dash:1,bogen:-10}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"arme"},{x:226,y:143,c:"blau",p:"arme",flip:1},{x:270,y:143,c:"lila",p:"steh",flip:1},{x:248,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"balken",x:60,w:160,h:30}],
+      extra:[{typ:"blase",x:140,y:40,text:"Niedrig einstellen"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"steh"},{x:226,y:143,c:"blau",p:"steh",flip:1},{x:270,y:143,c:"lila",p:"arme",flip:1},{x:248,y:143,c:"gruen",p:"arme",flip:1}],
+      plus:[{typ:"smatte",x:50,w:180}],
+      extra:[{typ:"blase",x:140,y:40,text:"Matten links + rechts"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"steh"},{x:226,y:143,c:"blau",p:"steh",flip:1},{x:270,y:143,c:"lila",p:"steh",flip:1},{x:248,y:143,c:"gruen",p:"arme",flip:1}],
+      plus:[{typ:"huetchen",x:210,y:147},{typ:"reifen",x:142,y:142,r:14,c:"tuerkis"}],
+      extra:[{typ:"blase",x:140,y:40,text:"Betreuerin hält Reifen"},{typ:"kreis",cx:142,cy:142,r:20}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:64,y:113,c:"orange",p:"balance"},{x:118,y:113,c:"blau",p:"kletter"},{x:244,y:143,c:"lila",p:"arme"},{x:184,y:113,c:"gruen",p:"balance"}],
+      pfeile:[{von:[70,100],nach:[210,100],dash:1},{von:[222,120],nach:[246,160],dash:1,bogen:-10}],
+      extra:[{typ:"blase",x:140,y:40,text:"Drübersteigen!"}] },
+    { kinder:[{x:62,y:113,c:"gelb",p:"balance"},{x:0,y:143,c:"rot",p:"steh"},{x:96,y:113,c:"orange",p:"balance"},{x:156,y:113,c:"blau",p:"balance"},{x:244,y:143,c:"lila",p:"lauf",flip:1},{x:204,y:113,c:"gruen",p:"balance"}],
+      pfeile:[{von:[262,120],nach:[20,120],dash:1,bogen:30}],
+      extra:[{typ:"blase",x:140,y:40,text:"Höchstens drei drauf"}] }
+  ]
+},
+{
+  id:"bankwippe", name:"Bankwippe", kat:"Balancieren",
+  kinder:3, klassen:"1–4", aufbau:3, platz:[5,2], wand:false,
+  geraete:{bank:1, kasten:1, matte:2}, klein:[],
+  kurz:"Langsam über eine Bank balancieren, die auf einem Kastenteil liegt – in der Mitte kippt sie wie eine Wippe.",
+  foerdert:"Gleichgewicht, Körpergefühl, Mut, Geduld",
+  ablauf:[
+    "Einen Kasten mit 1 Teil (unterstes Teil mit Deckel) in die Mitte der Station stellen.",
+    "Eine Bank zu viert tragen und quer mittig auf den Kastendeckel legen – die Mitte der Bank liegt genau auf dem Kasten, ein Ende berührt den Boden.",
+    "Links und rechts neben die Wippe je eine Turnmatte längs legen. Die Betreuerin stellt sich direkt neben den Kasten.",
+    "Los geht's: Ein Kind steigt am unteren Ende auf und balanciert langsam zur Mitte hinauf.",
+    "Los geht's: Über dem Kasten kippt die Bank sanft auf die andere Seite – kurz stehen bleiben, dann weiter und am Ende absteigen. Immer nur ein Kind auf der Wippe."
+  ],
+  stufen:[
+    "Die Betreuerin hält die Hand und bremst das Kippen mit dem Fuß.",
+    "Allein balancieren, beim Kippen stehen bleiben und das Gleichgewicht halten.",
+    "Genau in der Mitte anhalten und die Wippe waagerecht halten, bis die Betreuerin bis 3 zählt."
+  ],
+  sicherheit:"Immer nur ein Kind auf der Wippe, die Betreuerin steht die ganze Zeit direkt daneben. Die Bank muss mittig auf dem Deckel liegen und darf nicht zur Seite rutschen – vorher selbst prüfen. Niemand steht oder sitzt am Ende, das herunterkippt (Füße!). Nicht hüpfen und nicht schaukeln.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"rot",p:"steh"},
+      {x:120,y:124,c:"orange",p:"balance",r:-10},
+      {x:244,y:143,c:"blau",p:"arme"},
+      {x:44,y:143,c:"tuerkis",p:"steh"},
+      {x:268,y:143,c:"lila",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"smatte",x:62,w:176},
+      {typ:"kasten",x:128,w:44,teile:1},
+      {typ:"sbank",x1:66,y1:179,x2:234,y2:149}
+    ],
+    pfeile:[{von:[80,160],nach:[148,146],dash:1},{von:[160,146],nach:[226,160],dash:1,bogen:-8}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:96,y:143,c:"orange",p:"arme"},{x:190,y:143,c:"blau",p:"arme"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:240,y:143,c:"lila",p:"steh",flip:1}],
+      plus:[{typ:"kasten",x:128,w:44,teile:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Kasten mit 1 Teil"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:66,y:143,c:"orange",p:"arme"},{x:196,y:143,c:"blau",p:"arme"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:240,y:143,c:"lila",p:"arme",flip:1}],
+      plus:[{typ:"sbank",x1:66,y1:179,x2:234,y2:149}],
+      extra:[{typ:"blase",x:150,y:40,text:"Mitte auf den Kasten"},{typ:"kreis",cx:150,cy:166,r:14}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:66,y:137,c:"orange",p:"steh"},{x:244,y:143,c:"blau",p:"arme"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:268,y:143,c:"lila",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:62,w:176}],
+      dinge:[{typ:"smatte",x:62,w:176},{typ:"kasten",x:128,w:44,teile:1},{typ:"sbank",x1:66,y1:179,x2:234,y2:149}],
+      extra:[{typ:"blase",x:150,y:40,text:"Betreuerin steht dabei"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:120,y:124,c:"orange",p:"balance",r:-10},{x:244,y:143,c:"blau",p:"arme"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:268,y:143,c:"lila",p:"steh",flip:1}],
+      dinge:[{typ:"smatte",x:62,w:176},{typ:"kasten",x:128,w:44,teile:1},{typ:"sbank",x1:66,y1:179,x2:234,y2:149}],
+      pfeile:[{von:[80,160],nach:[148,146],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur ein Kind!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:165,y:126,c:"orange",p:"balance",r:10},{x:244,y:143,c:"blau",p:"steh"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:268,y:143,c:"lila",p:"steh",flip:1}],
+      dinge:[{typ:"smatte",x:62,w:176},{typ:"kasten",x:128,w:44,teile:1},{typ:"sbank",x1:66,y1:149,x2:234,y2:179}],
+      pfeile:[{von:[176,150],nach:[226,166],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Langsam – sie kippt!"}] }
+  ]
+},
+{
+  id:"himmelsleiter", name:"Himmelsleiter", kat:"Balancieren",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[5,3], wand:true,
+  geraete:{sprossen:2, bank:1, matte:3}, klein:[],
+  kurz:"Eine schräg eingehängte Bank zur Sprossenwand hinaufbalancieren und oben seitlich und abwärts klettern.",
+  foerdert:"Gleichgewicht, Klettern, Mut, Kraft",
+  ablauf:[
+    "Zwei Turnmatten längs vor die Sprossenwand legen – sie liegen später unter der Bank. Eine dritte Matte vor das Nachbarfeld der Sprossenwand.",
+    "Eine Bank zu viert tragen und mit dem Haken in eine Sprosse etwa auf Brusthöhe eines Erwachsenen einhängen.",
+    "Prüfen, ob der Haken über die ganze Breite auf der Sprosse liegt und die Bank unten nicht rutscht.",
+    "Los geht's: Die Kinder balancieren die schräge Bank hinauf, steigen oben auf die Sprossenwand um, klettern seitlich ins Nachbarfeld und Sprosse für Sprosse abwärts.",
+    "Los geht's: Höchstens zwei Kinder mit Abstand auf der Bank, an der Sprossenwand immer nur eins. Unten nicht abspringen, sondern bis zur Matte klettern."
+  ],
+  stufen:[
+    "Die Bank auf allen vieren hinaufkrabbeln, die Betreuerin hilft beim Umsteigen.",
+    "Aufrecht hinaufbalancieren, Arme seitlich, oben umsteigen und abwärts klettern.",
+    "Bank eine Sprosse höher einhängen oder mit einem Ball in den Händen hinaufbalancieren."
+  ],
+  sicherheit:"Haken vor dem Start selbst prüfen. Die Betreuerin steht an der Stelle, wo die Kinder von der Bank auf die Sprossenwand umsteigen. Nie höher als bis zur Einhängehöhe klettern, nicht springen. Unter der Bank hält sich niemand auf.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"rot",p:"steh"},
+      {x:48,y:143,c:"tuerkis",p:"steh"},
+      {x:118,y:129,c:"orange",p:"balance",r:-19},
+      {x:168,y:112,c:"blau",p:"balance",r:-19},
+      {x:240,y:90,c:"lila",p:"kletter"}
+    ],
+    dinge:[
+      {typ:"sprossen",x:240,oben:62},
+      {typ:"smatte",x:100,w:70},{typ:"smatte",x:170,w:70},{typ:"smatte",x:270,w:30},
+      {typ:"sbank",x1:110,y1:180,x2:240,y2:135,haken:2}
+    ],
+    pfeile:[{von:[120,166],nach:[222,128],dash:1},{von:[286,96],nach:[286,170],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:48,y:143,c:"tuerkis",p:"steh"},{x:110,y:137,c:"orange",p:"arme"},{x:176,y:137,c:"blau",p:"arme"},{x:266,y:137,c:"lila",p:"steh"}],
+      plus:[{typ:"sprossen",x:240,oben:62},{typ:"smatte",x:100,w:70},{typ:"smatte",x:170,w:70},{typ:"smatte",x:270,w:30}],
+      extra:[{typ:"blase",x:160,y:40,text:"Matten vor die Wand"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"arme"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:66,y:143,c:"orange",p:"arme"},{x:88,y:137,c:"blau",p:"arme"},{x:266,y:137,c:"lila",p:"arme"}],
+      plus:[{typ:"sbank",x1:110,y1:180,x2:240,y2:135,haken:2}],
+      extra:[{typ:"blase",x:160,y:40,text:"Zu viert tragen!"}],
+      pfeile:[{von:[190,70],nach:[236,126],dash:1}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"tuerkis",p:"steh"},{x:66,y:143,c:"orange",p:"steh"},{x:88,y:137,c:"blau",p:"steh"},{x:266,y:137,c:"lila",p:"steh"}],
+      extra:[{typ:"blase",x:160,y:40,text:"Haken prüfen!"},{typ:"kreis",cx:242,cy:139,r:13}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:48,y:143,c:"tuerkis",p:"steh"},{x:118,y:129,c:"orange",p:"balance",r:-19},{x:168,y:112,c:"blau",p:"balance",r:-19},{x:240,y:90,c:"lila",p:"kletter"}],
+      pfeile:[{von:[120,166],nach:[222,128],dash:1},{von:[286,96],nach:[286,170],dash:1}],
+      extra:[{typ:"blase",x:140,y:40,text:"Hinauf und umsteigen"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:70,y:143,c:"tuerkis",p:"steh"},{x:140,y:122,c:"orange",p:"balance",r:-19},{x:196,y:103,c:"blau",p:"balance",r:-19},{x:240,y:122,c:"lila",p:"kletter"}],
+      pfeile:[{von:[286,110],nach:[286,170],dash:1}],
+      extra:[{typ:"blase",x:140,y:40,text:"An der Wand nur eins"}] }
+  ]
+},
+{
+  id:"seiltaenzer-steg", name:"Seiltänzer-Steg", kat:"Balancieren",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[7,2], wand:false,
+  geraete:{kasten:2, bank:1, matte:2}, klein:[],
+  kurz:"Wie im Zirkus über einen schmalen, erhöhten Steg aus einer umgedrehten Bank auf zwei Kästen balancieren.",
+  foerdert:"Gleichgewicht, Mut, Konzentration, Körperspannung",
+  ablauf:[
+    "Zwei Kästen mit je 1 Teil (unterstes Teil mit Deckel) so hinstellen, dass die Bank auf beiden Deckeln gut aufliegt.",
+    "Eine Bank zu viert umdrehen und mit der schmalen Seite (dem Unterholm) nach oben längs über beide Kastendeckel legen.",
+    "Eine Turnmatte zwischen die Kästen unter den Steg legen, die zweite hinter den zweiten Kasten zum Absteigen.",
+    "Los geht's: Auf den ersten Kasten steigen, über den Steg balancieren und vom zweiten Kasten auf die Matte hinuntersteigen.",
+    "Los geht's: Immer nur zwei Kinder auf dem Steg, mit Abstand. Das nächste Kind wartet am Boden, bis der erste Kasten frei ist."
+  ],
+  stufen:[
+    "Seitwärts balancieren, die Betreuerin geht nebenher und gibt die Hand.",
+    "Vorwärts frei balancieren wie ein Seiltänzer, Arme weit zur Seite.",
+    "In der Mitte eine Kniebeuge machen oder rückwärts über den Steg."
+  ],
+  sicherheit:"Die Bank tragen und umdrehen immer 4 Kinder. Sie muss an beiden Enden ganz auf den Deckeln liegen – vorher prüfen, ob sie kippelt. Die Betreuerin steht in der Mitte neben dem Steg. Vom Kasten wird hinuntergestiegen, nicht gesprungen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"rot",p:"steh"},
+      {x:76,y:128,c:"orange",p:"steh"},
+      {x:124,y:121,c:"blau",p:"balance"},
+      {x:174,y:121,c:"gruen",p:"balance"},
+      {x:246,y:137,c:"lila",p:"arme"}
+    ],
+    dinge:[
+      {typ:"kasten",x:70,w:44,teile:1},{typ:"kasten",x:190,w:44,teile:1},
+      {typ:"sbank",x1:74,y1:164,x2:230,y2:164},
+      {typ:"smatte",x:114,w:76},{typ:"smatte",x:234,w:60}
+    ],
+    pfeile:[{von:[90,110],nach:[222,110],dash:1},{von:[226,118],nach:[256,130],dash:1,bogen:-10}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:46,y:143,c:"orange",p:"arme"},{x:128,y:143,c:"blau",p:"steh"},{x:156,y:143,c:"gruen",p:"steh"},{x:246,y:143,c:"lila",p:"arme"}],
+      plus:[{typ:"kasten",x:70,w:44,teile:1},{typ:"kasten",x:190,w:44,teile:1}],
+      extra:[{typ:"blase",x:152,y:40,text:"Je 1 Teil"}],
+      pfeile:[{von:[130,110],nach:[176,110],c:"ink"},{von:[176,110],nach:[130,110],c:"ink"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"arme"},{x:230,y:143,c:"blau",p:"arme",flip:1},{x:250,y:143,c:"gruen",p:"arme",flip:1},{x:270,y:143,c:"lila",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:74,y1:164,x2:230,y2:164}],
+      extra:[{typ:"blase",x:152,y:40,text:"Schmale Seite nach oben"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"steh"},{x:230,y:137,c:"blau",p:"steh",flip:1},{x:250,y:137,c:"gruen",p:"arme",flip:1},{x:270,y:137,c:"lila",p:"arme",flip:1}],
+      plus:[{typ:"smatte",x:114,w:76},{typ:"smatte",x:234,w:60}],
+      extra:[{typ:"blase",x:152,y:40,text:"Matte drunter + dahinter"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:76,y:128,c:"orange",p:"steh"},{x:124,y:121,c:"blau",p:"balance"},{x:174,y:121,c:"gruen",p:"balance"},{x:246,y:137,c:"lila",p:"arme"}],
+      pfeile:[{von:[90,110],nach:[222,110],dash:1},{von:[226,118],nach:[256,130],dash:1,bogen:-10}],
+      extra:[{typ:"blase",x:152,y:40,text:"Wie im Zirkus!"}] },
+    { kinder:[{x:24,y:143,c:"gelb",p:"steh"},{x:46,y:143,c:"rot",p:"steh"},{x:106,y:121,c:"orange",p:"balance"},{x:160,y:121,c:"blau",p:"balance"},{x:196,y:128,c:"gruen",p:"steh"},{x:0,y:143,c:"lila",p:"lauf",flip:1}],
+      pfeile:[{von:[90,110],nach:[222,110],dash:1}],
+      extra:[{typ:"blase",x:152,y:40,text:"Höchstens zwei drauf"}] }
+  ]
+},
+{
+  id:"leiter-steg", name:"Leiter-Steg", kat:"Balancieren",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[7,2], wand:false,
+  geraete:{kasten:2, leiter:1, matte:2}, klein:[],
+  kurz:"Über eine flach auf zwei Kästen liegende Turnleiter von Sprosse zu Sprosse steigen.",
+  foerdert:"Gleichgewicht, Schrittgenauigkeit, Konzentration",
+  ablauf:[
+    "Zwei Kästen mit je 1 Teil (für geübte Kinder 2 Teile) so hinstellen, dass die Leiter an beiden Enden gut aufliegt.",
+    "Die Turnleiter zu viert tragen und flach über beide Kastendeckel legen – sie darf nicht kippeln.",
+    "Eine Turnmatte zwischen die Kästen unter die Leiter legen, die zweite hinter den zweiten Kasten zum Absteigen.",
+    "Los geht's: Auf den ersten Kasten steigen und von Sprosse zu Sprosse über die Zwischenräume steigen. Am Ende vom Kasten auf die Matte hinuntersteigen.",
+    "Los geht's: Immer nur zwei Kinder auf der Leiter, mit mindestens drei Sprossen Abstand."
+  ],
+  stufen:[
+    "Auf allen vieren krabbeln, Hände und Knie auf den Sprossen.",
+    "Aufrecht von Sprosse zu Sprosse gehen, Arme seitlich.",
+    "Nur jede zweite Sprosse benutzen oder auf den beiden Holmen balancieren."
+  ],
+  sicherheit:"Die Leiter muss an beiden Enden mindestens eine Handbreit auf dem Deckel liegen – vorher prüfen. Wer in einen Zwischenraum rutscht, bleibt stehen und hält sich fest; die Betreuerin steht neben der Leitermitte. Vom Kasten nur hinuntersteigen, nicht springen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"rot",p:"steh"},
+      {x:76,y:128,c:"orange",p:"steh"},
+      {x:124,y:120,c:"blau",p:"balance"},
+      {x:174,y:120,c:"gruen",p:"balance"},
+      {x:246,y:137,c:"lila",p:"arme"}
+    ],
+    dinge:[
+      {typ:"kasten",x:70,w:44,teile:1},{typ:"kasten",x:190,w:44,teile:1},
+      {typ:"leiter",x1:74,y1:167,x2:230,y2:167},
+      {typ:"smatte",x:114,w:76},{typ:"smatte",x:234,w:60}
+    ],
+    pfeile:[{von:[90,110],nach:[222,110],dash:1},{von:[226,118],nach:[256,130],dash:1,bogen:-10}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:46,y:143,c:"orange",p:"arme"},{x:128,y:143,c:"blau",p:"steh"},{x:156,y:143,c:"gruen",p:"steh"},{x:246,y:143,c:"lila",p:"arme"}],
+      plus:[{typ:"kasten",x:70,w:44,teile:1},{typ:"kasten",x:190,w:44,teile:1}],
+      extra:[{typ:"blase",x:152,y:40,text:"Je 1 Teil"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"arme"},{x:230,y:143,c:"blau",p:"arme",flip:1},{x:250,y:143,c:"gruen",p:"arme",flip:1},{x:270,y:143,c:"lila",p:"steh",flip:1}],
+      plus:[{typ:"leiter",x1:74,y1:167,x2:230,y2:167}],
+      extra:[{typ:"blase",x:152,y:40,text:"Flach auflegen"},{typ:"kreis",cx:80,cy:168,r:12}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"rot",p:"steh"},{x:44,y:143,c:"orange",p:"steh"},{x:230,y:137,c:"blau",p:"steh",flip:1},{x:250,y:137,c:"gruen",p:"arme",flip:1},{x:270,y:137,c:"lila",p:"arme",flip:1}],
+      plus:[{typ:"smatte",x:114,w:76},{typ:"smatte",x:234,w:60}],
+      extra:[{typ:"blase",x:152,y:40,text:"Matte drunter + dahinter"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"rot",p:"steh"},{x:76,y:128,c:"orange",p:"steh"},{x:124,y:120,c:"blau",p:"balance"},{x:174,y:120,c:"gruen",p:"balance"},{x:246,y:137,c:"lila",p:"arme"}],
+      pfeile:[{von:[90,110],nach:[222,110],dash:1},{von:[226,118],nach:[256,130],dash:1,bogen:-10}],
+      extra:[{typ:"blase",x:152,y:40,text:"Sprosse für Sprosse"}] },
+    { kinder:[{x:24,y:143,c:"gelb",p:"steh"},{x:46,y:143,c:"rot",p:"steh"},{x:106,y:120,c:"orange",p:"balance"},{x:160,y:120,c:"blau",p:"balance"},{x:196,y:128,c:"gruen",p:"steh"},{x:0,y:143,c:"lila",p:"lauf",flip:1}],
+      pfeile:[{von:[90,110],nach:[222,110],dash:1}],
+      extra:[{typ:"blase",x:152,y:40,text:"Drei Sprossen Abstand"}] }
+  ]
+},
+{
+  id:"wandbruecke", name:"Wandbrücke", kat:"Balancieren",
+  kinder:4, klassen:"2–4", aufbau:5, platz:[8,2], wand:true,
+  geraete:{sprossen:1, bank:1, kasten:1, matte:1, weich:1}, klein:[],
+  kurz:"An der Sprossenwand hoch, über die waagerechte Bank zum Kasten balancieren und auf den Weichboden springen.",
+  foerdert:"Gleichgewicht, Klettern, Mut, sicheres Landen",
+  ablauf:[
+    "Einen Kasten mit 3 Teilen etwa eine Banklänge vor die Sprossenwand stellen.",
+    "Eine Bank zu viert tragen, mit dem Haken auf Höhe des Kastendeckels in eine Sprosse einhängen und das andere Ende waagerecht auf den Kasten legen.",
+    "Eine Turnmatte unter die Bank vor die Sprossenwand legen und den Weichboden direkt hinter den Kasten.",
+    "Los geht's: An der Sprossenwand hochklettern, auf die Bank umsteigen, zum Kasten balancieren und auf den Weichboden springen oder hinuntersteigen.",
+    "Los geht's: Immer nur ein Kind an der Wand und höchstens zwei auf der Bank. Gesprungen wird erst, wenn der Weichboden frei ist."
+  ],
+  stufen:[
+    "Die Bank auf allen vieren überqueren und vom Kasten hinunterrutschen.",
+    "Aufrecht balancieren und mit Strecksprung auf den Weichboden.",
+    "Rückwärts balancieren oder Sprung mit halber Drehung."
+  ],
+  sicherheit:"Haken vor dem Start selbst prüfen, die Bank muss waagerecht und fest auf dem Kastendeckel liegen. Die Betreuerin steht an der Wand, wo die Kinder auf die Bank umsteigen. Weichboden nie an eine Wand schieben, das nächste Kind springt erst, wenn er frei ist. Unter der Bank hält sich niemand auf.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:92,c:"lila",p:"kletter"},
+      {x:46,y:105,c:"orange",p:"balance"},
+      {x:92,y:105,c:"blau",p:"balance"},
+      {x:136,y:112,c:"gruen",p:"steh"},
+      {x:198,y:66,c:"rot",p:"sprung"},
+      {x:262,y:143,c:"gelb",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"sprossen",x:0,oben:62},
+      {typ:"kasten",x:130,w:44,teile:3},
+      {typ:"sbank",x1:30,y1:148,x2:170,y2:148,haken:1},
+      {typ:"smatte",x:30,w:100},
+      {typ:"weich",x:178,w:90}
+    ],
+    pfeile:[{von:[40,94],nach:[128,94],dash:1},{von:[168,100],nach:[224,120],dash:1,bogen:-16},{von:[270,120],nach:[20,56],dash:1,bogen:30}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"lila",p:"steh"},{x:180,y:143,c:"orange",p:"arme",flip:1},{x:202,y:143,c:"blau",p:"arme",flip:1},{x:224,y:143,c:"gruen",p:"steh"},{x:246,y:143,c:"rot",p:"steh"},{x:268,y:143,c:"gelb",p:"steh"}],
+      plus:[{typ:"sprossen",x:0,oben:62},{typ:"kasten",x:130,w:44,teile:3}],
+      extra:[{typ:"blase",x:150,y:40,text:"3 Teile"}] },
+    { kinder:[{x:0,y:143,c:"lila",p:"arme"},{x:180,y:143,c:"orange",p:"arme",flip:1},{x:202,y:143,c:"blau",p:"arme",flip:1},{x:224,y:143,c:"gruen",p:"arme",flip:1},{x:246,y:143,c:"rot",p:"steh"},{x:268,y:143,c:"gelb",p:"steh"}],
+      plus:[{typ:"sbank",x1:30,y1:148,x2:170,y2:148,haken:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Haken prüfen!"},{typ:"kreis",cx:28,cy:152,r:12}] },
+    { kinder:[{x:0,y:143,c:"lila",p:"steh"},{x:180,y:127,c:"orange",p:"arme"},{x:202,y:127,c:"blau",p:"steh"},{x:244,y:127,c:"gruen",p:"steh"},{x:268,y:143,c:"rot",p:"steh",flip:1},{x:222,y:127,c:"gelb",p:"arme"}],
+      plus:[{typ:"smatte",x:30,w:100},{typ:"weich",x:178,w:90}],
+      extra:[{typ:"blase",x:150,y:40,text:"Weichboden dicht ran"}] },
+    { kinder:[{x:0,y:92,c:"lila",p:"kletter"},{x:46,y:105,c:"orange",p:"balance"},{x:92,y:105,c:"blau",p:"balance"},{x:136,y:112,c:"gruen",p:"steh"},{x:198,y:66,c:"rot",p:"sprung"},{x:262,y:143,c:"gelb",p:"steh",flip:1}],
+      pfeile:[{von:[40,94],nach:[128,94],dash:1},{von:[168,100],nach:[224,120],dash:1,bogen:-16}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hoch, drüber, springen"}] },
+    { kinder:[{x:0,y:110,c:"gelb",p:"kletter"},{x:70,y:105,c:"lila",p:"balance"},{x:114,y:105,c:"orange",p:"balance"},{x:236,y:127,c:"blau",p:"steh"},{x:210,y:127,c:"gruen",p:"steh"},{x:262,y:143,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[270,120],nach:[20,56],dash:1,bogen:30}],
+      extra:[{typ:"blase",x:150,y:40,text:"Erst wenn frei!"}] }
+  ]
+}
+);
+MODULE.push(
+{
+  id:"kastengebirge", name:"Kastengebirge", kat:"Klettern",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[7,2], wand:false,
+  geraete:{kasten:2, matte:3}, klein:[],
+  kurz:"Über zwei unterschiedlich hohe Kästen mit Matten klettern und auf der Landematte ankommen.",
+  foerdert:"Klettern, Kraft, Körpergefühl, Mut",
+  ablauf:[
+    "Einen Kasten mit 2 Teilen und direkt dahinter einen Kasten mit 4 Teilen hinstellen – ohne Lücke. Kastenteile tragen immer zwei Kinder.",
+    "Je eine Turnmatte längs über die beiden Kastendeckel legen – das ist das Gebirge.",
+    "Eine Turnmatte als Landefläche hinter den hohen Kasten legen.",
+    "Los geht's: auf den kleinen Kasten klettern, auf den hohen Kasten krabbeln und auf der anderen Seite auf die Matte hinunter – immer nur ein Kind auf dem Gebirge."
+  ],
+  stufen:[
+    "Hochkrabbeln, oben hinsetzen und rückwärts auf die Matte hinunterklettern.",
+    "Frei drüberklettern und vom hohen Kasten auf die Matte hinuntersteigen.",
+    "Ohne Hände hochsteigen oder vom hohen Kasten mit Strecksprung auf die Matte springen."
+  ],
+  sicherheit:"Die Kästen stehen dicht aneinander und wackeln nicht. Die Matten oben dürfen nicht über die Kante hängen. Immer nur ein Kind auf dem Gebirge; die Betreuerin steht am hohen Kasten. Springen nur mit den Füßen voran.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:4,y:143,c:"gelb",p:"steh"},
+      {x:28,y:143,c:"lila",p:"steh"},
+      {x:52,y:143,c:"orange",p:"kletter"},
+      {x:86,y:114,c:"blau",p:"krabbel"},
+      {x:126,y:98,c:"gruen",p:"lauf"},
+      {x:192,y:137,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"kasten",x:76,w:44,teile:2},{typ:"kasten",x:120,w:44,teile:4},
+      {typ:"smatte",x:74,w:46,y:163},{typ:"smatte",x:120,w:46,y:147},
+      {typ:"smatte",x:168,w:90}
+    ],
+    pfeile:[{von:[34,170],nach:[74,150],dash:1},{von:[96,102],nach:[132,88],dash:1},{von:[160,90],nach:[214,128],dash:1,bogen:-16}]
+  },
+  schritte:[
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:52,y:143,c:"orange",p:"arme"},{x:176,y:143,c:"blau",p:"arme",flip:1},{x:210,y:143,c:"gruen",p:"steh",flip:1},{x:240,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"kasten",x:76,w:44,teile:2},{typ:"kasten",x:120,w:44,teile:4}],
+      extra:[{typ:"blase",x:120,y:40,text:"Ohne Lücke!"},{typ:"kreis",cx:120,cy:168,r:12}] },
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"arme"},{x:52,y:143,c:"orange",p:"steh"},{x:176,y:143,c:"blau",p:"arme",flip:1},{x:210,y:143,c:"gruen",p:"steh",flip:1},{x:240,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:74,w:46,y:163},{typ:"smatte",x:120,w:46,y:147}],
+      extra:[{typ:"blase",x:120,y:40,text:"Matten flach auflegen"}] },
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:52,y:143,c:"orange",p:"steh"},{x:176,y:137,c:"blau",p:"steh"},{x:206,y:137,c:"gruen",p:"arme"},{x:236,y:137,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:168,w:90}],
+      extra:[{typ:"blase",x:212,y:40,text:"Landematte"}] },
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:52,y:143,c:"orange",p:"kletter"},{x:86,y:114,c:"blau",p:"krabbel"},{x:126,y:98,c:"gruen",p:"lauf"},{x:192,y:137,c:"rot",p:"arme"}],
+      pfeile:[{von:[34,170],nach:[74,150],dash:1},{von:[96,102],nach:[132,88],dash:1},{von:[160,90],nach:[214,128],dash:1,bogen:-16}],
+      extra:[{typ:"blase",x:220,y:40,text:"Nur ein Kind oben!"}] }
+  ]
+},
+{
+  id:"sprossen-traverse", name:"Sprossenwand-Traverse", kat:"Klettern",
+  kinder:4, klassen:"1–4", aufbau:3, platz:[8,2], wand:true,
+  geraete:{sprossen:3, matte:3}, klein:["Hütchen (2)"],
+  kurz:"Seitlich an der Sprossenwand vom Start bis zum Ziel klettern, ohne den Boden zu berühren.",
+  foerdert:"Klettern, Kraft in Armen und Händen, Koordination, Ausdauer",
+  ablauf:[
+    "Drei Turnmatten lückenlos vor drei Felder der Sprossenwand legen.",
+    "Ein Hütchen links als Start und eins rechts als Ziel an die Wand stellen.",
+    "Die Betreuerin zeigt die Regel: Die Füße stehen höchstens auf der 3. Sprosse von unten.",
+    "Los geht's: am Start aufsteigen, seitlich bis zum Ziel klettern und dort absteigen – immer ein Feld Abstand zum Kind davor."
+  ],
+  stufen:[
+    "Füße auf der untersten Sprosse, Hände dürfen überall greifen, Pausen erlaubt.",
+    "Füße auf der 2. oder 3. Sprosse, ohne Absteigen bis zum Ziel.",
+    "Nur jede zweite Sprosse greifen oder die Strecke hin und zurück klettern."
+  ],
+  sicherheit:"Füße nie höher als die 3. Sprosse. Überholen ist verboten, Abstand mindestens ein Feld. Wer müde wird, steigt einfach auf die Matte ab. Die Betreuerin geht in der Mitte mit.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:64,y:114,c:"orange",p:"kletter"},
+      {x:134,y:125,c:"blau",p:"kletter"},
+      {x:204,y:114,c:"gruen",p:"kletter"},
+      {x:248,y:137,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"sprossen",x:46,oben:62,w:78},{typ:"sprossen",x:124,oben:62,w:78},{typ:"sprossen",x:202,oben:62,w:78},
+      {typ:"smatte",x:46,w:78},{typ:"smatte",x:124,w:78},{typ:"smatte",x:202,w:78},
+      {typ:"huetchen",x:36,y:177},{typ:"huetchen",x:290,y:177}
+    ],
+    pfeile:[{von:[98,110],nach:[128,110],dash:1},{von:[168,110],nach:[198,110],dash:1},{von:[238,110],nach:[262,128],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:70,y:137,c:"orange",p:"arme"},{x:140,y:137,c:"blau",p:"steh"},{x:200,y:137,c:"gruen",p:"arme"},{x:248,y:137,c:"rot",p:"steh"}],
+      plus:[{typ:"sprossen",x:46,oben:62,w:78},{typ:"sprossen",x:124,oben:62,w:78},{typ:"sprossen",x:202,oben:62,w:78},{typ:"smatte",x:46,w:78},{typ:"smatte",x:124,w:78},{typ:"smatte",x:202,w:78}],
+      extra:[{typ:"blase",x:160,y:40,text:"Matten ohne Lücke!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"arme"},{x:70,y:137,c:"orange",p:"steh"},{x:140,y:137,c:"blau",p:"steh"},{x:200,y:137,c:"gruen",p:"steh"},{x:248,y:137,c:"rot",p:"arme"}],
+      plus:[{typ:"huetchen",x:36,y:177},{typ:"huetchen",x:290,y:177}],
+      extra:[{typ:"blase",x:160,y:40,text:"Start und Ziel"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:64,y:114,c:"orange",p:"kletter"},{x:140,y:137,c:"blau",p:"steh",flip:1},{x:200,y:137,c:"gruen",p:"steh",flip:1},{x:248,y:137,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:160,y:40,text:"Max. 3. Sprosse!"},{typ:"kreis",cx:79,cy:158,r:14}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:64,y:114,c:"orange",p:"kletter"},{x:134,y:125,c:"blau",p:"kletter"},{x:204,y:114,c:"gruen",p:"kletter"},{x:248,y:137,c:"rot",p:"arme"}],
+      pfeile:[{von:[98,110],nach:[128,110],dash:1},{von:[168,110],nach:[198,110],dash:1},{von:[238,110],nach:[262,128],dash:1}],
+      extra:[{typ:"blase",x:160,y:40,text:"Ein Feld Abstand"}] }
+  ]
+},
+{
+  id:"leiter-aufstieg", name:"Leiter-Aufstieg", kat:"Klettern",
+  kinder:4, klassen:"1–4", aufbau:5, platz:[8,2], wand:false,
+  geraete:{kasten:1, leiter:1, bank:1, matte:2}, klein:[],
+  kurz:"Eine schräge Leiter auf den Kasten hochklettern, oben stehen und über die Bank wieder hinunter.",
+  foerdert:"Klettern, Koordination, Mut, Gleichgewicht",
+  ablauf:[
+    "Einen Kasten mit 4 Teilen hinstellen – die Teile tragen immer zwei Kinder.",
+    "Die Turnleiter schräg an den Kasten lehnen und oben am Deckel einhängen; eine Matte unter das Leiterende legen.",
+    "Auf der anderen Seite eine Bank mit dem Haken am Kasten einhängen – vier Kinder tragen sie. Eine Matte ans untere Bankende legen.",
+    "Los geht's: die Leiter hochklettern, oben auf dem Kasten kurz stehen und über die Bank hinuntergehen oder -rutschen – immer nur ein Kind auf dem Kasten."
+  ],
+  stufen:[
+    "Leiter auf allen vieren hochkrabbeln, auf der Bank im Sitzen hinunterrutschen.",
+    "Leiter frei hochklettern, oben aufrichten, Bank auf dem Bauch mit den Füßen voran hinunterrutschen.",
+    "Die Bank hinunterbalancieren und am Ende auf die Matte springen."
+  ],
+  sicherheit:"Beide Haken (Leiter und Bank) müssen ganz über dem Kastendeckel greifen – die Betreuerin prüft sie vorher. Immer nur ein Kind auf dem Kasten. Nie mit dem Kopf voran rutschen. Die Betreuerin steht am Kasten.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:66,y:122,c:"orange",p:"kletter"},
+      {x:126,y:104,c:"blau",p:"arme"},
+      {x:190,y:121,c:"gruen",p:"sitz",r:22},
+      {x:258,y:137,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"kasten",x:120,w:44,teile:4},
+      {typ:"smatte",x:40,w:50},
+      {typ:"leiter",x1:52,y1:180,x2:122,y2:147},
+      {typ:"sbank",x1:162,y1:140,x2:250,y2:180,haken:1},
+      {typ:"smatte",x:244,w:54}
+    ],
+    pfeile:[{von:[44,164],nach:[104,128],dash:1},{von:[172,120],nach:[236,152],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:80,y:143,c:"orange",p:"arme"},{x:180,y:143,c:"blau",p:"arme",flip:1},{x:220,y:143,c:"gruen",p:"steh"},{x:250,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"kasten",x:120,w:44,teile:4}],
+      extra:[{typ:"blase",x:142,y:40,text:"4 Teile"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:170,y:143,c:"orange",p:"arme"},{x:196,y:143,c:"blau",p:"steh",flip:1},{x:224,y:143,c:"gruen",p:"steh"},{x:252,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:40,w:50},{typ:"leiter",x1:52,y1:180,x2:122,y2:147}],
+      extra:[{typ:"blase",x:120,y:40,text:"Haken prüfen!"},{typ:"kreis",cx:122,cy:148,r:12}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:168,y:143,c:"orange",p:"arme"},{x:196,y:143,c:"blau",p:"arme"},{x:224,y:143,c:"gruen",p:"arme"},{x:258,y:137,c:"rot",p:"steh"}],
+      plus:[{typ:"sbank",x1:162,y1:140,x2:250,y2:180,haken:1},{typ:"smatte",x:244,w:54}],
+      extra:[{typ:"blase",x:210,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:66,y:122,c:"orange",p:"kletter"},{x:126,y:104,c:"blau",p:"arme"},{x:190,y:121,c:"gruen",p:"sitz",r:22},{x:258,y:137,c:"rot",p:"steh"}],
+      pfeile:[{von:[44,164],nach:[104,128],dash:1},{von:[172,120],nach:[236,152],dash:1}],
+      extra:[{typ:"blase",x:220,y:40,text:"Nur ein Kind oben!"}] }
+  ]
+},
+{
+  id:"barren-tunnel", name:"Barren-Tunnel", kat:"Klettern",
+  kinder:4, klassen:"1–4", aufbau:5, platz:[6,3], wand:false,
+  geraete:{barren:1, matte:3}, klein:[],
+  kurz:"Unter dem Barren durchkriechen und oben über die Holme zurückklettern.",
+  foerdert:"Klettern, Stützkraft, Körperspannung, Raumgefühl",
+  ablauf:[
+    "Die Betreuerin stellt beide Holme des Barrens gleich hoch ein – etwa auf Hüfthöhe der Kinder – und zieht die Schrauben fest.",
+    "Eine Turnmatte längs unter den Barren schieben, je eine Matte links und rechts neben den Barren legen.",
+    "Los geht's: auf allen vieren unter den Holmen durchkriechen.",
+    "Los geht's: am Ende auf die Holme steigen, oben zurück zum Anfang klettern und auf die Matte absteigen – immer nur ein Kind oben."
+  ],
+  stufen:[
+    "Durchkriechen, oben im Sitzen Hand für Hand zurückrutschen.",
+    "Oben im Vierfüßlergang auf beiden Holmen zurückklettern.",
+    "Oben im Stütz zurückhangeln oder unten auf dem Rücken durchrobben."
+  ],
+  sicherheit:"Die Holme müssen fest verschraubt sein – vorher prüfen. Holme nicht höher als Hüfthöhe. Immer nur ein Kind oben. Die Betreuerin steht seitlich am Barren und sichert beim Aufsteigen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:4,y:143,c:"gelb",p:"steh"},
+      {x:30,y:143,c:"lila",p:"steh"},
+      {x:108,y:137,c:"orange",p:"krabbel"},
+      {x:148,y:137,c:"blau",p:"krabbel"},
+      {x:126,y:99,c:"gruen",p:"krabbel",flip:1},
+      {x:212,y:143,c:"rot",p:"kletter",flip:1}
+    ],
+    dinge:[
+      {typ:"smatte",x:80,w:130},
+      {typ:"barren",x:90,w:100,h:40}
+    ],
+    pfeile:[{von:[76,172],nach:[200,172],dash:1},{von:[200,124],nach:[94,124],dash:1,bogen:12}]
+  },
+  schritte:[
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:56,y:143,c:"orange",p:"steh"},{x:206,y:143,c:"blau",p:"steh",flip:1},{x:232,y:143,c:"gruen",p:"steh",flip:1},{x:258,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"barren",x:90,w:100,h:40}],
+      extra:[{typ:"blase",x:140,y:40,text:"Holme gleich hoch"},{typ:"kreis",cx:102,cy:150,r:12}] },
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"arme"},{x:56,y:143,c:"orange",p:"steh"},{x:206,y:143,c:"blau",p:"arme",flip:1},{x:232,y:143,c:"gruen",p:"steh",flip:1},{x:258,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:80,w:130}],
+      extra:[{typ:"blase",x:140,y:40,text:"Matten drunter!"}] },
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:108,y:137,c:"orange",p:"krabbel"},{x:148,y:137,c:"blau",p:"krabbel"},{x:232,y:143,c:"gruen",p:"steh",flip:1},{x:258,y:143,c:"rot",p:"steh",flip:1}],
+      pfeile:[{von:[76,172],nach:[200,172],dash:1}],
+      extra:[{typ:"blase",x:140,y:40,text:"Durchkriechen"}] },
+    { kinder:[{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:108,y:137,c:"orange",p:"krabbel"},{x:148,y:137,c:"blau",p:"krabbel"},{x:126,y:99,c:"gruen",p:"krabbel",flip:1},{x:212,y:143,c:"rot",p:"kletter",flip:1}],
+      pfeile:[{von:[200,124],nach:[94,124],dash:1,bogen:12}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur ein Kind oben!"}] }
+  ]
+},
+{
+  id:"weichbodenberg", name:"Weichbodenberg", kat:"Klettern",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[7,2], wand:false,
+  geraete:{kasten:1, matte:2, weich:1}, klein:[],
+  kurz:"Auf den Kasten-Gipfel krabbeln und auf der anderen Seite auf den Weichboden hinunterrutschen.",
+  foerdert:"Klettern, Kraft, Mut, Körpergefühl",
+  ablauf:[
+    "Einen Kasten mit 3 Teilen hinstellen und eine Turnmatte oben auf den Deckel legen.",
+    "Den Weichboden dicht an eine Kastenseite legen – vier Kinder tragen ihn.",
+    "Eine Turnmatte vor die andere Kastenseite legen – hier wird hochgeklettert.",
+    "Los geht's: auf den Kasten krabbeln, oben hinsetzen und mit den Füßen voran auf den Weichboden hinunterrutschen – dann seitlich runter und zurück zum Start."
+  ],
+  stufen:[
+    "Mit Hilfe hochklettern, oben hinsetzen und langsam hinunterrutschen.",
+    "Allein hochkrabbeln und auf dem Po hinunterrutschen.",
+    "Oben aufstehen und mit Strecksprung auf den Weichboden springen."
+  ],
+  sicherheit:"Der Weichboden liegt lückenlos am Kasten. Immer nur ein Kind oben, das nächste startet erst, wenn der Weichboden frei ist. Nie mit dem Kopf voran rutschen oder springen. Die Betreuerin steht am Kasten.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:66,y:137,c:"orange",p:"kletter"},
+      {x:104,y:106,c:"blau",p:"krabbel"},
+      {x:150,y:117,c:"gruen",p:"sitz",r:30},
+      {x:222,y:127,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"kasten",x:100,w:44,teile:3},
+      {typ:"smatte",x:98,w:48,y:155},
+      {typ:"weich",x:146,w:120},
+      {typ:"smatte",x:44,w:56}
+    ],
+    pfeile:[{von:[48,168],nach:[96,140],dash:1},{von:[140,120],nach:[196,150],dash:1,bogen:-10},{von:[250,112],nach:[40,70],dash:1,bogen:24}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:62,y:143,c:"orange",p:"arme"},{x:176,y:143,c:"blau",p:"arme",flip:1},{x:220,y:143,c:"gruen",p:"steh"},{x:250,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"kasten",x:100,w:44,teile:3},{typ:"smatte",x:98,w:48,y:155}],
+      extra:[{typ:"blase",x:122,y:40,text:"Matte oben drauf"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:62,y:143,c:"orange",p:"steh"},{x:168,y:127,c:"blau",p:"arme"},{x:200,y:127,c:"gruen",p:"steh"},{x:232,y:127,c:"rot",p:"arme"}],
+      plus:[{typ:"weich",x:146,w:120}],
+      extra:[{typ:"blase",x:206,y:40,text:"Zu viert tragen!"},{typ:"kreis",cx:146,cy:176,r:12}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"arme"},{x:62,y:137,c:"orange",p:"arme"},{x:168,y:127,c:"blau",p:"steh"},{x:200,y:127,c:"gruen",p:"steh"},{x:232,y:127,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:44,w:56}],
+      extra:[{typ:"blase",x:72,y:40,text:"Ohne Lücke!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:66,y:137,c:"orange",p:"kletter"},{x:104,y:106,c:"blau",p:"krabbel"},{x:150,y:117,c:"gruen",p:"sitz",r:30},{x:222,y:127,c:"rot",p:"arme"}],
+      pfeile:[{von:[48,168],nach:[96,140],dash:1},{von:[140,120],nach:[196,150],dash:1,bogen:-10}],
+      extra:[{typ:"blase",x:210,y:40,text:"Füße voran!"}] }
+  ]
+},
+{
+  id:"kasten-korb", name:"Kasten-Korb", kat:"Werfen & Zielen",
+  kinder:5, klassen:"1–4", aufbau:2, platz:[6,2], wand:false,
+  geraete:{kasten:1}, klein:["Hütchen (3)","Bälle"],
+  kurz:"Bälle aus immer größerer Entfernung in einen niedrigen Kasten werfen.",
+  foerdert:"Zielen, Wurfgefühl, Auge-Hand-Koordination, Konzentration",
+  ablauf:[
+    "Einen Kasten mit 2 Teilen hinstellen – am besten ohne Deckel, dann ist er ein Korb.",
+    "Drei Hütchen im Abstand von etwa 1 m, 2 m und 3 m vor den Kasten stellen – das sind die Wurflinien.",
+    "Die Bälle am Start bereitlegen.",
+    "Los geht's: hinter dem nächsten Hütchen stehen und den Ball in den Kasten werfen. Wer trifft, darf ein Hütchen weiter nach hinten.",
+    "Ein Kind ist Ballholer: Es sammelt die Bälle hinter dem Kasten und rollt sie zum Start zurück, dann wird gewechselt."
+  ],
+  stufen:[
+    "Vom nächsten Hütchen mit beiden Händen von unten werfen.",
+    "Vom mittleren Hütchen mit einer Hand werfen.",
+    "Vom hintersten Hütchen werfen oder rückwärts über den Kopf in den Kasten."
+  ],
+  sicherheit:"Nur werfen, wenn niemand vor dem Kasten steht. Der Ballholer sammelt erst, wenn alle Bälle geworfen sind. Weiche Bälle verwenden.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:44,y:143,c:"rot",p:"steh"},
+      {x:66,y:143,c:"orange",p:"steh"},
+      {x:92,y:143,c:"blau",p:"arme"},
+      {x:266,y:143,c:"gruen",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"kasten",x:220,w:44,teile:2},
+      {typ:"huetchen",x:196,y:177},{typ:"huetchen",x:160,y:177},{typ:"huetchen",x:124,y:177},
+      {typ:"ball",x:80,y:180},{typ:"ball",x:90,y:180}
+    ],
+    pfeile:[{von:[114,140],nach:[240,156],dash:1,bogen:-45}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:44,y:143,c:"rot",p:"steh"},{x:66,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"blau",p:"arme"},{x:266,y:143,c:"gruen",p:"arme",flip:1}],
+      plus:[{typ:"kasten",x:220,w:44,teile:2}],
+      extra:[{typ:"blase",x:242,y:40,text:"2 Teile = Korb"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:44,y:143,c:"rot",p:"arme"},{x:66,y:143,c:"orange",p:"steh"},{x:92,y:143,c:"blau",p:"steh"},{x:266,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"huetchen",x:196,y:177},{typ:"huetchen",x:160,y:177},{typ:"huetchen",x:124,y:177}],
+      extra:[{typ:"blase",x:150,y:40,text:"1 m – 2 m – 3 m"},{typ:"text",x:196,y:162,text:"1",gr:9},{typ:"text",x:160,y:162,text:"2",gr:9},{typ:"text",x:124,y:162,text:"3",gr:9}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"arme"},{x:22,y:143,c:"lila",p:"steh"},{x:44,y:143,c:"rot",p:"steh"},{x:66,y:143,c:"orange",p:"steh"},{x:92,y:143,c:"blau",p:"steh"},{x:266,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"ball",x:80,y:180},{typ:"ball",x:90,y:180}],
+      extra:[{typ:"blase",x:62,y:40,text:"Bälle bereit"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:44,y:143,c:"rot",p:"steh"},{x:66,y:143,c:"orange",p:"steh"},{x:92,y:143,c:"blau",p:"arme"},{x:266,y:143,c:"gruen",p:"steh",flip:1}],
+      pfeile:[{von:[114,140],nach:[240,156],dash:1,bogen:-45}],
+      extra:[{typ:"blase",x:150,y:40,text:"Treffer? Weiter hinten!"},{typ:"ball",x:176,y:106}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:44,y:143,c:"rot",p:"steh"},{x:66,y:143,c:"orange",p:"steh"},{x:92,y:143,c:"blau",p:"steh"},{x:240,y:143,c:"gruen",p:"lauf",flip:1}],
+      pfeile:[{von:[216,176],nach:[112,176],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Ballholer rollt zurück"},{typ:"ball",x:204,y:180}] }
+  ]
+},
+{
+  id:"reifen-zielwurf", name:"Reifen-Zielwurf", kat:"Werfen & Zielen",
+  kinder:5, klassen:"1–4", aufbau:3, platz:[6,2], wand:true,
+  geraete:{sprossen:1}, klein:["Reifen (2)","Hütchen (2)","Bälle"],
+  kurz:"Bälle durch Reifen werfen, die an der Sprossenwand hängen.",
+  foerdert:"Zielen, Wurfkraft, Auge-Hand-Koordination",
+  ablauf:[
+    "Die Betreuerin hängt zwei Reifen an die Sprossenwand – einen auf Brusthöhe, einen auf Kopfhöhe der Kinder.",
+    "Mit zwei Hütchen die Wurflinien markieren: nah (etwa 2 m) und weit (etwa 3 m).",
+    "Die Bälle am Start bereitlegen.",
+    "Los geht's: hinter dem Hütchen stehen und den Ball durch einen Reifen werfen – der obere Reifen zählt doppelt.",
+    "Erst wenn alle Bälle geworfen sind, holen die Kinder sie gemeinsam zurück."
+  ],
+  stufen:[
+    "Vom nahen Hütchen auf den unteren Reifen werfen, beidhändig.",
+    "Vom weiten Hütchen, einhändig, beide Reifen abwechselnd.",
+    "Vom weiten Hütchen auf dem oberen Reifen punkten oder mit der schwächeren Hand werfen."
+  ],
+  sicherheit:"Reifen fest einhängen, dass sie nicht herunterfallen. Niemand läuft zur Wand, solange geworfen wird. Weiche Bälle verwenden.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"lila",p:"steh"},
+      {x:48,y:143,c:"rot",p:"steh"},
+      {x:92,y:143,c:"orange",p:"steh"},
+      {x:124,y:143,c:"blau",p:"arme"},
+      {x:196,y:143,c:"gruen",p:"ruf"}
+    ],
+    dinge:[
+      {typ:"sprossen",x:262,oben:62,w:30},
+      {typ:"reifen",x:252,y:146,r:14,c:"tuerkis"},{typ:"reifen",x:252,y:104,r:14,c:"rot"},
+      {typ:"huetchen",x:192,y:177},{typ:"huetchen",x:157,y:177},
+      {typ:"ball",x:74,y:180},{typ:"ball",x:84,y:180}
+    ],
+    pfeile:[{von:[140,138],nach:[246,104],dash:1,bogen:-24}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:48,y:143,c:"rot",p:"steh"},{x:88,y:143,c:"orange",p:"steh"},{x:118,y:143,c:"blau",p:"steh"},{x:196,y:143,c:"gruen",p:"arme"}],
+      plus:[{typ:"sprossen",x:262,oben:62,w:30},{typ:"reifen",x:252,y:146,r:14,c:"tuerkis"},{typ:"reifen",x:252,y:104,r:14,c:"rot"}],
+      extra:[{typ:"blase",x:190,y:40,text:"Fest einhängen!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:48,y:143,c:"rot",p:"steh"},{x:88,y:143,c:"orange",p:"steh"},{x:118,y:143,c:"blau",p:"arme"},{x:212,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"huetchen",x:192,y:177},{typ:"huetchen",x:157,y:177}],
+      extra:[{typ:"blase",x:170,y:40,text:"2 m und 3 m"},{typ:"text",x:192,y:162,text:"nah",gr:9},{typ:"text",x:157,y:162,text:"weit",gr:9}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:48,y:143,c:"rot",p:"arme"},{x:88,y:143,c:"orange",p:"steh"},{x:118,y:143,c:"blau",p:"steh"},{x:212,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"ball",x:74,y:180},{typ:"ball",x:84,y:180}],
+      extra:[{typ:"blase",x:80,y:40,text:"Bälle bereit"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:48,y:143,c:"rot",p:"steh"},{x:88,y:143,c:"orange",p:"steh"},{x:118,y:143,c:"blau",p:"arme"},{x:196,y:143,c:"gruen",p:"ruf"}],
+      pfeile:[{von:[140,138],nach:[246,104],dash:1,bogen:-24}],
+      extra:[{typ:"blase",x:150,y:40,text:"Oben zählt doppelt!"}] },
+    { kinder:[{x:30,y:143,c:"gelb",p:"steh"},{x:100,y:143,c:"lila",p:"lauf"},{x:128,y:143,c:"rot",p:"lauf"},{x:156,y:143,c:"orange",p:"lauf"},{x:184,y:143,c:"blau",p:"lauf"},{x:212,y:143,c:"gruen",p:"arme"}],
+      pfeile:[{von:[70,128],nach:[170,128],dash:1}],
+      extra:[{typ:"blase",x:120,y:40,text:"Erst alle, dann holen"},{typ:"ball",x:244,y:180},{typ:"ball",x:226,y:180}] }
+  ]
+},
+{
+  id:"balance-wurf", name:"Balance-Wurf", kat:"Werfen & Zielen",
+  kinder:4, klassen:"1–4", aufbau:3, platz:[8,2], wand:false,
+  geraete:{bank:1, kasten:1}, klein:["Bälle"],
+  kurz:"Mit dem Ball über die Bank balancieren und vom Bankende in den Kasten werfen.",
+  foerdert:"Gleichgewicht, Zielen, Konzentration, Koordination",
+  ablauf:[
+    "Eine Bank flach hinstellen, Sitzfläche oben – vier Kinder tragen sie.",
+    "Einen Kasten mit 2 Teilen etwa 2 m hinter das Bankende stellen – das ist der Korb.",
+    "Die Bälle am Bankanfang bereitlegen.",
+    "Los geht's: einen Ball nehmen, über die Bank balancieren und vom Bankende aus in den Kasten werfen – immer nur ein Kind auf der Bank.",
+    "Ein Kind ist Ballholer und bringt die Bälle zum Start zurück, dann wird gewechselt."
+  ],
+  stufen:[
+    "Über die Bank gehen, am Ende auf den Boden steigen und von dort werfen.",
+    "Auf dem Bankende stehen bleiben und werfen.",
+    "In der Mitte der Bank auf einem Bein stehen und werfen."
+  ],
+  sicherheit:"Die Bank tragen immer 4 Kinder. Immer nur ein Kind auf der Bank. Niemand steht zwischen Bank und Kasten, solange geworfen wird. Weiche Bälle verwenden.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:66,y:129,c:"orange",p:"balance"},
+      {x:132,y:129,c:"blau",p:"arme"},
+      {x:196,y:143,c:"rot",p:"ruf"},
+      {x:268,y:143,c:"gruen",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"sbank",x1:44,y1:172,x2:170,y2:172,beine:1},
+      {typ:"kasten",x:236,w:44,teile:2},
+      {typ:"ball",x:36,y:180},{typ:"ball",x:48,y:180}
+    ],
+    pfeile:[{von:[70,118],nach:[112,118],dash:1},{von:[156,128],nach:[254,156],dash:1,bogen:-40}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"arme"},{x:60,y:143,c:"orange",p:"arme"},{x:140,y:143,c:"blau",p:"arme"},{x:172,y:143,c:"rot",p:"arme"},{x:250,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:44,y1:172,x2:170,y2:172,beine:1}],
+      extra:[{typ:"blase",x:108,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:76,y:143,c:"orange",p:"steh"},{x:130,y:143,c:"blau",p:"steh"},{x:196,y:143,c:"rot",p:"arme"},{x:268,y:143,c:"gruen",p:"arme",flip:1}],
+      plus:[{typ:"kasten",x:236,w:44,teile:2}],
+      extra:[{typ:"blase",x:204,y:40,text:"ca. 2 m"}],
+      pfeile:[{von:[174,150],nach:[232,150],c:"ink"},{von:[232,150],nach:[174,150],c:"ink"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"arme"},{x:22,y:143,c:"lila",p:"steh"},{x:76,y:143,c:"orange",p:"steh"},{x:130,y:143,c:"blau",p:"steh"},{x:196,y:143,c:"rot",p:"steh"},{x:268,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"ball",x:36,y:180},{typ:"ball",x:48,y:180}],
+      extra:[{typ:"blase",x:60,y:40,text:"Bälle bereit"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:66,y:129,c:"orange",p:"balance"},{x:132,y:129,c:"blau",p:"arme"},{x:196,y:143,c:"rot",p:"ruf"},{x:268,y:143,c:"gruen",p:"steh",flip:1}],
+      pfeile:[{von:[70,118],nach:[112,118],dash:1},{von:[156,128],nach:[254,156],dash:1,bogen:-40}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur ein Kind drauf!"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:66,y:129,c:"orange",p:"balance"},{x:150,y:129,c:"blau",p:"steh"},{x:196,y:143,c:"rot",p:"steh"},{x:224,y:143,c:"gruen",p:"lauf",flip:1}],
+      pfeile:[{von:[220,178],nach:[70,178],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Ballholer wechselt"},{typ:"ball",x:210,y:180}] }
+  ]
+},
+{
+  id:"kegelbahn", name:"Kegelbahn", kat:"Werfen & Zielen",
+  kinder:6, klassen:"1–4", aufbau:3, platz:[8,2], wand:false,
+  geraete:{bank:2}, klein:["Hütchen (6)","Bälle"],
+  kurz:"Einen Ball durch eine Bahn aus zwei Bänken rollen und die Hütchen-Kegel umwerfen.",
+  foerdert:"Zielen, Dosieren der Kraft, Auge-Hand-Koordination, Geduld",
+  ablauf:[
+    "Zwei Bänke auf die Seite kippen und parallel im Abstand von etwa 1 m hinlegen – das ist die Bahn.",
+    "Am Ende der Bahn 6 Hütchen als Kegel in ein Dreieck stellen.",
+    "Die Bälle am Start der Bahn bereitlegen.",
+    "Los geht's: am Bahnanfang hinknien und den Ball mit beiden Händen durch die Bahn rollen – wie viele Kegel fallen?",
+    "Zwei Kinder stellen die Kegel wieder auf und rollen den Ball zurück, dann wird gewechselt."
+  ],
+  stufen:[
+    "Aus kurzer Entfernung (Mitte der Bahn) mit beiden Händen rollen.",
+    "Vom Bahnanfang einhändig rollen.",
+    "Mit der schwächeren Hand rollen oder den Ball über eine Bande anspielen."
+  ],
+  sicherheit:"Die Bänke liegen stabil auf der Seite und kippen nicht. Nur rollen, nicht werfen. Die Kegelaufsteller stehen neben der Bahn und gehen erst hinein, wenn der Ball liegt.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:46,y:143,c:"blau",p:"krabbel"},
+      {x:120,y:143,c:"orange",p:"ruf"},
+      {x:176,y:143,c:"rot",p:"steh",flip:1},
+      {x:204,y:143,c:"gruen",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"sbank",x1:80,y1:176,x2:230,y2:176},
+      {typ:"sbank",x1:84,y1:174,x2:234,y2:174},
+      {typ:"huetchen",x:246,y:177},{typ:"huetchen",x:262,y:177},{typ:"huetchen",x:278,y:177},
+      {typ:"ball",x:64,y:180},{typ:"ball",x:76,y:180}
+    ],
+    pfeile:[{von:[82,166],nach:[240,166],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:60,y:143,c:"blau",p:"arme"},{x:120,y:143,c:"orange",p:"steh"},{x:176,y:143,c:"rot",p:"arme"},{x:236,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:80,y1:176,x2:230,y2:176},{typ:"sbank",x1:84,y1:174,x2:234,y2:174}],
+      extra:[{typ:"blase",x:156,y:40,text:"Auf die Seite kippen"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:60,y:143,c:"blau",p:"steh"},{x:120,y:143,c:"orange",p:"steh"},{x:176,y:143,c:"rot",p:"steh",flip:1},{x:204,y:143,c:"gruen",p:"arme",flip:1}],
+      plus:[{typ:"huetchen",x:246,y:177},{typ:"huetchen",x:262,y:177},{typ:"huetchen",x:278,y:177}],
+      extra:[{typ:"blase",x:230,y:40,text:"6 Kegel im Dreieck"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"arme"},{x:22,y:143,c:"lila",p:"steh"},{x:46,y:143,c:"blau",p:"steh"},{x:120,y:143,c:"orange",p:"steh"},{x:176,y:143,c:"rot",p:"steh",flip:1},{x:204,y:143,c:"gruen",p:"steh",flip:1}],
+      plus:[{typ:"ball",x:64,y:180},{typ:"ball",x:76,y:180}],
+      extra:[{typ:"blase",x:70,y:40,text:"Bälle bereit"}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:46,y:143,c:"blau",p:"krabbel"},{x:120,y:143,c:"orange",p:"ruf"},{x:176,y:143,c:"rot",p:"steh",flip:1},{x:204,y:143,c:"gruen",p:"steh",flip:1}],
+      pfeile:[{von:[82,166],nach:[240,166],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Rollen, nicht werfen!"},{typ:"ball",x:160,y:180}] },
+    { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:46,y:143,c:"blau",p:"steh"},{x:120,y:143,c:"orange",p:"steh"},{x:216,y:143,c:"rot",p:"arme"},{x:240,y:143,c:"gruen",p:"lauf",flip:1}],
+      pfeile:[{von:[236,166],nach:[90,166],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Kegel aufstellen"}] }
+  ]
+}
+);
+MODULE.push(
+{
+  id:"minitramp-sprung", name:"Minitramp-Sprung", kat:"Springen",
+  kinder:4, klassen:"2–4", aufbau:4, platz:[8,3], wand:false,
+  geraete:{minitramp:1, weich:1}, klein:["Hütchen (1)"],
+  kurz:"Kurzer Anlauf, beidbeinig ins Minitrampolin und mit einem Strecksprung auf den Weichboden.",
+  foerdert:"Sprungkraft, Körperspannung, Mut, sicheres Landen",
+  ablauf:[
+    "Den Weichboden an die Landestelle legen – 4 Kinder tragen ihn gemeinsam, die Betreuerin hilft.",
+    "Das Minitramp direkt vor den Weichboden stellen, die hohe Seite zeigt zum Weichboden. Tragen und Aufklappen übernimmt die Betreuerin, danach prüft sie, ob alle Beine eingerastet sind.",
+    "Mit einem Hütchen den Start markieren (3–4 Laufschritte vor dem Minitramp). Die Betreuerin stellt sich seitlich neben das Minitramp, auf Höhe des Weichbodens.",
+    "Los geht's: kurzer Anlauf, mit beiden Füßen gleichzeitig in die Mitte springen, Strecksprung (Arme hoch, Körper gestreckt) und auf dem Weichboden im Stand landen.",
+    "Los geht's: Nach der Landung sofort vom Weichboden runter und außen zurück zum Hütchen – erst wenn der Weichboden frei ist, läuft das nächste Kind an."
+  ],
+  stufen:[
+    "Ohne Anlauf: aus dem Stand im Minitramp zweimal federn, dann Strecksprung auf den Weichboden – die Betreuerin gibt die Hand.",
+    "Mit 3–4 Schritten Anlauf, beidbeinig in die Mitte, Strecksprung und im Stand landen.",
+    "Strecksprung mit Figur in der Luft (Arme seitlich, Hampelmann) oder mit Klatschen über dem Kopf."
+  ],
+  sicherheit:"Nur Strecksprünge – keine Drehungen, keine Saltos. Die Betreuerin steht immer seitlich am Minitramp und gibt bei Bedarf Hilfestellung am Oberarm. Immer nur ein Kind springt, das nächste erst, wenn der Weichboden frei ist. Minitramp nur von Erwachsenen tragen und aufklappen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:78,y:143,c:"orange",p:"lauf"},
+      {x:132,y:126,c:"blau",p:"arme"},
+      {x:196,y:64,c:"gruen",p:"haeng"},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"lila",p:"steh"},
+      {x:252,y:127,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"weich",x:174,w:120,text:"Weichboden"},
+      {typ:"minitramp",x:124,w:46},
+      {typ:"huetchen",x:56,y:177}
+    ],
+    pfeile:[{von:[60,164],nach:[118,164],dash:1},{von:[162,118],nach:[236,116],dash:1,bogen:-40}]
+  },
+  schritte:[
+    { kinder:[{x:66,y:143,c:"orange",p:"steh"},{x:96,y:143,c:"blau",p:"steh"},{x:140,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:252,y:127,c:"rot",p:"arme"}],
+      plus:[{typ:"weich",x:174,w:120,text:"Weichboden"}],
+      extra:[{typ:"blase",x:234,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:50,y:143,c:"orange",p:"steh"},{x:76,y:143,c:"blau",p:"steh"},{x:100,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:252,y:127,c:"rot",p:"steh"}],
+      plus:[{typ:"minitramp",x:124,w:46}],
+      extra:[{typ:"blase",x:160,y:40,text:"Hohe Seite zum Weich"},{typ:"kreis",cx:147,cy:172,r:20}] },
+    { kinder:[{x:78,y:143,c:"orange",p:"steh"},{x:100,y:143,c:"blau",p:"steh"},{x:216,y:127,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:252,y:127,c:"rot",p:"steh"}],
+      plus:[{typ:"huetchen",x:56,y:177}],
+      extra:[{typ:"blase",x:150,y:40,text:"Betreuerin seitlich!"},{typ:"kreis",cx:147,cy:168,r:22}],
+      pfeile:[{von:[150,54],nach:[147,140],dash:1}] },
+    { kinder:[{x:78,y:143,c:"orange",p:"lauf"},{x:132,y:126,c:"blau",p:"arme"},{x:196,y:64,c:"gruen",p:"haeng"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:252,y:127,c:"rot",p:"steh"}],
+      pfeile:[{von:[60,164],nach:[118,164],dash:1},{von:[162,118],nach:[236,116],dash:1,bogen:-40}],
+      extra:[{typ:"blase",x:110,y:40,text:"Beidbeinig in die Mitte"}] },
+    { kinder:[{x:66,y:143,c:"orange",p:"steh"},{x:96,y:143,c:"blau",p:"steh"},{x:210,y:127,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:258,y:127,c:"rot",p:"lauf"}],
+      pfeile:[{von:[246,118],nach:[292,118],dash:1}],
+      extra:[{typ:"blase",x:130,y:40,text:"Weich frei? Dann los!"}] }
+  ]
+},
+{
+  id:"bank-huepfer", name:"Bank-Hüpfer", kat:"Springen",
+  kinder:4, klassen:"1–4", aufbau:2, platz:[6,3], wand:false,
+  geraete:{bank:1}, klein:[],
+  kurz:"Hände auf die Bank, mit beiden Füßen seitlich hinüber und zurück – im Zickzack bis zum Ende.",
+  foerdert:"Sprungkraft, Stützkraft, Ausdauer, Rhythmus",
+  ablauf:[
+    "Eine Bank flach in die Mitte stellen – zwei Kinder tragen sie, an jedem Ende eins.",
+    "Rundherum etwa 1,5 m frei lassen und prüfen: Die Bank steht mit allen Füßen fest und wackelt nicht.",
+    "Los geht's: Die Kinder stellen sich seitlich an den Bankanfang, stützen beide Hände auf die Bank und springen mit beiden Füßen gleichzeitig hinüber – und wieder zurück.",
+    "Los geht's: Nach jedem Sprung rutschen die Hände ein Stück weiter, so geht es im Zickzack bis zum Ende. Das nächste Kind startet, wenn das vordere die Bankmitte erreicht hat."
+  ],
+  stufen:[
+    "Hände auf die Bank, erst mit einem Fuß, dann mit dem anderen hinübersteigen.",
+    "Beidbeinig hin und her springen, Hände rutschen nach jedem Sprung weiter.",
+    "Schnell und ohne Pause bis zum Ende, oder die Sprünge laut mitzählen und am Ende die Zahl sagen."
+  ],
+  sicherheit:"Die Hände bleiben immer auf der Bank, die Arme gestreckt. Immer nur ein Kind pro Bankhälfte. Rundherum keine Gegenstände, die Bank steht nicht an der Wand.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:62,y:126,c:"orange",p:"sprung"},
+      {x:112,y:143,c:"blau",p:"steh"},
+      {x:170,y:126,c:"gruen",p:"sprung"},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:258,y:143,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"sbank",x1:40,y1:172,x2:250,y2:172,beine:1}
+    ],
+    pfeile:[{von:[46,150],nach:[100,150],dash:1,bogen:-18},{von:[150,150],nach:[206,150],dash:1,bogen:-18}]
+  },
+  schritte:[
+    { kinder:[{x:14,y:143,c:"orange",p:"arme"},{x:236,y:143,c:"blau",p:"arme",flip:1},{x:110,y:143,c:"gruen",p:"steh"},{x:140,y:143,c:"gelb",p:"steh"},{x:170,y:143,c:"lila",p:"steh"},{x:200,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"sbank",x1:40,y1:172,x2:250,y2:172,beine:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Zu zweit tragen"}] },
+    { kinder:[{x:70,y:143,c:"orange",p:"steh"},{x:112,y:143,c:"blau",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:250,y:143,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Wackelt nichts?"},{typ:"kreis",cx:52,cy:179,r:12},{typ:"kreis",cx:238,cy:179,r:12}] },
+    { kinder:[{x:62,y:126,c:"orange",p:"sprung"},{x:112,y:143,c:"blau",p:"steh"},{x:170,y:126,c:"gruen",p:"sprung"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:258,y:143,c:"rot",p:"arme"}],
+      pfeile:[{von:[46,150],nach:[100,150],dash:1,bogen:-18},{von:[150,150],nach:[206,150],dash:1,bogen:-18}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hände auf die Bank!"}] },
+    { kinder:[{x:140,y:126,c:"orange",p:"sprung"},{x:214,y:143,c:"blau",p:"steh"},{x:256,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:54,y:126,c:"lila",p:"sprung"},{x:24,y:143,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[44,150],nach:[96,150],dash:1,bogen:-18},{von:[128,150],nach:[180,150],dash:1,bogen:-18}],
+      extra:[{typ:"blase",x:150,y:40,text:"Start ab Bankmitte"}] }
+  ]
+},
+{
+  id:"reifen-huepfgarten", name:"Reifen-Hüpfgarten", kat:"Springen",
+  kinder:5, klassen:"1–4", aufbau:2, platz:[8,2], wand:false,
+  geraete:{}, klein:["Reifen (10)"],
+  kurz:"Durch eine Reifenreihe hüpfen – im Einzelreifen auf einem Bein, im Doppelreifen mit beiden Füßen.",
+  foerdert:"Sprungkraft, Rhythmus, Gleichgewicht, Koordination",
+  ablauf:[
+    "Jedes Kind holt einen Reifen. Die Reifen werden flach auf den Boden gelegt, in einer Reihe dicht an dicht.",
+    "Das Muster legen: einzeln – doppelt (zwei Reifen nebeneinander) – einzeln – doppelt …, wie bei Himmel und Hölle. Kein Reifen liegt auf einem anderen.",
+    "Los geht's: Im Einzelreifen landen die Kinder auf einem Bein, im Doppelreifen mit beiden Füßen (ein Fuß pro Reifen).",
+    "Los geht's: Am Ende umdrehen und außen zurücklaufen. Das nächste Kind startet, wenn das vordere drei Reifen weiter ist."
+  ],
+  stufen:[
+    "Beidbeinig von Reifen zu Reifen hüpfen, das Muster ist egal.",
+    "Einzeln einbeinig, doppelt beidbeinig – ohne einen Reifen zu berühren.",
+    "Das Muster rückwärts hüpfen oder das Bein bei jedem Einzelreifen wechseln."
+  ],
+  sicherheit:"Reifen nie übereinanderlegen, sonst rutschen sie weg. Verrutschte Reifen sofort gerade legen. Genug Abstand zum vorderen Kind, kein Überholen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:53,y:138,c:"orange",p:"lauf"},
+      {x:137,y:132,c:"blau",p:"sprung"},
+      {x:193,y:132,c:"gruen",p:"sprung"},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:256,y:143,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},
+      {typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},
+      {typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},
+      {typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},
+      {typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},
+      {typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},
+      {typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"}
+    ],
+    pfeile:[{von:[50,122],nach:[250,122],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:180,y:143,c:"orange",p:"steh"},{x:0,y:143,c:"blau",p:"arme"},{x:206,y:143,c:"gruen",p:"steh"},{x:232,y:143,c:"gelb",p:"steh"},{x:32,y:143,c:"lila",p:"arme"},{x:258,y:143,c:"rot",p:"steh"}],
+      plus:[
+        {typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:56,y:180,w:24,h:5,c:"#159A9C"},
+        {typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:87,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:84,y:180,w:24,h:5,c:"#F28C28"},
+        {typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:112,y:180,w:24,h:5,c:"#159A9C"},
+        {typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:143,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:140,y:180,w:24,h:5,c:"#F28C28"}
+      ],
+      extra:[{typ:"reifen",x:34,y:162,r:12,c:"gelb"},{typ:"reifen",x:66,y:162,r:12,c:"tuerkis"},{typ:"blase",x:150,y:40,text:"Flach hinlegen!"}] },
+    { kinder:[{x:180,y:143,c:"orange",p:"steh"},{x:0,y:143,c:"blau",p:"steh"},{x:210,y:143,c:"gruen",p:"steh"},{x:236,y:143,c:"gelb",p:"arme"},{x:26,y:143,c:"lila",p:"steh"},{x:262,y:143,c:"rot",p:"steh"}],
+      plus:[
+        {typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:168,y:180,w:24,h:5,c:"#159A9C"},
+        {typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:199,y:173,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},{typ:"zone",x:196,y:180,w:24,h:5,c:"#F28C28"},
+        {typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"},{typ:"zone",x:224,y:180,w:24,h:5,c:"#159A9C"}
+      ],
+      extra:[{typ:"blase",x:150,y:40,text:"Einzeln – doppelt"},{typ:"kreis",cx:152,cy:178,r:15}] },
+    { kinder:[{x:53,y:138,c:"orange",p:"lauf"},{x:137,y:132,c:"blau",p:"sprung"},{x:193,y:132,c:"gruen",p:"sprung"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:256,y:143,c:"rot",p:"arme"}],
+      pfeile:[{von:[50,122],nach:[250,122],dash:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"1 Reifen = 1 Bein"}] },
+    { kinder:[{x:137,y:132,c:"orange",p:"sprung"},{x:193,y:132,c:"blau",p:"sprung"},{x:256,y:143,c:"gruen",p:"arme"},{x:53,y:138,c:"gelb",p:"lauf"},{x:0,y:143,c:"lila",p:"steh"},{x:22,y:143,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[270,110],nach:[36,110],dash:1,bogen:22}],
+      extra:[{typ:"blase",x:150,y:40,text:"3 Reifen Abstand"}] }
+  ]
+},
+{
+  id:"aufhocken-absprung", name:"Aufhocken & Absprung", kat:"Springen",
+  kinder:4, klassen:"1–4", aufbau:4, platz:[9,2], wand:false,
+  geraete:{kasten:1, matte:1, weich:1}, klein:[],
+  kurz:"Mit Anlauf auf den Kasten aufhocken, oben aufrichten und mit einem Strecksprung auf den Weichboden.",
+  foerdert:"Sprungkraft, Stützkraft, Mut, sicheres Landen",
+  ablauf:[
+    "Einen Kasten mit 3 Teilen aufbauen – jedes Kastenteil tragen zwei Kinder, der Deckel kommt zuletzt drauf.",
+    "Eine Turnmatte direkt vor den Kasten legen – hier springen die Kinder ab.",
+    "Den Weichboden direkt hinter den Kasten legen – 4 Kinder tragen ihn gemeinsam.",
+    "Los geht's: kurzer Anlauf, auf der Matte beidbeinig abspringen, Hände auf den Kastendeckel und auf den Kasten aufknien oder aufhocken.",
+    "Los geht's: Oben langsam aufrichten, kurz stehen, dann Strecksprung auf den Weichboden und im Stand landen. Erst wenn der Weichboden frei ist, kommt das nächste Kind."
+  ],
+  stufen:[
+    "Ohne Anlauf auf den Kasten klettern, oben aufstehen und hinunterspringen.",
+    "Mit Anlauf aufknien, aufrichten, Strecksprung.",
+    "Mit Anlauf direkt in die Hocke (Füße auf den Kasten), Strecksprung mit Klatschen oder Hampelmann."
+  ],
+  sicherheit:"Der Kasten steht fest, die Teile sind sauber aufeinander gesetzt. Immer nur ein Kind auf dem Kasten. Die Betreuerin steht seitlich am Kasten und hilft beim Aufhocken. Gesprungen wird nur nach vorn auf den Weichboden.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:46,y:143,c:"orange",p:"lauf"},
+      {x:124,y:112,c:"blau",p:"krabbel",flip:1},
+      {x:198,y:64,c:"gruen",p:"haeng"},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"lila",p:"steh"},
+      {x:254,y:127,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"kasten",x:120,w:44,teile:3},
+      {typ:"smatte",x:66,w:54},
+      {typ:"weich",x:170,w:124,text:"Weichboden"}
+    ],
+    pfeile:[{von:[80,160],nach:[118,140],dash:1,bogen:-10},{von:[156,104],nach:[232,114],dash:1,bogen:-36}]
+  },
+  schritte:[
+    { kinder:[{x:70,y:143,c:"orange",p:"arme"},{x:176,y:143,c:"blau",p:"arme",flip:1},{x:210,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:240,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"kasten",x:120,w:44,teile:3}],
+      extra:[{typ:"blase",x:142,y:40,text:"3 Teile, zu zweit"}] },
+    { kinder:[{x:84,y:137,c:"orange",p:"arme"},{x:176,y:143,c:"blau",p:"steh"},{x:210,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:240,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:66,w:54}],
+      extra:[{typ:"blase",x:94,y:40,text:"Direkt anlegen"}] },
+    { kinder:[{x:52,y:143,c:"orange",p:"steh"},{x:180,y:127,c:"blau",p:"arme"},{x:210,y:127,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:254,y:127,c:"rot",p:"arme"}],
+      plus:[{typ:"weich",x:170,w:124,text:"Weichboden"}],
+      extra:[{typ:"blase",x:230,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:46,y:143,c:"orange",p:"lauf"},{x:124,y:112,c:"blau",p:"krabbel",flip:1},{x:212,y:127,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:254,y:127,c:"rot",p:"steh"}],
+      pfeile:[{von:[80,160],nach:[118,140],dash:1,bogen:-10}],
+      extra:[{typ:"blase",x:130,y:40,text:"Hände auf den Kasten"}] },
+    { kinder:[{x:48,y:143,c:"orange",p:"steh"},{x:128,y:112,c:"blau",p:"arme"},{x:212,y:127,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:258,y:127,c:"rot",p:"lauf"}],
+      pfeile:[{von:[156,104],nach:[232,114],dash:1,bogen:-36}],
+      extra:[{typ:"blase",x:130,y:40,text:"Im Stand landen"}] }
+  ]
+},
+{
+  id:"huerdenbahn", name:"Hürdenbahn", kat:"Springen",
+  kinder:4, klassen:"1–4", aufbau:3, platz:[10,2], wand:false,
+  geraete:{}, klein:["Hütchen (8)","Seile (4)"],
+  kurz:"Über eine Reihe kleiner Hürden aus Hütchen und locker aufgelegten Seilen springen.",
+  foerdert:"Sprungkraft, Rhythmus, Schnelligkeit, Mut",
+  ablauf:[
+    "Je zwei Hütchen nebeneinander aufstellen (etwa 1 m auseinander) – vier Paare in einer Reihe, zwischen den Paaren etwa 2 m frei. Die Kinder helfen beim Tragen.",
+    "Über jedes Hütchenpaar ein Seil locker legen – nicht festknoten und nicht spannen. Berührt ein Kind das Seil, fällt es einfach herunter.",
+    "Los geht's: Anlauf und über jede Hürde springen, zwischen den Hürden 1–3 Laufschritte.",
+    "Los geht's: Am Ende außen zurücklaufen. Liegt ein Seil am Boden, legt das Kind es wieder auf. Das nächste Kind startet, wenn das vordere über die zweite Hürde ist."
+  ],
+  stufen:[
+    "Seile direkt auf den Boden legen und darüber hüpfen.",
+    "Über die Hürden springen, zwischen den Hürden laufen.",
+    "Beidbeinig über jede Hürde springen, ohne Zwischenschritt – oder die Hütchen umdrehen, dann liegen die Seile höher."
+  ],
+  sicherheit:"Seile nie festknoten oder spannen – sie müssen bei Berührung sofort herunterfallen. Immer in eine Richtung laufen, kein Gegenverkehr in der Bahn. Genug Abstand zum vorderen Kind.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:51,y:112,c:"orange",p:"sprung"},
+      {x:92,y:143,c:"blau",p:"lauf"},
+      {x:167,y:112,c:"gruen",p:"sprung"},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:260,y:143,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"huetchen",x:60,y:177},{typ:"huetchen",x:72,y:177},
+      {typ:"huetchen",x:118,y:177},{typ:"huetchen",x:130,y:177},
+      {typ:"huetchen",x:176,y:177},{typ:"huetchen",x:188,y:177},
+      {typ:"huetchen",x:234,y:177},{typ:"huetchen",x:246,y:177},
+      {typ:"seil",x1:56,y1:167,x2:76,y2:167,welle:0},
+      {typ:"seil",x1:114,y1:167,x2:134,y2:167,welle:0},
+      {typ:"seil",x1:172,y1:167,x2:192,y2:167,welle:0},
+      {typ:"seil",x1:230,y1:167,x2:250,y2:167,welle:0}
+    ],
+    pfeile:[{von:[34,162],nach:[98,162],dash:1,bogen:-34},{von:[150,162],nach:[214,162],dash:1,bogen:-34}]
+  },
+  schritte:[
+    { kinder:[{x:84,y:143,c:"orange",p:"arme"},{x:142,y:143,c:"blau",p:"steh"},{x:200,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:260,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"huetchen",x:60,y:177},{typ:"huetchen",x:72,y:177},{typ:"huetchen",x:118,y:177},{typ:"huetchen",x:130,y:177},{typ:"huetchen",x:176,y:177},{typ:"huetchen",x:188,y:177},{typ:"huetchen",x:234,y:177},{typ:"huetchen",x:246,y:177}],
+      extra:[{typ:"blase",x:124,y:40,text:"ca. 2 m Abstand"}],
+      pfeile:[{von:[80,130],nach:[112,130],c:"ink"},{von:[112,130],nach:[80,130],c:"ink"}] },
+    { kinder:[{x:84,y:143,c:"orange",p:"steh"},{x:142,y:143,c:"blau",p:"arme"},{x:200,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:260,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"seil",x1:56,y1:167,x2:76,y2:167,welle:0},{typ:"seil",x1:114,y1:167,x2:134,y2:167,welle:0},{typ:"seil",x1:172,y1:167,x2:192,y2:167,welle:0},{typ:"seil",x1:230,y1:167,x2:250,y2:167,welle:0}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur locker auflegen!"},{typ:"kreis",cx:66,cy:171,r:16}] },
+    { kinder:[{x:51,y:112,c:"orange",p:"sprung"},{x:92,y:143,c:"blau",p:"lauf"},{x:167,y:112,c:"gruen",p:"sprung"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:260,y:143,c:"rot",p:"arme"}],
+      pfeile:[{von:[34,162],nach:[98,162],dash:1,bogen:-34},{von:[150,162],nach:[214,162],dash:1,bogen:-34}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hoch die Beine!"}] },
+    { kinder:[{x:142,y:143,c:"orange",p:"lauf"},{x:225,y:112,c:"blau",p:"sprung"},{x:262,y:143,c:"gruen",p:"arme"},{x:51,y:112,c:"gelb",p:"sprung"},{x:0,y:143,c:"lila",p:"steh"},{x:24,y:143,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[34,162],nach:[98,162],dash:1,bogen:-34}],
+      extra:[{typ:"blase",x:150,y:40,text:"Start ab Hürde 2"}] }
+  ]
+},
+{
+  id:"rollberg", name:"Rollberg", kat:"Rollen & Kriechen",
+  kinder:4, klassen:"1–4", aufbau:5, platz:[7,2], wand:false,
+  geraete:{kasten:1, bank:2, matte:2}, klein:[],
+  kurz:"Auf einer schiefen Ebene aus Bänken und Matte eine Rolle vorwärts bergab machen.",
+  foerdert:"Rollen, Orientierung, Körperspannung, Mut",
+  ablauf:[
+    "Einen Kasten mit 2 Teilen aufbauen – jedes Teil tragen zwei Kinder.",
+    "Zwei Bänke dicht nebeneinander mit den Haken auf den Kastendeckel einhängen – je 4 Kinder tragen eine Bank. Beide Haken prüfen.",
+    "Eine Turnmatte längs über beide Bänke legen, sodass die Bänke ganz abgedeckt sind. Eine zweite Matte unten an das Ende legen.",
+    "Los geht's: Von hinten auf den Kasten steigen, oben in die Hocke gehen, Hände auf die Matte, Kinn auf die Brust – Rolle vorwärts bergab.",
+    "Los geht's: Unten aufstehen, die Matte verlassen und außen herum zurück zum Kasten. Immer nur ein Kind auf dem Rollberg."
+  ],
+  stufen:[
+    "Seitlich wie ein Baumstamm den Rollberg hinunterrollen.",
+    "Rolle vorwärts bergab aus der Hocke, unten im Sitz ankommen.",
+    "Rolle vorwärts und unten ohne Hände direkt in den Stand aufstehen."
+  ],
+  sicherheit:"Beide Haken müssen ganz über dem Kastendeckel liegen – vorher selbst prüfen. Die Matte muss die Bänke ganz bedecken und darf nicht rutschen. Kinn immer auf die Brust, nie über den Kopf abrollen. Die Betreuerin steht seitlich am oberen Ende und hilft beim Ansetzen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:6,y:137,c:"orange",p:"sitz"},
+      {x:110,y:132,c:"blau",p:"sitz",r:-120},
+      {x:206,y:120,c:"gruen",p:"krabbel"},
+      {x:250,y:143,c:"gelb",p:"steh",flip:1},
+      {x:270,y:143,c:"lila",p:"steh",flip:1},
+      {x:36,y:137,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"kasten",x:200,w:44,teile:2},
+      {typ:"sbank",x1:60,y1:180,x2:206,y2:156,haken:2},
+      {typ:"smatte",x:62,w:13,y:180},{typ:"smatte",x:74,w:13,y:178},{typ:"smatte",x:86,w:13,y:176},{typ:"smatte",x:98,w:13,y:174},{typ:"smatte",x:110,w:13,y:172},{typ:"smatte",x:122,w:13,y:170},{typ:"smatte",x:134,w:13,y:168},{typ:"smatte",x:146,w:13,y:166},{typ:"smatte",x:158,w:13,y:164},{typ:"smatte",x:170,w:13,y:162},{typ:"smatte",x:182,w:13,y:160},{typ:"smatte",x:194,w:13,y:158},
+      {typ:"smatte",x:2,w:60}
+    ],
+    pfeile:[{von:[196,138],nach:[76,160],dash:1},{von:[60,118],nach:[236,110],dash:1,bogen:-26}]
+  },
+  schritte:[
+    { kinder:[{x:150,y:143,c:"orange",p:"steh"},{x:252,y:143,c:"blau",p:"arme",flip:1},{x:176,y:143,c:"gruen",p:"arme"},{x:40,y:143,c:"gelb",p:"steh"},{x:70,y:143,c:"lila",p:"steh"},{x:10,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"kasten",x:200,w:44,teile:2}],
+      extra:[{typ:"blase",x:222,y:40,text:"2 Teile"}] },
+    { kinder:[{x:20,y:143,c:"orange",p:"arme"},{x:248,y:143,c:"blau",p:"steh",flip:1},{x:270,y:143,c:"gruen",p:"steh",flip:1},{x:0,y:143,c:"gelb",p:"steh"},{x:40,y:143,c:"lila",p:"arme"},{x:228,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:60,y1:180,x2:206,y2:156,haken:2}],
+      extra:[{typ:"blase",x:190,y:40,text:"Haken prüfen!"},{typ:"kreis",cx:207,cy:158,r:12}] },
+    { kinder:[{x:20,y:143,c:"orange",p:"steh"},{x:248,y:143,c:"blau",p:"steh",flip:1},{x:270,y:143,c:"gruen",p:"steh",flip:1},{x:0,y:143,c:"gelb",p:"steh"},{x:40,y:143,c:"lila",p:"steh"},{x:228,y:143,c:"rot",p:"arme",flip:1}],
+      plus:[
+        {typ:"smatte",x:62,w:13,y:180},{typ:"smatte",x:74,w:13,y:178},{typ:"smatte",x:86,w:13,y:176},{typ:"smatte",x:98,w:13,y:174},{typ:"smatte",x:110,w:13,y:172},{typ:"smatte",x:122,w:13,y:170},{typ:"smatte",x:134,w:13,y:168},{typ:"smatte",x:146,w:13,y:166},{typ:"smatte",x:158,w:13,y:164},{typ:"smatte",x:170,w:13,y:162},{typ:"smatte",x:182,w:13,y:160},{typ:"smatte",x:194,w:13,y:158},
+        {typ:"smatte",x:2,w:60}
+      ],
+      extra:[{typ:"blase",x:134,y:40,text:"Matte ganz drüber"}] },
+    { kinder:[{x:6,y:137,c:"orange",p:"sitz"},{x:110,y:132,c:"blau",p:"sitz",r:-120},{x:206,y:120,c:"gruen",p:"krabbel"},{x:250,y:143,c:"gelb",p:"steh",flip:1},{x:270,y:143,c:"lila",p:"steh",flip:1},{x:36,y:137,c:"rot",p:"arme"}],
+      pfeile:[{von:[196,138],nach:[76,160],dash:1}],
+      extra:[{typ:"blase",x:130,y:40,text:"Kinn auf die Brust!"}] },
+    { kinder:[{x:250,y:143,c:"orange",p:"lauf"},{x:30,y:137,c:"blau",p:"sitz"},{x:110,y:132,c:"gruen",p:"sitz",r:-120},{x:206,y:120,c:"gelb",p:"krabbel"},{x:270,y:143,c:"lila",p:"steh",flip:1},{x:0,y:137,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[60,118],nach:[236,110],dash:1,bogen:-26}],
+      extra:[{typ:"blase",x:130,y:40,text:"Nur einer rollt!"}] }
+  ]
+},
+{
+  id:"mattentunnel", name:"Mattentunnel", kat:"Rollen & Kriechen",
+  kinder:4, klassen:"1–4", aufbau:3, platz:[5,3], wand:false,
+  geraete:{bank:2, matte:1}, klein:[],
+  kurz:"Unter einer Matte, die quer über zwei Bänken liegt, durch den Tunnel robben.",
+  foerdert:"Kriechen, Körpergefühl, Orientierung, Mut",
+  ablauf:[
+    "Zwei Bänke parallel nebeneinander aufstellen, etwa 1 m auseinander – je zwei Kinder tragen eine Bank.",
+    "Die Turnmatte quer über beide Bänke legen – sie muss auf beiden Seiten mindestens eine Handbreit aufliegen. Zu viert tragen.",
+    "Los geht's: Die Kinder robben auf dem Bauch zwischen den Bänken unter der Matte hindurch – vorn krabbeln sie hinein, im Tunnel geht es flach weiter.",
+    "Los geht's: Am Ausgang aufstehen und außen zurück. Immer nur ein Kind im Tunnel – das nächste startet, wenn das vordere hinausschaut."
+  ],
+  stufen:[
+    "Einfach durch den Tunnel robben, die Betreuerin schaut am Ausgang hinein.",
+    "Rückwärts mit den Füßen voran durch den Tunnel robben.",
+    "Mit einem Ball: den Ball vor sich her durch den Tunnel schieben."
+  ],
+  sicherheit:"Niemand setzt sich oder klettert auf die Matte, solange ein Kind im Tunnel ist. Die Matte muss auf beiden Bänken sicher aufliegen, die Bänke dürfen nicht wackeln. Kinder mit Angst im Dunkeln dürfen neben dem Tunnel herkrabbeln.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:66,y:143,c:"orange",p:"krabbel",flip:1},
+      {x:118,y:143,c:"blau",p:"lieg",flip:1},
+      {x:176,y:143,c:"gruen",p:"krabbel",flip:1},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:24,y:143,c:"lila",p:"steh"},
+      {x:240,y:143,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"sbank",x1:60,y1:172,x2:210,y2:172,beine:1},
+      {typ:"smatte",x:104,w:56,y:172,h:10,text:"Matte"}
+    ],
+    pfeile:[{von:[56,158],nach:[232,158],dash:1},{von:[252,120],nach:[40,120],dash:1,bogen:24}]
+  },
+  schritte:[
+    { kinder:[{x:46,y:143,c:"orange",p:"arme"},{x:214,y:143,c:"blau",p:"arme",flip:1},{x:110,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:140,y:143,c:"lila",p:"steh"},{x:246,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"sbank",x1:60,y1:172,x2:210,y2:172,beine:1}],
+      extra:[{typ:"blase",x:136,y:40,text:"Parallel, ca. 1 m"}] },
+    { kinder:[{x:30,y:143,c:"orange",p:"steh"},{x:214,y:143,c:"blau",p:"steh",flip:1},{x:84,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:160,y:143,c:"lila",p:"arme",flip:1},{x:246,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:104,w:56,y:172,h:10,text:"Matte"}],
+      extra:[{typ:"blase",x:136,y:40,text:"Liegt beidseitig auf?"},{typ:"kreis",cx:132,cy:170,r:22}] },
+    { kinder:[{x:66,y:143,c:"orange",p:"krabbel",flip:1},{x:118,y:143,c:"blau",p:"lieg",flip:1},{x:176,y:143,c:"gruen",p:"krabbel",flip:1},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:240,y:143,c:"rot",p:"arme"}],
+      pfeile:[{von:[56,158],nach:[232,158],dash:1}],
+      extra:[{typ:"blase",x:136,y:40,text:"Flach robben!"}] },
+    { kinder:[{x:118,y:143,c:"orange",p:"lieg",flip:1},{x:176,y:143,c:"blau",p:"krabbel",flip:1},{x:234,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:66,y:143,c:"lila",p:"krabbel",flip:1},{x:24,y:143,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[252,120],nach:[40,120],dash:1,bogen:24}],
+      extra:[{typ:"blase",x:136,y:40,text:"Nur einer im Tunnel"}] }
+  ]
+},
+{
+  id:"baumstamm-rollen", name:"Baumstamm-Rollen", kat:"Rollen & Kriechen",
+  kinder:3, klassen:"1–4", aufbau:2, platz:[8,2], wand:false,
+  geraete:{matte:3}, klein:[],
+  kurz:"Gestreckt wie ein Baumstamm seitlich über eine lange Mattenbahn rollen.",
+  foerdert:"Körperspannung, Orientierung, Rollen",
+  ablauf:[
+    "Drei Turnmatten lückenlos hintereinander zu einer langen Bahn legen – je zwei Kinder tragen eine Matte.",
+    "Die Matten gerade ausrichten, auf Lücken prüfen und rundherum 1 m frei lassen.",
+    "Los geht's: Auf den Rücken legen, Arme lang über den Kopf, Beine geschlossen, Körper fest wie ein Baumstamm – und seitlich die Bahn entlangrollen.",
+    "Los geht's: Am Ende aufstehen und außen zurück. Das nächste Kind startet, wenn das vordere auf der zweiten Matte ist."
+  ],
+  stufen:[
+    "Mit angewinkelten Armen rollen, die Betreuerin zeigt die Richtung an.",
+    "Ganz gestreckt rollen und gerade in der Bahn bleiben.",
+    "Leicht bergab: eine Bank (flach, mit Beinen) quer unter den Anfang der ersten Matte schieben – oder mit einem Ball zwischen den Händen rollen."
+  ],
+  sicherheit:"Die Matten liegen ohne Lücke und rutschen nicht. Immer nur ein Kind pro Matte, genug Abstand zum vorderen Kind. Wem schwindelig wird, der setzt sich kurz an den Rand. Bei der Bergab-Variante liegt die Bank ganz unter der Matte.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:58,y:137,c:"orange",p:"lieg",r:-12},
+      {x:136,y:137,c:"blau",p:"lieg",r:12},
+      {x:210,y:137,c:"gruen",p:"lieg",r:-12},
+      {x:0,y:143,c:"gelb",p:"steh"},
+      {x:22,y:143,c:"lila",p:"steh"},
+      {x:256,y:137,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"smatte",x:36,w:80},{typ:"smatte",x:116,w:80},{typ:"smatte",x:196,w:80}
+    ],
+    pfeile:[{von:[48,160],nach:[106,160],dash:1,bogen:-14},{von:[126,160],nach:[184,160],dash:1,bogen:-14},{von:[204,160],nach:[244,160],dash:1,bogen:-12}]
+  },
+  schritte:[
+    { kinder:[{x:30,y:143,c:"orange",p:"arme"},{x:120,y:143,c:"blau",p:"arme"},{x:210,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:60,y:143,c:"lila",p:"steh"},{x:240,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:36,w:80},{typ:"smatte",x:116,w:80},{typ:"smatte",x:196,w:80}],
+      extra:[{typ:"blase",x:150,y:40,text:"Zu zweit tragen"}] },
+    { kinder:[{x:70,y:137,c:"orange",p:"steh"},{x:150,y:137,c:"blau",p:"steh"},{x:210,y:137,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:240,y:137,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:156,y:40,text:"Ohne Lücke!"},{typ:"kreis",cx:116,cy:182,r:11},{typ:"kreis",cx:196,cy:182,r:11}] },
+    { kinder:[{x:58,y:137,c:"orange",p:"lieg",r:-12},{x:136,y:137,c:"blau",p:"lieg",r:12},{x:210,y:137,c:"gruen",p:"lieg",r:-12},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:256,y:137,c:"rot",p:"arme"}],
+      pfeile:[{von:[48,160],nach:[106,160],dash:1,bogen:-14},{von:[126,160],nach:[184,160],dash:1,bogen:-14},{von:[204,160],nach:[244,160],dash:1,bogen:-12}],
+      extra:[{typ:"blase",x:150,y:40,text:"Körper fest!"}] },
+    { kinder:[{x:136,y:137,c:"orange",p:"lieg",r:12},{x:210,y:137,c:"blau",p:"lieg",r:-12},{x:256,y:137,c:"gruen",p:"arme"},{x:58,y:137,c:"gelb",p:"lieg",r:-12},{x:0,y:143,c:"lila",p:"steh"},{x:22,y:143,c:"rot",p:"lauf",flip:1}],
+      pfeile:[{von:[270,116],nach:[36,116],dash:1,bogen:22}],
+      extra:[{typ:"blase",x:150,y:40,text:"Einer pro Matte"}] }
+  ]
+}
+);
+MODULE.push(
+{
+  id:"tarzan-tau", name:"Tarzan-Tau", kat:"Hangeln & Schwingen",
+  kinder:4, klassen:"1–4", aufbau:5, platz:[8,2], wand:false,
+  geraete:{kasten:1, taue:1, matte:2, weich:1}, klein:[],
+  kurz:"Vom Kasten aus am Tau über den „Fluss“ schwingen und auf dem Weichboden landen.",
+  foerdert:"Griffkraft, Mut, Timing, sicheres Landen",
+  ablauf:[
+    "Den Kasten (3 Teile) etwa 2 m vor das hängende Tau stellen – je 2 Kinder tragen ein Teil.",
+    "Zwei Matten als „Fluss“ zwischen Kasten und Landeplatz legen.",
+    "Den Weichboden hinter den Fluss legen – 4 Kinder tragen ihn gemeinsam.",
+    "Los geht's: Die Betreuerin reicht das Tau zum Kasten. Das Kind greift hoch, stößt sich ab und schwingt über den Fluss.",
+    "Über dem Weichboden loslassen und im Stand landen – erst wenn der Weichboden frei ist, steigt das nächste Kind auf den Kasten."
+  ],
+  stufen:[
+    "Ohne Kasten: vom Boden aus anlaufen, am Tau schwingen und auf den Weichboden loslassen.",
+    "Vom Kasten über den Fluss schwingen und im Stand landen.",
+    "Hin und zurück schwingen und wieder auf dem Kasten landen, oder Beine im Schwung anhocken."
+  ],
+  sicherheit:"Das Tau nur so hoch greifen, dass die Füße nie höher als der Kasten sind. Immer nur ein Kind am Tau, alle anderen warten hinter dem Kasten. Niemand steht im Schwungbereich. Die Betreuerin steht neben dem Kasten und reicht das Tau an.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:62,y:112,c:"orange",p:"steh"},
+      {x:167,y:119,c:"blau",p:"haeng",r:-12},
+      {x:232,y:127,c:"gruen",p:"arme"},
+      {x:2,y:143,c:"gelb",p:"steh"},
+      {x:26,y:143,c:"lila",p:"steh"},
+      {x:266,y:127,c:"rot",p:"lauf",flip:1}
+    ],
+    dinge:[
+      {typ:"kasten",x:56,w:44,teile:3},
+      {typ:"tau",x:150,y:145,x2:189},
+      {typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},
+      {typ:"text",x:128,y:176,text:"Fluss",gr:9},
+      {typ:"weich",x:204,w:90,text:"Weichboden"}
+    ],
+    pfeile:[{von:[98,118],nach:[222,112],dash:1,bogen:34},{von:[262,112],nach:[40,118],dash:1,bogen:40}]
+  },
+  schritte:[
+    { kinder:[{x:106,y:143,c:"orange",p:"arme"},{x:160,y:143,c:"blau",p:"steh"},{x:232,y:143,c:"gruen",p:"steh"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"arme"},{x:262,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:145,x2:189}],
+      dinge:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:150}],
+      extra:[{typ:"blase",x:190,y:40,text:"ca. 2 m vor das Tau"}],
+      pfeile:[{von:[104,118],nach:[144,118],c:"ink"},{von:[144,118],nach:[104,118],c:"ink"}] },
+    { kinder:[{x:106,y:137,c:"orange",p:"steh"},{x:160,y:137,c:"blau",p:"steh"},{x:208,y:143,c:"gruen",p:"arme",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:262,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},{typ:"text",x:128,y:176,text:"Fluss",gr:9}],
+      dinge:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:150},{typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},{typ:"text",x:128,y:176,text:"Fluss",gr:9}],
+      extra:[{typ:"blase",x:190,y:40,text:"Das ist der Fluss"}] },
+    { kinder:[{x:106,y:137,c:"orange",p:"steh"},{x:160,y:137,c:"blau",p:"steh"},{x:210,y:127,c:"gruen",p:"arme"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:262,y:127,c:"rot",p:"arme",flip:1}],
+      plus:[{typ:"weich",x:204,w:90,text:"Weichboden"}],
+      dinge:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:150},{typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},{typ:"text",x:128,y:176,text:"Fluss",gr:9},{typ:"weich",x:204,w:90,text:"Weichboden"}],
+      extra:[{typ:"blase",x:240,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:62,y:112,c:"orange",p:"kletter"},{x:204,y:127,c:"blau",p:"steh",flip:1},{x:232,y:127,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:266,y:127,c:"rot",p:"steh",flip:1}],
+      dinge:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:129,x2:73},{typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},{typ:"text",x:128,y:176,text:"Fluss",gr:9},{typ:"weich",x:204,w:90,text:"Weichboden"}],
+      extra:[{typ:"blase",x:190,y:40,text:"Hoch greifen!"},{typ:"kreis",cx:78,cy:117,r:12}],
+      pfeile:[{von:[98,118],nach:[222,112],dash:1,bogen:34}] },
+    { kinder:[{x:62,y:112,c:"orange",p:"steh"},{x:244,y:127,c:"blau",p:"lauf",flip:1},{x:205,y:90,c:"gruen",p:"sprung"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:270,y:127,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:120,y:40,text:"Loslassen – landen!"}],
+      pfeile:[{von:[196,88],nach:[228,122],dash:1,bogen:-10}] }
+  ]
+},
+{
+  id:"faultier-reck", name:"Faultier am Reck", kat:"Hangeln & Schwingen",
+  kinder:3, klassen:"1–4", aufbau:5, platz:[5,2], wand:false,
+  geraete:{reck:1, matte:2}, klein:[],
+  kurz:"Wie ein Faultier mit Händen und Kniekehlen am niedrigen Reck hängen und ans andere Ende hangeln.",
+  foerdert:"Griffkraft, Rumpfkraft, Koordination, Ausdauer",
+  ablauf:[
+    "Die Betreuerin baut das Reck auf und stellt die Stange auf Brusthöhe der Kinder (etwa 1 m) ein. Spannseile fest einhaken.",
+    "Zwei Matten lückenlos unter das Reck legen – je 2 Kinder tragen eine Matte.",
+    "Los geht's: Mit beiden Händen die Stange greifen, die Beine hochschwingen und mit den Kniekehlen einhaken – wie ein Faultier.",
+    "Hand für Hand, Knie für Knie ans andere Ende hangeln, dort die Beine lösen und auf die Matte stellen. Höchstens 2 Kinder am Reck, mit Abstand."
+  ],
+  stufen:[
+    "Nur hängen: 5 Sekunden als Faultier an der Stange bleiben, dann Beine runter.",
+    "Als Faultier bis zum anderen Ende hangeln.",
+    "Hin und zurück hangeln oder ein Kuscheltier auf dem Bauch mitnehmen."
+  ],
+  sicherheit:"Die Stange bleibt niedrig, damit der Rücken knapp über der Matte ist. Nie nur mit den Kniekehlen hängen – die Hände bleiben immer an der Stange. Die Betreuerin steht am Reck und hilft beim Einhaken und Lösen der Beine. Spannseile und Bolzen vorher prüfen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:66,y:137,c:"orange",p:"steh"},
+      {x:106,y:145,c:"blau",p:"krabbel",r:180},
+      {x:158,y:145,c:"gruen",p:"krabbel",r:180},
+      {x:206,y:137,c:"gelb",p:"arme"},
+      {x:4,y:143,c:"lila",p:"steh"},
+      {x:30,y:143,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"reck",x:100,w:100,h:40},
+      {typ:"smatte",x:70,w:80},{typ:"smatte",x:150,w:80}
+    ],
+    pfeile:[{von:[112,132],nach:[196,132],dash:1},{von:[236,120],nach:[30,120],dash:1,bogen:36}]
+  },
+  schritte:[
+    { kinder:[{x:66,y:143,c:"orange",p:"steh"},{x:130,y:143,c:"blau",p:"steh"},{x:170,y:143,c:"gruen",p:"steh"},{x:236,y:143,c:"gelb",p:"steh",flip:1},{x:4,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"reck",x:100,w:100,h:40}],
+      extra:[{typ:"blase",x:150,y:40,text:"Stange fest?"},{typ:"kreis",cx:100,cy:152,r:13}] },
+    { kinder:[{x:66,y:137,c:"orange",p:"arme"},{x:130,y:143,c:"blau",p:"steh"},{x:170,y:143,c:"gruen",p:"steh"},{x:206,y:137,c:"gelb",p:"arme"},{x:4,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:70,w:80},{typ:"smatte",x:150,w:80}],
+      extra:[{typ:"blase",x:150,y:40,text:"Ohne Lücke!"}] },
+    { kinder:[{x:66,y:137,c:"orange",p:"steh"},{x:106,y:145,c:"blau",p:"krabbel",r:180},{x:236,y:143,c:"gruen",p:"steh",flip:1},{x:206,y:137,c:"gelb",p:"steh",flip:1},{x:4,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hände und Kniekehlen"},{typ:"kreis",cx:121,cy:152,r:18}] },
+    { kinder:[{x:66,y:137,c:"orange",p:"steh"},{x:106,y:145,c:"blau",p:"krabbel",r:180},{x:158,y:145,c:"gruen",p:"krabbel",r:180},{x:206,y:137,c:"gelb",p:"arme"},{x:4,y:143,c:"lila",p:"steh"},{x:30,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hände bleiben dran!"}],
+      pfeile:[{von:[112,132],nach:[196,132],dash:1}] }
+  ]
+},
+{
+  id:"barren-hangeln", name:"Barren-Hangeln", kat:"Hangeln & Schwingen",
+  kinder:4, klassen:"1–4", aufbau:6, platz:[5,3], wand:false,
+  geraete:{barren:1, matte:2}, klein:[],
+  kurz:"Am niedrigen Barren an einem Holm entlang ans andere Ende hangeln.",
+  foerdert:"Griffkraft, Armkraft, Körperspannung, Ausdauer",
+  ablauf:[
+    "Die Betreuerin stellt den Barren niedrig ein – Holme etwa auf Kopfhöhe der Kinder – und prüft, ob alle Verriegelungen fest sind.",
+    "Zwei Matten unter den Barren legen, auch über die Standfüße – je 2 Kinder tragen eine Matte.",
+    "Los geht's: An einem Holm mit beiden Händen festhalten und seitlich entlanghangeln – am Anfang dürfen die Füße auf der Matte mitlaufen.",
+    "Wer sicher ist, zieht die Füße an und hangelt frei bis zum Ende. An jedem Holm immer nur ein Kind."
+  ],
+  stufen:[
+    "Füße laufen auf der Matte mit, die Hände rutschen am Holm entlang.",
+    "Füße angezogen, Hand neben Hand bis zum Ende hangeln.",
+    "Hand über Hand (überkreuzt) hangeln oder am Ende auf den anderen Holm umgreifen."
+  ],
+  sicherheit:"Holme niedrig, damit die Kinder jederzeit auf die Füße kommen. Alle Verriegelungen vor dem Start prüfen. Nicht zwischen den Holmen durchklettern und nicht auf die Holme setzen. Pro Holm nur ein Kind, die Betreuerin steht in der Mitte daneben.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:62,y:143,c:"orange",p:"arme"},
+      {x:108,y:132,c:"blau",p:"haeng"},
+      {x:150,y:130,c:"gruen",p:"sprung"},
+      {x:206,y:137,c:"gelb",p:"arme"},
+      {x:8,y:143,c:"lila",p:"steh"},
+      {x:34,y:143,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"barren",x:90,w:120,h:50},
+      {typ:"smatte",x:80,w:70},{typ:"smatte",x:150,w:70}
+    ],
+    pfeile:[{von:[106,120],nach:[200,120],dash:1},{von:[236,112],nach:[34,112],dash:1,bogen:36}]
+  },
+  schritte:[
+    { kinder:[{x:62,y:143,c:"orange",p:"steh"},{x:124,y:143,c:"blau",p:"steh"},{x:164,y:143,c:"gruen",p:"steh"},{x:236,y:143,c:"gelb",p:"steh",flip:1},{x:8,y:143,c:"lila",p:"steh"},{x:34,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"barren",x:90,w:120,h:50}],
+      extra:[{typ:"blase",x:150,y:40,text:"Riegel fest?"},{typ:"kreis",cx:102,cy:150,r:13}] },
+    { kinder:[{x:62,y:143,c:"orange",p:"steh"},{x:96,y:137,c:"blau",p:"arme"},{x:176,y:137,c:"gruen",p:"arme",flip:1},{x:236,y:143,c:"gelb",p:"steh",flip:1},{x:8,y:143,c:"lila",p:"steh"},{x:34,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:80,w:70},{typ:"smatte",x:150,w:70}],
+      extra:[{typ:"blase",x:150,y:40,text:"Auch über die Füße"}] },
+    { kinder:[{x:62,y:143,c:"orange",p:"steh"},{x:108,y:136,c:"blau",p:"haeng"},{x:236,y:143,c:"gruen",p:"steh",flip:1},{x:206,y:137,c:"gelb",p:"steh",flip:1},{x:8,y:143,c:"lila",p:"steh"},{x:34,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Füße helfen mit"},{typ:"kreis",cx:123,cy:178,r:12}],
+      pfeile:[{von:[106,120],nach:[200,120],dash:1}] },
+    { kinder:[{x:62,y:143,c:"orange",p:"arme"},{x:108,y:132,c:"blau",p:"haeng"},{x:150,y:130,c:"gruen",p:"sprung"},{x:206,y:137,c:"gelb",p:"arme"},{x:8,y:143,c:"lila",p:"steh"},{x:34,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Ein Kind pro Holm"}],
+      pfeile:[{von:[106,120],nach:[200,120],dash:1}] }
+  ]
+},
+{
+  id:"ringe-schaukel", name:"Ringe-Schaukel", kat:"Hangeln & Schwingen",
+  kinder:4, klassen:"2–4", aufbau:5, platz:[7,2], wand:false,
+  geraete:{ringe:1, matte:1, weich:1}, klein:[],
+  kurz:"An den Ringen festhalten, schaukeln und am vorderen Punkt auf den Weichboden loslassen.",
+  foerdert:"Griffkraft, Schwunggefühl, Timing, sicheres Landen",
+  ablauf:[
+    "Die Ringe herunterlassen und auf Brusthöhe der Kinder (etwa 1,1 m) einstellen – beide Ringe gleich hoch.",
+    "Eine Matte unter die Ringe legen.",
+    "Den Weichboden etwa 1 m vor die Ringe in Schwungrichtung legen – 4 Kinder tragen ihn gemeinsam.",
+    "Los geht's: Ringe greifen, 2–3 Schritte anlaufen, die Beine anhocken und nach vorn schaukeln.",
+    "Am vorderen Punkt loslassen und auf dem Weichboden im Stand landen. Erst wenn der Weichboden frei ist, startet das nächste Kind."
+  ],
+  stufen:[
+    "Nur hin- und herschaukeln und hinten auf der Matte wieder abstellen.",
+    "Einmal schaukeln, vorn loslassen, im Stand auf dem Weichboden landen.",
+    "Zweimal schaukeln und vorn in den Sitz landen oder weiter nach vorn fliegen."
+  ],
+  sicherheit:"Ringe nur auf Brusthöhe, nie höher. Immer nur ein Kind an den Ringen, die anderen warten mit Abstand hinter der Anlaufmatte. Niemand steht vor oder neben den Ringen. Die Betreuerin steht seitlich am Weichboden und fängt bei Bedarf ab.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:103,y:138,c:"blau",p:"sprung"},
+      {x:178,y:88,c:"gruen",p:"sprung"},
+      {x:236,y:127,c:"orange",p:"arme"},
+      {x:10,y:143,c:"gelb",p:"steh"},
+      {x:262,y:127,c:"lila",p:"lauf",flip:1},
+      {x:40,y:143,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"ringe",x:130,y:139},
+      {typ:"smatte",x:90,w:80},
+      {typ:"weich",x:190,w:100,text:"Weichboden"}
+    ],
+    pfeile:[{von:[92,160],nach:[168,122],dash:1,bogen:16},{von:[198,86],nach:[236,116],dash:1,bogen:-14}]
+  },
+  schritte:[
+    { kinder:[{x:70,y:143,c:"blau",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:236,y:143,c:"orange",p:"steh",flip:1},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:143,c:"lila",p:"steh",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"ringe",x:130,y:139}],
+      extra:[{typ:"blase",x:200,y:40,text:"Beide gleich hoch!"},{typ:"kreis",cx:130,cy:146,r:14}] },
+    { kinder:[{x:66,y:143,c:"blau",p:"arme"},{x:176,y:143,c:"gruen",p:"arme",flip:1},{x:236,y:143,c:"orange",p:"steh",flip:1},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:143,c:"lila",p:"steh",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"smatte",x:90,w:80}],
+      extra:[{typ:"blase",x:200,y:40,text:"Matte darunter"}] },
+    { kinder:[{x:66,y:143,c:"blau",p:"steh"},{x:196,y:127,c:"gruen",p:"arme"},{x:236,y:127,c:"orange",p:"steh"},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:127,c:"lila",p:"arme",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
+      plus:[{typ:"weich",x:190,w:100,text:"Weichboden"}],
+      extra:[{typ:"blase",x:240,y:40,text:"Zu viert tragen!"}] },
+    { kinder:[{x:103,y:138,c:"blau",p:"sprung"},{x:70,y:143,c:"gruen",p:"steh"},{x:236,y:127,c:"orange",p:"steh",flip:1},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:127,c:"lila",p:"steh",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:200,y:40,text:"Beine anhocken"}],
+      pfeile:[{von:[92,160],nach:[168,122],dash:1,bogen:16}] },
+    { kinder:[{x:178,y:88,c:"blau",p:"sprung"},{x:70,y:143,c:"gruen",p:"steh"},{x:236,y:127,c:"orange",p:"arme"},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:127,c:"lila",p:"lauf",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:110,y:40,text:"Vorn loslassen!"}],
+      pfeile:[{von:[198,86],nach:[236,116],dash:1,bogen:-14}] }
+  ]
+},
+{
+  id:"hangel-leiter", name:"Hangel-Leiter", kat:"Hangeln & Schwingen",
+  kinder:3, klassen:"1–4", aufbau:6, platz:[6,2], wand:false,
+  geraete:{kasten:2, leiter:1, matte:2}, klein:[],
+  kurz:"Unter einer waagerechten Turnleiter von Sprosse zu Sprosse hangeln – wie an Monkey Bars.",
+  foerdert:"Griffkraft, Armkraft, Rhythmus, Ausdauer",
+  ablauf:[
+    "Zwei Kästen (je 5 Teile) mit etwa 2,5 m Abstand aufstellen – je 2 Kinder tragen ein Kastenteil.",
+    "Die Betreuerin legt mit Hilfe die Turnleiter waagerecht über beide Kastendeckel – an jedem Ende mindestens 30 cm fest aufliegend.",
+    "Zwei Matten lückenlos unter die Leiter legen.",
+    "Los geht's: Vom Boden aus die erste Sprosse greifen und von Sprosse zu Sprosse hangeln. Die Betreuerin steht daneben.",
+    "Am Ende auf die Matte loslassen und außen herum zurück zum Start. Das nächste Kind startet erst, wenn das Kind davor über die Mitte ist."
+  ],
+  stufen:[
+    "Jede Sprosse mit beiden Händen greifen, die Füße dürfen kurz auf die Matte.",
+    "Hand über Hand, jede Sprosse einmal, ohne die Füße abzusetzen.",
+    "Jede zweite Sprosse greifen oder rückwärts zurückhangeln."
+  ],
+  sicherheit:"Die Leiter muss an beiden Enden fest und gerade auf den Kastendeckeln aufliegen – vorher rütteln und prüfen. Nicht auf die Leiter klettern oder sich daraufsetzen. Die Betreuerin steht die ganze Zeit neben der Leiter. Matten ohne Lücke darunter.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:106,y:137,c:"orange",p:"arme"},
+      {x:146,y:132,c:"blau",p:"sprung"},
+      {x:244,y:143,c:"gruen",p:"lauf",flip:1},
+      {x:2,y:143,c:"gelb",p:"steh"},
+      {x:28,y:143,c:"lila",p:"steh"},
+      {x:270,y:143,c:"rot",p:"steh",flip:1}
+    ],
+    dinge:[
+      {typ:"kasten",x:60,w:44,teile:5},{typ:"kasten",x:196,w:44,teile:5},
+      {typ:"leiter",x1:66,y1:135,x2:234,y2:135},
+      {typ:"smatte",x:104,w:46},{typ:"smatte",x:150,w:46}
+    ],
+    pfeile:[{von:[112,122],nach:[192,122],dash:1},{von:[252,112],nach:[34,112],dash:1,bogen:36}]
+  },
+  schritte:[
+    { kinder:[{x:110,y:143,c:"orange",p:"steh"},{x:150,y:143,c:"blau",p:"steh"},{x:244,y:143,c:"gruen",p:"arme",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"arme"},{x:270,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"kasten",x:60,w:44,teile:5},{typ:"kasten",x:196,w:44,teile:5}],
+      extra:[{typ:"blase",x:150,y:40,text:"ca. 2,5 m Abstand"}],
+      pfeile:[{von:[108,112],nach:[190,112],c:"ink"},{von:[190,112],nach:[108,112],c:"ink"}] },
+    { kinder:[{x:110,y:143,c:"orange",p:"arme"},{x:156,y:143,c:"blau",p:"arme",flip:1},{x:244,y:143,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:270,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"leiter",x1:66,y1:135,x2:234,y2:135}],
+      extra:[{typ:"blase",x:150,y:40,text:"Fest aufliegend!"},{typ:"kreis",cx:76,cy:136,r:13},{typ:"kreis",cx:224,cy:136,r:13}] },
+    { kinder:[{x:106,y:137,c:"orange",p:"steh"},{x:160,y:137,c:"blau",p:"arme",flip:1},{x:244,y:143,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:270,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:104,w:46},{typ:"smatte",x:150,w:46}],
+      extra:[{typ:"blase",x:150,y:40,text:"Ohne Lücke!"}] },
+    { kinder:[{x:106,y:137,c:"orange",p:"arme"},{x:146,y:132,c:"blau",p:"sprung"},{x:244,y:143,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:270,y:143,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Sprosse für Sprosse"}],
+      pfeile:[{von:[112,122],nach:[192,122],dash:1}] },
+    { kinder:[{x:106,y:137,c:"orange",p:"steh"},{x:166,y:137,c:"blau",p:"arme"},{x:244,y:143,c:"gruen",p:"lauf",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:270,y:143,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Außen zurück"}],
+      pfeile:[{von:[252,112],nach:[34,112],dash:1,bogen:36}] }
+  ]
+},
+{
+  id:"tau-aufstieg", name:"Tau-Aufstieg", kat:"Hangeln & Schwingen",
+  kinder:4, klassen:"2–4", aufbau:3, platz:[4,2], wand:false,
+  geraete:{taue:2, matte:2}, klein:[],
+  kurz:"Am Tau hochziehen, mit den Füßen klemmen und bis zur Markierung klettern – dann langsam wieder runter.",
+  foerdert:"Armkraft, Klemmtechnik, Körperspannung, Mut",
+  ablauf:[
+    "Die Betreuerin löst zwei Taue aus der Halterung und prüft, ob sie frei und gerade hängen.",
+    "Mit Klebeband eine Markierung auf etwa 1,5 m Höhe an jedes Tau kleben – höher geht es nicht.",
+    "Zwei Matten lückenlos unter die Taue legen.",
+    "Los geht's: Hoch greifen, hochziehen und das Tau zwischen den Füßen einklemmen. So Stück für Stück bis zur Markierung.",
+    "Hand unter Hand langsam wieder runterklettern – nicht rutschen! Pro Tau immer nur ein Kind."
+  ],
+  stufen:[
+    "Am Tau hängen, Füße klemmen und 5 Sekunden festhalten.",
+    "Zwei- bis dreimal nachgreifen und wieder runter.",
+    "Bis zur Markierung klettern, dort kurz „winken“ (eine Hand) und runter."
+  ],
+  sicherheit:"Nie höher als die Markierung. Nicht am Tau herunterrutschen (Brandblasen), sondern Hand unter Hand klettern. Pro Tau nur ein Kind, die anderen warten neben den Matten. Die Betreuerin steht zwischen den Tauen.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:95,y:111,c:"orange",p:"kletter"},
+      {x:175,y:126,c:"blau",p:"kletter"},
+      {x:230,y:143,c:"gruen",p:"arme"},
+      {x:4,y:143,c:"gelb",p:"steh"},
+      {x:30,y:143,c:"lila",p:"steh"},
+      {x:56,y:143,c:"rot",p:"steh"}
+    ],
+    dinge:[
+      {typ:"tau",x:110,y:172},{typ:"tau",x:190,y:172},
+      {typ:"strich",x1:102,y1:106,x2:118,y2:106},{typ:"strich",x1:182,y1:106,x2:198,y2:106},
+      {typ:"text",x:150,y:108,text:"Markierung",gr:8},
+      {typ:"smatte",x:80,w:70},{typ:"smatte",x:150,w:70}
+    ],
+    pfeile:[{von:[124,168],nach:[124,118],dash:1},{von:[206,120],nach:[206,166],dash:1}]
+  },
+  schritte:[
+    { kinder:[{x:70,y:143,c:"orange",p:"steh"},{x:140,y:143,c:"blau",p:"steh"},{x:230,y:143,c:"gruen",p:"steh",flip:1},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:256,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"tau",x:110,y:172},{typ:"tau",x:190,y:172}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hängen die Taue frei?"}] },
+    { kinder:[{x:70,y:143,c:"orange",p:"steh"},{x:140,y:143,c:"blau",p:"arme"},{x:230,y:143,c:"gruen",p:"steh",flip:1},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:256,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"strich",x1:102,y1:106,x2:118,y2:106},{typ:"strich",x1:182,y1:106,x2:198,y2:106},{typ:"text",x:150,y:108,text:"Markierung",gr:8}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur bis zum Band!"},{typ:"kreis",cx:110,cy:106,r:12},{typ:"kreis",cx:190,cy:106,r:12}] },
+    { kinder:[{x:56,y:143,c:"orange",p:"steh"},{x:134,y:137,c:"blau",p:"arme"},{x:230,y:143,c:"gruen",p:"steh",flip:1},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:256,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:80,w:70},{typ:"smatte",x:150,w:70}],
+      extra:[{typ:"blase",x:150,y:40,text:"Ohne Lücke!"}] },
+    { kinder:[{x:95,y:111,c:"orange",p:"kletter"},{x:175,y:126,c:"blau",p:"kletter"},{x:230,y:143,c:"gruen",p:"steh",flip:1},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:56,y:143,c:"rot",p:"steh"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Füße klemmen!"},{typ:"kreis",cx:189,cy:166,r:11}],
+      pfeile:[{von:[124,168],nach:[124,118],dash:1}] },
+    { kinder:[{x:95,y:124,c:"orange",p:"kletter"},{x:136,y:137,c:"blau",p:"arme"},{x:230,y:143,c:"gruen",p:"arme"},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:175,y:128,c:"rot",p:"kletter"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nicht rutschen!"}],
+      pfeile:[{von:[126,120],nach:[126,166],dash:1}] }
+  ]
+},
+{
+  id:"unter-baenken", name:"Unter den Bänken durch", kat:"Rollen & Kriechen",
+  kinder:4, klassen:"1–4", aufbau:2, platz:[7,2], wand:false,
+  geraete:{bank:2}, klein:["Hütchen (2)"],
+  kurz:"Unter quer gestellten Bänken durchrobben und dazwischen schnell aufstehen.",
+  foerdert:"Ganzkörperkoordination, Wendigkeit, Körpergefühl",
+  ablauf:[
+    "Zwei Bänke quer zur Laufrichtung aufstellen, mit etwa 1,5 m Lücke dazwischen – je 2 Kinder tragen eine Bank.",
+    "Ein Hütchen als Start vor die erste und ein Hütchen als Ziel hinter die zweite Bank stellen.",
+    "Los geht's: Flach auf den Bauch legen und unter der ersten Bank durchrobben, in der Lücke aufstehen und zur zweiten Bank.",
+    "Unter der zweiten Bank durch, am Ziel-Hütchen abklatschen und außen herum zurück. Erst starten, wenn die erste Bank frei ist."
+  ],
+  stufen:[
+    "Auf allen vieren unter den Bänken durchkrabbeln.",
+    "Flach auf dem Bauch durchrobben, in der Lücke aufstehen.",
+    "Rückenlage mit den Füßen voran durchschieben oder einen Ball mitnehmen."
+  ],
+  sicherheit:"Die Bänke stehen fest auf allen Füßen, niemand sitzt oder steigt auf die Bänke. Beim Aufstehen erst ganz unter der Bank hervorkommen – Kopf in Acht nehmen. Unter jeder Bank immer nur ein Kind.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:78,y:143,c:"orange",p:"lieg",flip:1},
+      {x:125,y:143,c:"blau",p:"arme"},
+      {x:174,y:143,c:"gruen",p:"lieg",flip:1},
+      {x:2,y:143,c:"gelb",p:"steh"},
+      {x:28,y:143,c:"lila",p:"steh"},
+      {x:232,y:143,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"sbank",x1:80,y1:172,x2:108,y2:172,beine:1,text:"Bank"},
+      {typ:"sbank",x1:170,y1:172,x2:198,y2:172,beine:1,text:"Bank"},
+      {typ:"huetchen",x:64,y:177},{typ:"huetchen",x:274,y:177}
+    ],
+    pfeile:[{von:[60,194],nach:[270,194],dash:1},{von:[262,120],nach:[30,120],dash:1,bogen:36}]
+  },
+  schritte:[
+    { kinder:[{x:50,y:143,c:"orange",p:"arme"},{x:125,y:143,c:"blau",p:"steh"},{x:148,y:143,c:"gruen",p:"arme",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:232,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:80,y1:172,x2:108,y2:172,beine:1,text:"Bank"},{typ:"sbank",x1:170,y1:172,x2:198,y2:172,beine:1,text:"Bank"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Bänke quer stellen!"}],
+      pfeile:[{von:[114,160],nach:[164,160],c:"ink"},{von:[164,160],nach:[114,160],c:"ink"}] },
+    { kinder:[{x:30,y:143,c:"orange",p:"steh"},{x:125,y:143,c:"blau",p:"steh"},{x:236,y:143,c:"gruen",p:"arme",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:56,y:143,c:"lila",p:"steh"},{x:210,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"huetchen",x:64,y:177},{typ:"huetchen",x:274,y:177}],
+      extra:[{typ:"blase",x:150,y:40,text:"Start und Ziel"}] },
+    { kinder:[{x:78,y:143,c:"orange",p:"lieg",flip:1},{x:125,y:143,c:"blau",p:"arme"},{x:28,y:143,c:"gruen",p:"steh"},{x:2,y:143,c:"gelb",p:"steh"},{x:210,y:143,c:"lila",p:"steh",flip:1},{x:236,y:143,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Flach wie ein Brett"}],
+      pfeile:[{von:[60,194],nach:[160,194],dash:1}] },
+    { kinder:[{x:78,y:143,c:"orange",p:"lieg",flip:1},{x:125,y:143,c:"blau",p:"arme"},{x:174,y:143,c:"gruen",p:"lieg",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:232,y:143,c:"rot",p:"arme"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Unter jeder Bank einer"}],
+      pfeile:[{von:[60,194],nach:[270,194],dash:1},{von:[262,120],nach:[30,120],dash:1,bogen:36}] }
+  ]
+},
+{
+  id:"kastentunnel", name:"Kastentunnel", kat:"Rollen & Kriechen",
+  kinder:4, klassen:"1–4", aufbau:5, platz:[6,2], wand:false,
+  geraete:{kasten:2, matte:1}, klein:[],
+  kurz:"Durch einen Tunnel aus Kastenteilen krabbeln und am Ausgang auf der Matte aufstehen.",
+  foerdert:"Körpergefühl, Orientierung, Koordination, Mut",
+  ablauf:[
+    "Von zwei Kästen den Deckel abnehmen und zur Seite stellen. Die Kastenteile (Rahmen) einzeln abheben – je 2 Kinder tragen ein Teil.",
+    "Die Rahmen hochkant auf die lange Seite stellen, sodass man hindurchschauen kann – dicht an dicht hintereinander. Das ist der Tunnel.",
+    "Eine Matte an den Tunnelausgang legen.",
+    "Los geht's: Auf allen vieren durch den Tunnel krabbeln und am Ausgang auf der Matte aufstehen. Erst starten, wenn das Kind davor halb durch ist."
+  ],
+  stufen:[
+    "Langsam im Vierfüßlergang durchkrabbeln.",
+    "Flach durchrobben oder rückwärts durchkrabbeln.",
+    "Einen Ball mit dem Kopf oder einer Hand vor sich herschieben."
+  ],
+  sicherheit:"Die Rahmen müssen sicher stehen und dürfen nicht wackeln – vorher prüfen, die Betreuerin rückt sie zurecht. Niemand klettert auf oder über den Tunnel. Im Tunnel nicht überholen und nicht stehen bleiben.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:58,y:143,c:"orange",p:"krabbel",flip:1},
+      {x:104,y:143,c:"blau",p:"krabbel",flip:1},
+      {x:150,y:143,c:"gruen",p:"krabbel",flip:1},
+      {x:2,y:143,c:"gelb",p:"steh"},
+      {x:28,y:143,c:"lila",p:"steh"},
+      {x:200,y:137,c:"rot",p:"arme"}
+    ],
+    dinge:[
+      {typ:"kasten",x:80,w:44,teile:2},{typ:"kasten",x:124,w:44,teile:2},
+      {typ:"text",x:124,y:157,text:"Tunnel",gr:9},
+      {typ:"smatte",x:172,w:60}
+    ],
+    pfeile:[{von:[60,140],nach:[196,140],dash:1},{von:[236,112],nach:[30,112],dash:1,bogen:36}]
+  },
+  schritte:[
+    { kinder:[{x:50,y:143,c:"orange",p:"arme"},{x:130,y:143,c:"blau",p:"steh"},{x:180,y:143,c:"gruen",p:"steh"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:236,y:143,c:"rot",p:"arme",flip:1}],
+      plus:[{typ:"kasten",x:80,w:44,teile:2}],
+      extra:[{typ:"blase",x:150,y:40,text:"Deckel weg!"},{typ:"text",x:102,y:157,text:"Rahmen",gr:9}],
+      pfeile:[{von:[100,152],nach:[150,100],c:"ink",bogen:-12}] },
+    { kinder:[{x:50,y:143,c:"orange",p:"steh"},{x:176,y:143,c:"blau",p:"arme",flip:1},{x:210,y:143,c:"gruen",p:"steh"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:236,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"kasten",x:124,w:44,teile:2},{typ:"text",x:124,y:157,text:"Tunnel",gr:9}],
+      extra:[{typ:"blase",x:150,y:40,text:"Hochkant, dicht an dicht"}] },
+    { kinder:[{x:50,y:143,c:"orange",p:"steh"},{x:180,y:137,c:"blau",p:"arme"},{x:236,y:143,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:262,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"smatte",x:172,w:60}],
+      extra:[{typ:"blase",x:200,y:40,text:"Matte an den Ausgang"}] },
+    { kinder:[{x:58,y:143,c:"orange",p:"krabbel",flip:1},{x:104,y:143,c:"blau",p:"krabbel",flip:1},{x:150,y:143,c:"gruen",p:"krabbel",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:28,y:143,c:"lila",p:"steh"},{x:200,y:137,c:"rot",p:"arme"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nicht überholen!"}],
+      pfeile:[{von:[60,140],nach:[196,140],dash:1}] }
+  ]
+},
+{
+  id:"robben-bank", name:"Robben-Bank", kat:"Rollen & Kriechen",
+  kinder:4, klassen:"1–4", aufbau:2, platz:[6,2], wand:false,
+  geraete:{bank:1, matte:1}, klein:[],
+  kurz:"Bäuchlings auf der Bank liegen, sich nur mit den Armen nach vorn ziehen und am Ende auf die Matte abrollen.",
+  foerdert:"Armkraft, Körperspannung, Gleichgewicht",
+  ablauf:[
+    "Eine Bank flach hinstellen, Sitzfläche nach oben – 2 Kinder tragen sie.",
+    "Eine Matte quer vor das Ende der Bank legen, ohne Lücke.",
+    "Los geht's: Bäuchlings auf die Bank legen und sich nur mit den Armen nach vorn ziehen – die Beine bleiben lang und locker.",
+    "Am Ende langsam auf die Matte gleiten und seitlich wie ein Baumstamm abrollen. Auf der Bank höchstens 2 Kinder mit Abstand."
+  ],
+  stufen:[
+    "Mit Armen und Beinen mithelfen, in Ruhe bis zum Ende.",
+    "Nur mit den Armen ziehen, beide Arme gleichzeitig.",
+    "Rückenlage mit Händen über dem Kopf ziehen oder eine Robbe mit Ball auf dem Rücken sein."
+  ],
+  sicherheit:"Die Bank steht fest und gerade. Nicht von der Bank springen, sondern langsam auf die Matte gleiten. Abstand halten: das nächste Kind legt sich erst auf die Bank, wenn das Kind davor in der Mitte ist.",
+  feld:{ boden:"seite",
+    kinder:[
+      {x:60,y:129,c:"orange",p:"lieg",flip:1},
+      {x:126,y:129,c:"blau",p:"lieg",flip:1},
+      {x:200,y:137,c:"gruen",p:"lieg",flip:1},
+      {x:2,y:143,c:"gelb",p:"steh"},
+      {x:26,y:143,c:"lila",p:"steh"},
+      {x:238,y:137,c:"rot",p:"sitz"}
+    ],
+    dinge:[
+      {typ:"sbank",x1:50,y1:172,x2:190,y2:172,beine:1},
+      {typ:"smatte",x:190,w:70}
+    ],
+    pfeile:[{von:[70,150],nach:[180,150],dash:1},{von:[196,160],nach:[240,170],dash:1,bogen:-10},{von:[260,112],nach:[30,112],dash:1,bogen:36}]
+  },
+  schritte:[
+    { kinder:[{x:60,y:143,c:"orange",p:"arme"},{x:126,y:143,c:"blau",p:"steh"},{x:180,y:143,c:"gruen",p:"arme",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:238,y:143,c:"rot",p:"steh",flip:1}],
+      plus:[{typ:"sbank",x1:50,y1:172,x2:190,y2:172,beine:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Zu zweit tragen!"}] },
+    { kinder:[{x:60,y:143,c:"orange",p:"steh"},{x:126,y:143,c:"blau",p:"steh"},{x:200,y:137,c:"gruen",p:"arme"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:238,y:137,c:"rot",p:"arme",flip:1}],
+      plus:[{typ:"smatte",x:190,w:70}],
+      extra:[{typ:"blase",x:200,y:40,text:"Ohne Lücke!"}] },
+    { kinder:[{x:60,y:129,c:"orange",p:"lieg",flip:1},{x:200,y:137,c:"blau",p:"steh",flip:1},{x:268,y:143,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:238,y:143,c:"rot",p:"steh",flip:1}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur mit den Armen!"}],
+      pfeile:[{von:[70,150],nach:[180,150],dash:1}] },
+    { kinder:[{x:150,y:129,c:"orange",p:"lieg",flip:1},{x:76,y:129,c:"blau",p:"lieg",flip:1},{x:200,y:137,c:"gruen",p:"lieg",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:238,y:137,c:"rot",p:"sitz"}],
+      extra:[{typ:"blase",x:150,y:40,text:"Wie ein Baumstamm"}],
+      pfeile:[{von:[196,160],nach:[240,170],dash:1,bogen:-10}] }
+  ]
+}
+);
+/*MODULE-ENDE*/
+
 /* ===================== Einstellungen ===================== */
 const FARBEN = {orange:"#F28C28",blau:"#2E86DE",gruen:"#3BAA5C",lila:"#9B59B6",gelb:"#E0AE1F",rot:"#E5533D",tuerkis:"#159A9C",ink:"#2D3142"};
 const ORTE = {halle:"Turnhalle",draussen:"Schulhof"};
@@ -4413,6 +6407,11 @@ function bodenSVG(boden){
     s += `<rect x="8" y="8" width="284" height="184" rx="4" fill="none" stroke="#fff" stroke-width="3"/><line x1="150" y1="8" x2="150" y2="192" stroke="#fff" stroke-width="2"/><circle cx="150" cy="100" r="26" fill="none" stroke="#fff" stroke-width="2"/>`;
   } else if (boden==="draussen"){
     s += `<rect width="${W}" height="${H}" fill="#D6EDCB"/><rect x="8" y="8" width="284" height="184" rx="6" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 6"/>`;
+  } else if (boden==="seite"){
+    // Seitenansicht Turnhalle: Wand + Hallenboden (Boden-Oberkante = BODEN)
+    s += `<rect width="${W}" height="${H}" fill="#F6EEDF"/>`;
+    for(let x=0;x<W;x+=50) s += `<line x1="${x}" y1="0" x2="${x}" y2="${BODEN}" stroke="#EDE2CE" stroke-width="1"/>`;
+    s += `<rect x="0" y="${BODEN}" width="${W}" height="${H-BODEN}" fill="#E4C38F"/><line x1="0" y1="${BODEN}" x2="${W}" y2="${BODEN}" stroke="#C49A5E" stroke-width="2"/>`;
   } else {
     s += `<rect width="${W}" height="${H}" fill="#EFE6D8"/><rect x="8" y="8" width="44" height="30" rx="4" fill="#D9C7AA"/><rect x="248" y="162" width="44" height="30" rx="4" fill="#D9C7AA"/>`;
   }
@@ -4441,8 +6440,46 @@ function dingeSVG(dinge){
     if (d.typ==="huetchen") s += d.um
       ? `<g transform="translate(${d.x},${d.y})"><ellipse cx="0" cy="-6" rx="8" ry="3" fill="#E07A10"/><path d="M-8 -6 L-2 7 L2 7 L8 -6Z" fill="#F5A623"/><rect x="-6" y="7" width="12" height="3" rx="1" fill="#E07A10"/></g>`
       : `<g transform="translate(${d.x},${d.y})"><rect x="-9" y="5" width="18" height="4" rx="1.5" fill="#E07A10"/><path d="M-6 5 L-1.5 -10 L1.5 -10 L6 5Z" fill="#F5A623"/><path d="M-4 -1 L4 -1" stroke="#fff" stroke-width="2"/></g>`;
+    s += geraetSVG(d);
   }
   return s;
+}
+/* Turngeräte in der Seitenansicht (Parcours-Module). Boden-Oberkante = BODEN.
+   Maßstab grob: Kind (46 hoch) ≈ 1,30 m → 1 m ≈ 35. */
+const BODEN = 186, KT = 8, KD = 7;           // Kastenteil- und Deckelhöhe
+const kastenOben = (teile) => BODEN - teile*KT - KD;
+function geraetSVG(d){
+  const t = d.typ, lbl = (x,y,txt,f="#fff",gr=8) => txt ? `<text x="${x}" y="${y}" font-size="${gr}" font-weight="800" text-anchor="middle" fill="${f}">${esc(txt)}</text>` : "";
+  if (t==="kasten"){ const w=d.w||44, n=d.teile??3; let s="", y=BODEN;
+    for(let i=0;i<n;i++){ const e=i*1.5; s += `<path d="M${d.x+e} ${y} L${d.x+w-e} ${y} L${d.x+w-e-1.5} ${y-KT} L${d.x+e+1.5} ${y-KT}Z" fill="#E6C48E" stroke="#AF8448" stroke-width="1.2"/>`;
+      if (w>30) s += `<rect x="${d.x+w/2-6}" y="${y-5.5}" width="12" height="3" rx="1.5" fill="#AF8448" opacity=".55"/>`; y-=KT; }
+    const e=n*1.5; return s + `<rect x="${d.x+e}" y="${y-KD}" width="${w-2*e}" height="${KD}" rx="3.5" fill="#C98B4A" stroke="#8F5E2C" stroke-width="1.2"/>`; }
+  if (t==="sbank"){ let s="";
+    if (d.beine){ const dx=d.x2-d.x1, l=Math.hypot(dx,d.y2-d.y1)||1, u=12/l;
+      for (const f of [u, 1-u]){ const x=d.x1+dx*f, y=d.y1+(d.y2-d.y1)*f; s += `<line x1="${x}" y1="${y+7}" x2="${x}" y2="${BODEN}" stroke="#6E4B28" stroke-width="4"/><line x1="${x-5}" y1="${BODEN-1}" x2="${x+5}" y2="${BODEN-1}" stroke="#6E4B28" stroke-width="2.5"/>`; } }
+    s += `<line x1="${d.x1}" y1="${d.y1+7}" x2="${d.x2}" y2="${d.y2+7}" stroke="#6E4B28" stroke-width="3"/><line x1="${d.x1}" y1="${d.y1+2.5}" x2="${d.x2}" y2="${d.y2+2.5}" stroke="#B07A45" stroke-width="5.5" stroke-linecap="round"/>`;
+    for (const [n,x,y] of [[1,d.x1,d.y1],[2,d.x2,d.y2]]) if (d.haken===n) s += `<path d="M${x} ${y+1} q${n===1?-6:6} 0 ${n===1?-6:6} 6" stroke="#555" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    return s + lbl((d.x1+d.x2)/2, (d.y1+d.y2)/2-4, d.text, FARBEN.ink); }
+  if (t==="sprossen"){ const o=d.oben??80, w=d.w||30; let s=`<rect x="${d.x}" y="${o}" width="4" height="${BODEN-o}" fill="#946535"/><rect x="${d.x+w-4}" y="${o}" width="4" height="${BODEN-o}" fill="#946535"/>`;
+    for(let y=o+7;y<BODEN-3;y+=11) s += `<rect x="${d.x+4}" y="${y}" width="${w-8}" height="3.5" rx="1.7" fill="#C98B4A"/>`; return s; }
+  if (t==="smatte"){ const h=d.h||6, y=d.y??BODEN; return `<rect x="${d.x}" y="${y-h}" width="${d.w}" height="${h}" rx="3" fill="#4A7FCF" stroke="#35609F" stroke-width="1.2"/>` + (h>=9 ? lbl(d.x+d.w/2, y-h/2+3, d.text) : ""); }
+  if (t==="weich"){ const h=d.h||16, y=d.y??BODEN; return `<rect x="${d.x}" y="${y-h}" width="${d.w}" height="${h}" rx="6" fill="#3F74C4" stroke="#2C5696" stroke-width="1.5"/>` + lbl(d.x+d.w/2, y-h/2+3, d.text??"Weichboden"); }
+  if (t==="barren"){ const w=d.w||90, h=d.h||50, o=BODEN-h; let s="";
+    for (const x of [d.x+12, d.x+w-12]) s += `<rect x="${x-2.5}" y="${o}" width="5" height="${h}" fill="#8A8F99"/><rect x="${x-12}" y="${BODEN-4}" width="24" height="4" rx="2" fill="#5E636D"/>`;
+    return s + `<rect x="${d.x}" y="${o-7}" width="${w}" height="3.5" rx="1.7" fill="#C98B4A" opacity=".55"/><rect x="${d.x}" y="${o-4}" width="${w}" height="5" rx="2.5" fill="#C98B4A" stroke="#8F5E2C" stroke-width="1"/>`; }
+  if (t==="reck"){ const w=d.w||80, h=d.h||60, o=BODEN-h; let s="";
+    for (const [x,dir] of [[d.x,-1],[d.x+w,1]]) s += `<line x1="${x}" y1="${o}" x2="${x+dir*22}" y2="${BODEN}" stroke="#9AA0AA" stroke-width="1.2"/><rect x="${x-2.5}" y="${o}" width="5" height="${h}" fill="#8A8F99"/>`;
+    return s + `<line x1="${d.x}" y1="${o+2}" x2="${d.x+w}" y2="${o+2}" stroke="#5E636D" stroke-width="3.5" stroke-linecap="round"/>`; }
+  if (t==="ringe"){ const y=d.y||110; return `<line x1="${d.x}" y1="0" x2="${d.x}" y2="${y}" stroke="#8A6A45" stroke-width="2.5"/><circle cx="${d.x}" cy="${y+7}" r="7" fill="none" stroke="#7A5530" stroke-width="3"/>`; }
+  if (t==="tau"){ const x2=d.x2??d.x, y=d.y||150; return `<line x1="${d.x}" y1="0" x2="${x2}" y2="${y}" stroke="#B08A55" stroke-width="4.5" stroke-linecap="round"/><circle cx="${x2}" cy="${y}" r="4.5" fill="#8A6A45"/>`; }
+  if (t==="minitramp"){ const w=d.w||46, a=d.flip?[BODEN-24,BODEN-10]:[BODEN-10,BODEN-24];
+    return `<line x1="${d.x+4}" y1="${a[0]}" x2="${d.x+4}" y2="${BODEN}" stroke="#5E636D" stroke-width="3"/><line x1="${d.x+w-4}" y1="${a[1]}" x2="${d.x+w-4}" y2="${BODEN}" stroke="#5E636D" stroke-width="3"/><line x1="${d.x}" y1="${a[0]}" x2="${d.x+w}" y2="${a[1]}" stroke="#2D3142" stroke-width="5" stroke-linecap="round"/><line x1="${d.x+3}" y1="${a[0]-1}" x2="${d.x+w-3}" y2="${a[1]-1}" stroke="#E5533D" stroke-width="2"/>`; }
+  if (t==="balken"){ const w=d.w||110, h=d.h||30, o=BODEN-h;
+    return `<path d="M${d.x+8} ${BODEN} L${d.x+14} ${o+6} L${d.x+20} ${BODEN}Z M${d.x+w-20} ${BODEN} L${d.x+w-14} ${o+6} L${d.x+w-8} ${BODEN}Z" fill="#8A8F99"/><rect x="${d.x}" y="${o}" width="${w}" height="7" rx="2.5" fill="#D9B27A" stroke="#9C7440" stroke-width="1.2"/>`; }
+  if (t==="leiter"){ const dx=d.x2-d.x1, dy=d.y2-d.y1, l=Math.hypot(dx,dy)||1, px=-dy/l*4, py=dx/l*4; let s="";
+    for (let i=6;i<l-3;i+=11){ const x=d.x1+dx*i/l, y=d.y1+dy*i/l; s += `<line x1="${x-px}" y1="${y-py}" x2="${x+px}" y2="${y+py}" stroke="#C98B4A" stroke-width="2.5"/>`; }
+    return s + [1,-1].map(k=>`<line x1="${d.x1+px*k}" y1="${d.y1+py*k}" x2="${d.x2+px*k}" y2="${d.y2+py*k}" stroke="#946535" stroke-width="2.5" stroke-linecap="round"/>`).join(""); }
+  return "";
 }
 // Hände fassen: Linie von der rechten Hand des linken Kindes zur linken Hand des rechten Kindes
 function haendeSVG(kinder, haende){
@@ -4474,33 +6511,35 @@ const markerDefs = pre => "<defs>" + Object.entries(FARBEN).map(([k,v]) =>
 // Standbild: Übersicht (frame weggelassen) oder ein einzelner Schritt
 function feldSVG(sp, mini, frame){
   const f = frame || sp.feld;
-  const vb = mini ? "30 14 240 170" : "0 0 300 200";
+  const vb = mini && sp.feld.boden!=="seite" ? "30 14 240 170" : "0 0 300 200";
   let s = `<svg class="${mini?"":"feld"}" viewBox="${vb}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spielfeld ${esc(sp.name)}">`;
   const pre = neueMarkerId();
   s += markerDefs(pre) + bodenSVG(sp.feld.boden) + dingeSVG(f.dinge) + haendeSVG(f.kinder, f.haende);
   for (const k of f.kinder){
-    const t = `translate(${k.x},${k.y})` + (k.flip ? " translate(30,0) scale(-1,1)" : "");
-    s += `<g transform="${t}"><use href="#k-${k.p||"steh"}" width="30" height="46" style="color:${FARBEN[k.c]}"/></g>`;
+    s += `<g transform="${kidTrans(k.x,k.y,k.flip,k.r)}"><use href="#k-${k.p||"steh"}" width="30" height="46" style="color:${FARBEN[k.c]}"/></g>`;
   }
   return s + pfeileSVG(sp, f.pfeile, pre) + "</svg>";
 }
 
 /* ===================== Schritt-Player ===================== */
 // Bild 0 = Übersicht, danach ein Bild je Anleitungsschritt
+// Parcours-Module: Aufbau beginnt in der leeren Halle, "plus" legt Geräte dauerhaft dazu
 function bilder(sp){
   if (!sp.schritte) return null;
-  const basis = sp.schrittDinge || sp.feld.dinge;
-  return [ {...sp.feld, titel:"Übersicht"} ].concat(sp.schritte.map((s,i) => ({
-    kinder: s.kinder, haende: s.haende||[], pfeile: s.pfeile||[],
-    dinge: (s.dinge || basis).concat(s.extra||[]), titel: `Schritt ${i+1}`
-  })));
+  let kum = sp.schrittDinge || (sp.modul ? [] : sp.feld.dinge);
+  return [ {...sp.feld, titel:"Übersicht"} ].concat(sp.schritte.map((s,i) => {
+    if (s.plus) kum = kum.concat(s.plus);
+    return { kinder: s.kinder, haende: s.haende||[], pfeile: s.pfeile||[],
+      dinge: (s.dinge || kum).concat(s.extra||[]), titel: `Schritt ${i+1}` };
+  }));
 }
-const kidTrans = (x,y,flip) => `translate(${x.toFixed(1)},${y.toFixed(1)})` + (flip ? " translate(30,0) scale(-1,1)" : "");
+// r = Drehung in Grad um die Körpermitte (z. B. beim Rutschen)
+const kidTrans = (x,y,flip,r) => `translate(${(+x).toFixed(1)},${(+y).toFixed(1)})` + (r ? ` rotate(${(+r).toFixed(1)} 15 23)` : "") + (flip ? " translate(30,0) scale(-1,1)" : "");
 function playerSVG(sp, f){
   const pre = neueMarkerId();
   return `<svg class="feld player" data-m="${pre}" viewBox="0 0 300 200" role="img" aria-label="Spielfeld ${esc(sp.name)}, Schritt für Schritt">${markerDefs(pre)}${bodenSVG(sp.feld.boden)}
     <g class="l-dinge">${dingeSVG(f.dinge)}${haendeSVG(f.kinder,f.haende)}</g>
-    <g class="l-kinder">${f.kinder.map(k=>`<g class="kid" transform="${kidTrans(k.x,k.y,k.flip)}" style="color:${FARBEN[k.c]}"><use href="#k-${k.p||"steh"}" width="30" height="46"/></g>`).join("")}</g>
+    <g class="l-kinder">${f.kinder.map(k=>`<g class="kid" transform="${kidTrans(k.x,k.y,k.flip,k.r)}" style="color:${FARBEN[k.c]}"><use href="#k-${k.p||"steh"}" width="30" height="46"/></g>`).join("")}</g>
     <g class="l-pfeile">${pfeileSVG(sp,f.pfeile,pre)}</g></svg>`;
 }
 const TEMPO_MIN = 0.25, TEMPO_MAX = 3, TEMPO_CHIPS = [0.25, 0.5, 1, 1.5, 2, 3];
@@ -4557,7 +6596,8 @@ function spielerZeige(i){
     const t = dauer ? Math.min(1,(now-start)/dauer) : 1, e = t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
     kids.forEach((g,n)=>{ const a=von[n], b=nach[n]; if(!a||!b) return;
       const neu = t>=.15;
-      g.setAttribute("transform", kidTrans(a.x+(b.x-a.x)*e, a.y+(b.y-a.y)*e, neu ? b.flip : a.flip));
+      const ra=a.r||0, rb=b.r||0;
+      g.setAttribute("transform", kidTrans(a.x+(b.x-a.x)*e, a.y+(b.y-a.y)*e, neu ? b.flip : a.flip, ra+(rb-ra)*e));
       g.querySelector("use").setAttribute("href", `#k-${(neu?b.p:a.p)||"steh"}`);
       g.style.color = FARBEN[(t>=.5?b.c:a.c)]; });
     if (t<1) P.anim=requestAnimationFrame(schritt);
@@ -4663,10 +6703,16 @@ $("#zufall").onclick = () => {
 };
 
 /* ===================== Detailkarte ===================== */
+// Player-Bildschirm mit Steuerleiste (für Spiele und Parcours-Module gleich)
+function playerHTML(sp, fr){
+  return `<div class="bildschirm" id="bs">${playerSVG(sp, fr[0])}<div class="untertitel" id="ut"></div><button class="grossplay" id="pb-gross" aria-label="Abspielen">${ICON.play}</button><div class="steuer" id="steuer"><button id="pb-prev" aria-label="Schritt zurück">${ICON.zurueck}</button><button id="pb-play" aria-label="Abspielen">${ICON.play}</button><button id="pb-next" aria-label="Schritt vor">${ICON.vor}</button><span id="pb-info">Übersicht</span><button id="pb-tempo" class="tbtn" aria-label="Geschwindigkeit">${tempoKurz(player.tempo)}</button><button id="pb-voll" aria-label="Vollbild">${ICON.voll}</button></div><div class="tsheet-bg" id="tsheet-bg" hidden></div><div class="tempo-sheet" id="tsheet" role="dialog" aria-label="Geschwindigkeit" hidden><div class="griff"></div><div class="twert" id="twert">${tempoLang(player.tempo)}</div><div class="treihe"><button id="t-minus" aria-label="langsamer">−</button><input type="range" id="t-regler" min="${TEMPO_MIN}" max="${TEMPO_MAX}" step="0.05" value="${player.tempo}" aria-label="Geschwindigkeit"><button id="t-plus" aria-label="schneller">+</button></div><div class="tchips">${TEMPO_CHIPS.map(v=>`<span><button data-v="${v}" class="${Math.abs(v-player.tempo)<0.001?"on":""}">${String(v).replace(".", ",")}</button>${v===1?"<small>Normal</small>":""}</span>`).join("")}</div></div></div><div class="druck-uebersicht">${feldSVG(sp,false)}</div>`;
+}
 function zeige(id){
-  const sp = SPIELE.find(x=>x.id===id), nr = SPIELE.indexOf(sp)+1, fr = bilder(sp);
+  const modul = MODULE.find(x=>x.id===id);
+  const sp = modul || SPIELE.find(x=>x.id===id), nr = SPIELE.indexOf(sp)+1, fr = bilder(sp);
   if (player.timer) spielerStopp();
   cancelAnimationFrame(player.anim); Object.assign(player, {sp, frames:fr, i:0, pos:null});
+  if (modul) { $("#sheet").innerHTML = modulHTML(modul); oeffneDetail(); playerVerdrahten(); return; }
   const box = (cls,t,x) => x ? `<div class="box ${cls}"><b>${t}</b>${Array.isArray(x)?`<ul>${x.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`:esc(x)}</div>` : "";
   $("#sheet").innerHTML = `<article class="sheet" style="--c:${FARBEN[sp.farbe]}">
     <div class="cat">${esc(sp.kategorie)}</div>
@@ -4681,7 +6727,7 @@ function zeige(id){
       <span class="pill">Energie ${energieHTML(sp.energie)}</span>
     </div>
     <div class="sgrid ${fr?"mit-schritten":""}">
-      <div>${fr ? `<div class="bildschirm" id="bs">${playerSVG(sp, fr[0])}<div class="untertitel" id="ut"></div><button class="grossplay" id="pb-gross" aria-label="Abspielen">${ICON.play}</button><div class="steuer" id="steuer"><button id="pb-prev" aria-label="Schritt zurück">${ICON.zurueck}</button><button id="pb-play" aria-label="Abspielen">${ICON.play}</button><button id="pb-next" aria-label="Schritt vor">${ICON.vor}</button><span id="pb-info">Übersicht</span><button id="pb-tempo" class="tbtn" aria-label="Geschwindigkeit">${tempoKurz(player.tempo)}</button><button id="pb-voll" aria-label="Vollbild">${ICON.voll}</button></div><div class="tsheet-bg" id="tsheet-bg" hidden></div><div class="tempo-sheet" id="tsheet" role="dialog" aria-label="Geschwindigkeit" hidden><div class="griff"></div><div class="twert" id="twert">${tempoLang(player.tempo)}</div><div class="treihe"><button id="t-minus" aria-label="langsamer">−</button><input type="range" id="t-regler" min="${TEMPO_MIN}" max="${TEMPO_MAX}" step="0.05" value="${player.tempo}" aria-label="Geschwindigkeit"><button id="t-plus" aria-label="schneller">+</button></div><div class="tchips">${TEMPO_CHIPS.map(v=>`<span><button data-v="${v}" class="${Math.abs(v-player.tempo)<0.001?"on":""}">${String(v).replace(".", ",")}</button>${v===1?"<small>Normal</small>":""}</span>`).join("")}</div></div></div><div class="druck-uebersicht">${feldSVG(sp,false)}</div>` : feldSVG(sp,false)}
+      <div>${fr ? playerHTML(sp, fr) : feldSVG(sp,false)}
         <div class="legend">${sp.legende.map(([c,t])=>`<span><i style="background:${FARBEN[c]}"></i>${esc(t)}</span>`).join("")}</div>
       </div>
       <div><h3>So geht's${fr?` <small class="tipp">Schritt antippen = Bild dazu</small>`:""}</h3><ol class="steps ${fr?"mit-bild":""}">${sp.ablauf.map((a,n)=> fr ? `<li data-s="${Math.min(n+1, fr.length-1)}"><span class="st-bild">${feldSVG(sp,false,fr[Math.min(n+1, fr.length-1)])}</span><span class="st-text">${esc(a)}</span></li>` : `<li>${esc(a)}</li>`).join("")}</ol></div>
@@ -4697,9 +6743,12 @@ function zeige(id){
     </div>
     <div class="pagefoot"><span>Bewegungsspiele · Nachmittagsbetreuung</span><span>Karte ${String(nr).padStart(2,"0")}</span></div>
   </article>`;
-  $("#detail").classList.add("on"); $("#detail").scrollTop = 0;
-  document.body.style.overflow="hidden";
-  if (fr){
+  oeffneDetail();
+  if (fr) playerVerdrahten();
+}
+function oeffneDetail(){ $("#detail").classList.add("on"); $("#detail").scrollTop = 0; document.body.style.overflow="hidden"; }
+function playerVerdrahten(){
+  {
     spielerZeige(0);
     $("#pb-prev").onclick=()=>{ spielerStopp(); spielerZeige(player.i-1); };
     $("#pb-next").onclick=()=>{ spielerStopp(); spielerZeige(player.i+1); };
@@ -4734,7 +6783,8 @@ const RITUALE = [
 ];
 
 /* ===================== AG planen ===================== */
-const plan = {kinder:12, ort:"halle", stimmung:"normal", dauer:45, material:"ja", listen:{}, idx:{}};
+const plan = {kinder:12, ort:"halle", stimmung:"normal", dauer:45, material:"ja", haupt:"spiele", listen:{}, idx:{}, parcours:[]};
+const mitParcours = () => plan.haupt==="parcours" && plan.ort==="halle";
 // Aufbau je AG-Länge (Minuten). Hauptteil: ein Spiel bei 30 Min, zwei Spiele bei 45/60 Min.
 const AUFBAU = {
   30:{warm:5,  haupt:[15],     ritual:5,  raeumen:5},
@@ -4769,14 +6819,16 @@ function listeFuer(ph, minuten){
 
 function bloecke(){
   const a = AUFBAU[plan.dauer], l = [{key:"warm", ph:"warm", min:a.warm}];
-  a.haupt.forEach((m,i)=>l.push({key:"haupt"+i, ph:"haupt", min:m, nr:a.haupt.length>1?i+1:0}));
+  if (mitParcours()) l.push({key:"parcours", ph:"haupt", min:a.haupt.reduce((x,y)=>x+y,0), parcours:true});
+  else a.haupt.forEach((m,i)=>l.push({key:"haupt"+i, ph:"haupt", min:m, nr:a.haupt.length>1?i+1:0}));
   l.push({key:"ritual", ph:"ritual", min:a.ritual}, {key:"raeumen", ph:"raeumen", min:a.raeumen});
   return l;
 }
 
 function neuerPlan(){
-  plan.listen={}; plan.idx={};
+  plan.listen={}; plan.idx={}; plan.parcours = mitParcours() ? parcoursVorschlag(plan.kinder,"mix") : [];
   for (const b of bloecke()){
+    if (b.parcours) continue;
     if (b.ph==="warm"||b.ph==="haupt") plan.listen[b.key]=listeFuer(b.ph,b.min);
     plan.idx[b.key] = b.ph==="ritual" ? Math.floor(Math.random()*RITUALE.length) : 0;
   }
@@ -4801,6 +6853,8 @@ function renderFragen(){
   optGruppe("ort", Object.entries(ORTE)); optGruppe("stimmung", STIMMUNG);
   optGruppe("dauer", [[30,"30 Min"],[45,"45 Min"],[60,"60 Min"]]);
   optGruppe("material", [["ja","Ja"],["nein","Nein, ohne"]]);
+  optGruppe("haupt", [["spiele","Spiele"],["parcours","Parcours"]]);
+  $("#q-haupt").hidden = plan.ort!=="halle";
 }
 function optGruppe(key, liste){
   const el = document.querySelector(`[data-p="${key}"]`);
@@ -4813,10 +6867,16 @@ const zeitKachel = b => `<div class="t" style="background:${PHASE_FARBE[b.ph]};$
 function renderPlan(){
   const wahl = auswahl(), mat = new Set();
   const st = STIMMUNG.find(s=>s[0]===plan.stimmung)[1].replace("­","");
-  $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}`;
+  $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}`;
   let html = "";
+  const pg = geraeteSumme(plan.parcours);
   for (const b of bloecke()){
-    if (b.ph==="warm" || b.ph==="haupt"){
+    if (b.parcours){
+      const w = plan.parcours;
+      html += `<div class="phase">${zeitKachel(b)}<div class="body">${w.length ? `<button class="open" data-parcours="1"><span class="ico">🧗</span>
+        <span><h4>Parcours · ${w.length} Stationen</h4><small>${esc(w.map(m=>m.name).join(" · "))}</small></span></button>
+        <button class="swap" data-k="parcours" aria-label="anderer Parcours">⟳</button>` : `<small>Kein Parcours möglich – bitte „Unsere Halle“ prüfen.</small>`}</div></div>`;
+    } else if (b.ph==="warm" || b.ph==="haupt"){
       const x = wahl[b.key], sp = x && x.sp, anz = plan.listen[b.key].length;
       if (sp) sp.material.forEach(m=>mat.add(m));
       html += `<div class="phase">${zeitKachel(b)}<div class="body">${sp ? `<button class="open" data-id="${sp.id}"><span class="mini">${feldSVG(sp,true)}</span>
@@ -4831,17 +6891,20 @@ function renderPlan(){
     } else {
       const m = [...mat].filter(x=>!/Musik/.test(x));
       html += `<div class="phase">${zeitKachel(b)}<div class="body"><span class="ico">🧺</span><span><h4>Aufräumen</h4>
-        <small>${m.length ? "Wegräumen: " + esc(m.map(x=>x.replace(/ \(.*\)/,"")).join(", ")) : "Nichts wegzuräumen – Zeit zum Trinken und Umziehen"}</small></span></div></div>`;
+        <small>${plan.parcours.length ? "Parcours abbauen – alle Kinder helfen mit. " : ""}${m.length ? "Wegräumen: " + esc(m.map(x=>x.replace(/ \(.*\)/,"")).join(", ")) : (plan.parcours.length ? "" : "Nichts wegzuräumen – Zeit zum Trinken und Umziehen")}</small></span></div></div>`;
     }
   }
   const m = [...mat];
-  $("#plan").innerHTML = html + `<div class="note"><b>Material:</b> ${m.length ? esc(m.join(", ")) : "nichts nötig ✔"}</div>
+  const pAufbau = plan.parcours.reduce((a,x)=>a+x.aufbau,0);
+  $("#plan").innerHTML = html + `<div class="note"><b>Material:</b> ${m.length ? esc(m.join(", ")) : (plan.parcours.length ? "" : "nichts nötig ✔")}${plan.parcours.length ? `${m.length?" · ":""}${esc(geraetText(pg.s))}${pg.klein.length?", "+esc(pg.klein.join(", ")):""}` : ""}</div>
+    ${plan.parcours.length ? `<div class="note"><b>Parcours aufbauen:</b> ca. ${pAufbau} Min – am besten vor der AG oder gemeinsam mit den Kindern.</div>` : ""}
     <p class="hint">Tippen öffnet die Karte · ⟳ tauscht einen Block · 🎲 mischt die ganze Stunde neu.</p>`;
 }
 $("#plan").onclick = e => {
-  const s = e.target.closest(".swap"); if (s){ plan.idx[s.dataset.k]++; renderPlan(); return; }
+  const s = e.target.closest(".swap"); if (s){ if (s.dataset.k==="parcours") plan.parcours = parcoursVorschlag(plan.kinder,"mix"); else plan.idx[s.dataset.k]++; renderPlan(); return; }
   const o = e.target.closest(".open"); if (!o) return;
-  if (o.dataset.ritual) zeigeRitual(o.dataset.ritual); else zeige(o.dataset.id);
+  if (o.dataset.parcours) zeigeParcours(plan.parcours, plan.kinder);
+  else if (o.dataset.ritual) zeigeRitual(o.dataset.ritual); else zeige(o.dataset.id);
 };
 $("#minus").onclick = () => { plan.kinder=Math.max(2,plan.kinder-1); renderFragen(); };
 $("#plus").onclick = () => { plan.kinder=Math.min(40,plan.kinder+1); renderFragen(); };
@@ -4859,6 +6922,218 @@ function zeigeRitual(id){
     <div class="pagefoot"><span>Bewegungsspiele · Nachmittagsbetreuung</span><span>Ritual</span></div></article>`;
   $("#detail").classList.add("on"); $("#detail").scrollTop = 0; document.body.style.overflow="hidden";
 }
+
+/* ===================== Parcours ===================== */
+const PKAT = {"Balancieren":"blau","Klettern":"lila","Springen":"rot","Hangeln & Schwingen":"gruen","Rollen & Kriechen":"orange","Werfen & Zielen":"gelb"};
+// Turngeräte: Schlüssel, Name (Mehrzahl), Name (Einzahl), Standard-Anzahl in einer Einfachhalle
+const GERAETE = [
+  ["bank","Bänke","Bank",8], ["kasten","Kästen","Kasten",5], ["matte","Turnmatten","Turnmatte",12], ["weich","Weichböden","Weichboden",2],
+  ["sprossen","Sprossenwand-Felder","Sprossenwand-Feld",4], ["barren","Barren","Barren",1], ["reck","Reck","Reck",1], ["ringe","Ringe (Paar)","Ringe (Paar)",1],
+  ["taue","Taue","Tau",4], ["minitramp","Minitrampoline","Minitrampolin",1], ["balken","Schwebebalken","Schwebebalken",1], ["leiter","Turnleitern","Turnleiter",1]
+];
+const GNAME = Object.fromEntries(GERAETE.map(g=>[g[0],g]));
+MODULE.forEach(m => { m.modul = true; m.farbe = PKAT[m.kat] || "tuerkis"; m.kategorie = m.kat; });
+
+const lies = k => { try { return localStorage.getItem(k); } catch(e){ return null; } };
+const merke = (k,v) => { try { localStorage.setItem(k,v); } catch(e){} };
+// Geräte der eigenen Halle (Anzahl, 0 = nicht vorhanden) – wird auf dem Gerät gemerkt
+const halle = Object.fromEntries(GERAETE.map(g=>[g[0],g[3]]));
+try { Object.assign(halle, JSON.parse(lies("halle")||"{}")); } catch(e){}
+const halleMerken = () => merke("halle", JSON.stringify(halle));
+
+const geraetText = (g, kurz) => Object.entries(g).map(([k,n]) => `${n} ${n===1?GNAME[k][2]:GNAME[k][1]}`).join(kurz?", ":" · ");
+const modulPasst = (m, rest=halle) => Object.entries(m.geraete).every(([k,n]) => (rest[k]||0) >= n);
+
+/* ---------- Detailkarte eines Moduls ---------- */
+function modulHTML(m){
+  const nr = MODULE.indexOf(m)+1, fr = bilder(m);
+  const stufen = m.stufen.map((s,i)=>`<li><b class="stl l${i+1}">${["leicht","mittel","schwer"][i]}</b> ${esc(s)}</li>`).join("");
+  const box = (cls,t,x) => x ? `<div class="box ${cls}"><b>${t}</b>${x}</div>` : "";
+  return `<article class="sheet" style="--c:${FARBEN[m.farbe]}">
+    <div class="cat">Parcours · ${esc(m.kat)}</div>
+    <h2>${esc(m.name)}</h2>
+    <p class="kurz">${esc(m.kurz)}</p>
+    <div class="meta">
+      <span class="pill"><i style="background:#946535"></i>${esc(geraetText(m.geraete))}${m.klein&&m.klein.length?" · "+esc(m.klein.join(", ")):""}</span>
+      <span class="pill">⏱ Aufbau ca. ${m.aufbau} Min</span>
+      <span class="pill"><i style="background:var(--blau)"></i>${m.kinder} Kinder gleichzeitig</span>
+      <span class="pill"><i style="background:var(--gelb)"></i>Klasse ${m.klassen}</span>
+      <span class="pill">📐 ca. ${m.platz[0]} × ${m.platz[1]} m${m.wand?" · an der Wand":""}</span>
+    </div>
+    <div class="sgrid mit-schritten">
+      <div>${playerHTML(m, fr)}<div class="legend"><span>Seitenansicht · gestrichelt = Weg der Kinder</span></div></div>
+      <div><h3>Aufbau & Ablauf <small class="tipp">Schritt antippen = Bild dazu</small></h3>
+        <ol class="steps mit-bild">${m.ablauf.map((a,n)=>`<li data-s="${Math.min(n+1, fr.length-1)}"><span class="st-bild">${feldSVG(m,false,fr[Math.min(n+1, fr.length-1)])}</span><span class="st-text">${esc(a)}</span></li>`).join("")}</ol></div>
+    </div>
+    <div class="boxes">
+      ${box("l","Bewegungsaufgaben",`<ul class="stufenliste">${stufen}</ul>`)}
+      ${box("g","Fördert",esc(m.foerdert))}
+      ${box("b","Aufbauen mit Kindern","Die Kinder helfen gerne: Bänke tragen immer 4 Kinder, Kastenteile 2 Kinder, Weichböden 6–8 Kinder. Die Betreuerin prüft jede Station, bevor es losgeht.")}
+      ${box("r","Achtung",esc(m.sicherheit))}
+    </div>
+    <div class="pagefoot"><span>Bewegungsspiele · Parcours-Module</span><span>Modul ${String(nr).padStart(2,"0")}</span></div>
+  </article>`;
+}
+
+/* ---------- Liste aller Module ---------- */
+const mfilter = {kat:"alle", nurHalle:true};
+function modulKarte(m){
+  const ok = modulPasst(m);
+  return `<button class="gcard ${ok?"":"fehlt"}" style="--c:${FARBEN[m.farbe]}" data-id="${m.id}">
+    <span class="mini">${feldSVG(m,true)}</span>
+    <span><span class="kat">${esc(m.kat)}</span><span class="anim">▶ Aufbau</span><h3>${esc(m.name)}</h3>
+    <span class="m"><span class="pill lang">${esc(geraetText(m.geraete,true)||"nur Kleinmaterial")}</span><span class="pill">⏱ ${m.aufbau} Min</span></span>
+    ${ok?"":`<small class="warn">Nicht genug Geräte in eurer Halle</small>`}</span>
+  </button>`;
+}
+function renderModule(){
+  const kats = [["alle","Alle"], ...Object.keys(PKAT).filter(k=>MODULE.some(m=>m.kat===k)).map(k=>[k,k])];
+  const el = $("#m-kat");
+  el.innerHTML = kats.map(([v,l]) => `<button class="chip ${mfilter.kat===v?"on":""}" data-v="${esc(v)}">${esc(l)}</button>`).join("");
+  $("#m-halle").classList.toggle("on", mfilter.nurHalle);
+  const tr = MODULE.filter(m => (mfilter.kat==="alle" || m.kat===mfilter.kat) && (!mfilter.nurHalle || modulPasst(m)));
+  $("#m-anzahl").textContent = `${tr.length} von ${MODULE.length} Modulen`;
+  const gr = {}; tr.forEach(m => (gr[m.kat] ||= []).push(m));
+  $("#m-liste").innerHTML = tr.length ? Object.keys(PKAT).filter(k=>gr[k]).map(k =>
+    `<section class="grp" style="--c:${FARBEN[PKAT[k]]}"><h2>${esc(k)} · ${gr[k].length}</h2><div class="list">${gr[k].sort((a,b)=>a.name.localeCompare(b.name,"de")).map(modulKarte).join("")}</div></section>`).join("")
+    : `<div class="empty">Kein Modul passt.<br>Vielleicht bei „Unsere Halle“ Geräte ergänzen?</div>`;
+}
+$("#m-kat").onclick = e => { const b=e.target.closest("button"); if(!b) return; mfilter.kat=b.dataset.v; renderModule(); };
+$("#m-halle").onclick = () => { mfilter.nurHalle=!mfilter.nurHalle; renderModule(); };
+$("#m-liste").onclick = e => { const b=e.target.closest(".gcard"); if(b) zeige(b.dataset.id); };
+
+/* ---------- Unsere Halle (Geräte zählen) ---------- */
+function renderHalle(){
+  $("#halle-liste").innerHTML = GERAETE.map(([k,n]) => `<div class="hzeile ${halle[k]?"":"null"}"><span>${n}</span>
+    <span class="hst"><button data-k="${k}" data-d="-1" aria-label="${n} weniger">−</button><b>${halle[k]}</b><button data-k="${k}" data-d="1" aria-label="${n} mehr">+</button></span></div>`).join("");
+  const fehlt = GERAETE.filter(g=>!halle[g[0]]).length;
+  $("#halle-info").textContent = fehlt ? `${fehlt} Geräte nicht vorhanden` : "alle Geräte vorhanden";
+}
+$("#halle-liste").onclick = e => { const b=e.target.closest("button"); if(!b) return;
+  const k=b.dataset.k; halle[k]=Math.max(0,Math.min(30,(halle[k]||0)+ +b.dataset.d)); halleMerken(); renderHalle(); renderModule(); };
+
+/* ---------- Parcours zusammenstellen ---------- */
+const pz = {kinder:12, fokus:"mix", stationen:0, wahl:[], gemischt:0};
+const stationenFuer = k => Math.max(3, Math.min(8, Math.ceil(k/4)));
+function restGeraete(ohne){ const r={...halle}; pz.wahl.forEach((m,i)=>{ if(i!==ohne) Object.entries(m.geraete).forEach(([k,n])=>r[k]-=n); }); return r; }
+// Vorschlag: möglichst verschiedene Bewegungsarten, Schwerpunkt bevorzugt, Geräte dürfen nicht ausgehen
+function parcoursVorschlag(kinder, fokus, anzahl){
+  const n = anzahl || stationenFuer(kinder), rest = {...halle}, wahl = [], kats = {};
+  const pool = mischen(MODULE);
+  for (let i=0;i<n;i++){
+    const wert = m => (fokus!=="mix" && m.kat===fokus ? -2 : 0) + (kats[m.kat]||0)*(fokus!=="mix"&&m.kat===fokus?0.9:1.5) + (m.wand && wahl.filter(x=>x.wand).length>=2 ? 3 : 0);
+    const kand = pool.filter(m => !wahl.includes(m) && modulPasst(m, rest)).sort((a,b)=>wert(a)-wert(b));
+    if (!kand.length) break;
+    const m = kand[0]; wahl.push(m); kats[m.kat]=(kats[m.kat]||0)+1;
+    Object.entries(m.geraete).forEach(([k,c])=>rest[k]-=c);
+  }
+  return ordneWand(wahl);
+}
+function stationTauschen(i){
+  const rest = restGeraete(i), jetzt = pz.wahl[i];
+  const kand = MODULE.filter(m => !pz.wahl.includes(m) && modulPasst(m, rest));
+  if (!kand.length) return;
+  const gleich = kand.filter(m=>m.kat===jetzt.kat), l = gleich.length && Math.random()<.5 ? gleich : kand;
+  pz.wahl[i] = l[Math.floor(Math.random()*l.length)]; pz.wahl = ordneWand(pz.wahl);
+}
+// Kleinmaterial zusammenfassen: „Hütchen (3)“ + „Hütchen (1)“ → „Hütchen (4)“
+function geraeteSumme(wahl){ const s={}, k={};
+  wahl.forEach(m=>{ Object.entries(m.geraete).forEach(([g,n])=>s[g]=(s[g]||0)+n);
+    (m.klein||[]).forEach(x=>{ const r=/^(.*?)\s*\((\d+)\)\s*$/.exec(x), name=(r?r[1]:x).trim(); k[name]=(k[name]||0)+(r?+r[2]:0); }); });
+  return {s, klein:Object.entries(k).map(([n,c])=>c?`${n} (${c})`:n)}; }
+
+// Stationen mit Sprossenwand auf die Plätze an den Seitenwänden legen (die Reihenfolge bleibt ein Rundlauf)
+const slotWinkel = (n,i) => -Math.PI/2 - Math.PI/n + (i+1)*2*Math.PI/n;
+function ordneWand(wahl){
+  const n = wahl.length, seiten = [...Array(n).keys()].filter(i=>Math.abs(Math.cos(slotWinkel(n,i)))>.69);
+  const wand = wahl.filter(m=>m.wand).slice(0, seiten.length), rest = wahl.filter(m=>!wand.includes(m)), neu = Array(n);
+  wand.forEach((m,k)=>neu[seiten[k]]=m);
+  for (let i=0;i<n;i++) if (!neu[i]) neu[i]=rest.shift();
+  return neu;
+}
+// Hallenplan von oben: Stationen im Kreis, Wand-Module an die Seitenwände
+function hallenplanSVG(wahl){
+  const n = wahl.length, W=300, H=200, cx=150, cy=100, rx=104, ry=62;
+  const slots = wahl.map((_,i)=>{ const a = slotWinkel(n,i); return {a, x:cx+rx*Math.cos(a), y:cy+ry*Math.sin(a)}; });
+  // Wand-Module auf die Plätze mit der größten Nähe zu einer Seitenwand legen (Reihenfolge bleibt ein Rundlauf)
+  let s = `<svg class="feld hplan" viewBox="0 0 ${W} ${H}" role="img" aria-label="Hallenplan">${markerDefs("hp")}${bodenSVG("halle")}`;
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="${rx-6}" ry="${ry-8}" fill="none" stroke="${FARBEN.ink}" stroke-width="1.6" stroke-dasharray="5 5" opacity=".45"/>`;
+  for (let i=0;i<n;i++){ const a = slots[i].a + Math.PI/n, x=cx+(rx-6)*Math.cos(a), y=cy+(ry-8)*Math.sin(a), tx=-(rx-6)*Math.sin(a), ty=(ry-8)*Math.cos(a), l=Math.hypot(tx,ty);
+    s += `<path d="M${(x-tx/l*6).toFixed(1)} ${(y-ty/l*6).toFixed(1)} L${(x+tx/l*2).toFixed(1)} ${(y+ty/l*2).toFixed(1)}" stroke="${FARBEN.ink}" stroke-width="2" marker-end="url(#hp-ink)" opacity=".6"/>`; }
+  wahl.forEach((m,i)=>{
+    const p = slots[i], cos = Math.abs(Math.cos(p.a)), seite = cos > .75 || (m.wand && cos > .69), lang = n>=7 ? 50 : n>=6 ? 64 : 96;
+    let w = Math.min(seite ? lang : Math.min(96, n>=7?72:96), Math.max(seite?34:74, m.platz[0]*8)), h = Math.min(40, Math.max(18, m.platz[1]*8));
+    if (seite) [w,h] = [h,w];
+    let x = Math.max(12, Math.min(W-12-w, p.x-w/2)), y = Math.max(12, Math.min(H-12-h, p.y-h/2));
+    if (m.wand && seite){ x = p.x<cx ? 12 : W-12-w; s += `<rect x="${p.x<cx?8:W-13}" y="${y-4}" width="5" height="${h+8}" fill="#946535"/>`; }
+    const c = FARBEN[m.farbe], max = seite ? 14 : Math.floor((w-20)/4.4), kurz = m.name.length>max ? m.name.slice(0,max-1)+"…" : m.name;
+    s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#fff" stroke="${c}" stroke-width="2.5"/>`;
+    s += `<circle cx="${x+10}" cy="${y+10}" r="8" fill="${c}"/><text x="${x+10}" y="${y+13.5}" font-size="10" font-weight="900" text-anchor="middle" fill="#fff">${i+1}</text>`;
+    if (seite){ const links = x+w/2 < cx; s += `<text x="${links ? x+w+4 : x-4}" y="${y+h/2+3}" font-size="7" font-weight="800" text-anchor="${links?"start":"end"}" fill="${FARBEN.ink}">${esc(kurz)}</text>`; }
+    else s += `<text x="${x+(w+14)/2}" y="${y+h/2+3.5}" font-size="7" font-weight="800" text-anchor="middle" fill="${FARBEN.ink}">${esc(kurz)}</text>`;
+  });
+  return s + `<text x="150" y="196" font-size="7.5" text-anchor="middle" fill="${FARBEN.ink}" opacity=".7">Schema von oben – an eure Halle anpassen</text></svg>`;
+}
+
+function parcoursHTML(wahl, kinder, fuerDruck){
+  const {s, klein} = geraeteSumme(wahl);
+  const aufbau = wahl.reduce((a,m)=>a+m.aufbau,0), proSt = Math.max(1, Math.round(kinder/wahl.length));
+  const ablauf = kinder <= wahl.length*2
+    ? "Rundlauf: Alle starten nacheinander an Station 1 und laufen den Parcours immer wieder ab – mit Abstand, nicht überholen."
+    : `Stationsbetrieb: Je ${proSt} Kinder pro Station. Auf ein Signal (Pfiff oder Musik aus) geht jede Gruppe im Uhrzeigersinn eine Station weiter – etwa alle 3–4 Minuten.`;
+  return `
+    <div class="hplan-box">${hallenplanSVG(wahl)}</div>
+    <div class="stationen">${wahl.map((m,i)=>`<div class="phase"><div class="t" style="background:${FARBEN[m.farbe]}">${i+1}<small>Station</small></div>
+      <div class="body"><button class="open" data-id="${m.id}"><span class="mini">${feldSVG(m,true)}</span>
+      <span><h4>${esc(m.name)}</h4><small>${esc(m.kat)} · ${esc(geraetText(m.geraete,true))}</small></span></button>
+      ${fuerDruck?"":`<button class="swap" data-i="${i}" aria-label="andere Station">⟳</button>`}</div></div>`).join("")}</div>
+    <div class="note"><b>Geräte:</b> ${esc(geraetText(s))}${klein.length?` · ${esc(klein.join(", "))}`:""}</div>
+    <div class="note"><b>Aufbau:</b> ca. ${aufbau} Min – mit Kinderhilfe geht's schneller. Jede Station vor dem Start selbst prüfen.</div>
+    <div class="note"><b>So läuft's:</b> ${esc(ablauf)}</div>`;
+}
+function renderParcours(){
+  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${pz.wahl.length} Stationen${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}`;
+  $("#pz-anz").textContent = pz.wahl.length;
+  $("#pz-plan").innerHTML = pz.wahl.length ? parcoursHTML(pz.wahl, pz.kinder)
+    : `<div class="empty">Mit den Geräten eurer Halle passt leider kein Modul.<br>Bitte bei „Unsere Halle“ nachsehen.</div>`;
+}
+function renderPzFragen(){
+  $("#pz-kinder").textContent = pz.kinder;
+  const f = [["mix","Bunt gemischt"], ...Object.keys(PKAT).map(k=>[k,k])];
+  $("#pz-fokus").innerHTML = f.map(([v,l]) => `<button class="opt ${pz.fokus===v?"on":""}" data-v="${esc(v)}">${esc(l)}</button>`).join("");
+}
+$("#pz-fokus").onclick = e => { const b=e.target.closest("button"); if(!b) return; pz.fokus=b.dataset.v; renderPzFragen(); };
+$("#pz-minus").onclick = () => { pz.kinder=Math.max(2,pz.kinder-1); renderPzFragen(); };
+$("#pz-plus").onclick = () => { pz.kinder=Math.min(40,pz.kinder+1); renderPzFragen(); };
+$("#pz-los").onclick = () => { zaehle("/parcours-geplant",true); pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus); renderParcours(); $("#pz-fragen").hidden=true; $("#pz-ergebnis").hidden=false; window.scrollTo(0,0); };
+$("#pz-mischen").onclick = () => { pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length); renderParcours(); };
+$("#pz-aendern").onclick = () => { $("#pz-ergebnis").hidden=true; $("#pz-fragen").hidden=false; window.scrollTo(0,0); };
+$("#pz-weniger").onclick = () => { if (pz.wahl.length>2){ pz.wahl.pop(); pz.wahl=ordneWand(pz.wahl); renderParcours(); } };
+$("#pz-mehr").onclick = () => { const w=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length+1); if (w.length>pz.wahl.length){ const neu=w.find(m=>!pz.wahl.includes(m)&&modulPasst(m,restGeraete(-1))); if(neu){ pz.wahl.push(neu); pz.wahl=ordneWand(pz.wahl); } renderParcours(); } };
+$("#pz-plan").onclick = e => {
+  const s=e.target.closest(".swap"); if (s){ stationTauschen(+s.dataset.i); renderParcours(); return; }
+  const o=e.target.closest(".open"); if (o) zeige(o.dataset.id);
+};
+$("#pz-druck").onclick = () => zeigeParcours(pz.wahl, pz.kinder, true);
+// Parcours als Karte (zum Drucken oder aus dem AG-Plan heraus)
+function zeigeParcours(wahl, kinder, drucken){
+  schliessen();
+  $("#sheet").innerHTML = `<article class="sheet" style="--c:${FARBEN.tuerkis}">
+    <div class="cat">Parcours</div><h2>Parcours mit ${wahl.length} Stationen</h2>
+    <p class="kurz">Für ${kinder} Kinder · Turnhalle</p>
+    ${parcoursHTML(wahl, kinder, true)}
+    <p class="hint">Station antippen öffnet die Aufbau-Anleitung.</p>
+    <div class="pagefoot"><span>Bewegungsspiele · Parcours</span><span>${new Date().toLocaleDateString("de-DE")}</span></div></article>`;
+  $("#detail").classList.add("on"); $("#detail").scrollTop=0; document.body.style.overflow="hidden";
+  if (drucken) setTimeout(()=>window.print(), 300);
+}
+$("#sheet").addEventListener("click", e => { const o=e.target.closest(".stationen .open"); if (o) zeige(o.dataset.id); });
+
+// Unter-Reiter im Parcours-Bereich
+$("#pz-tabs").onclick = e => { const b=e.target.closest("button"); if(!b) return;
+  $("#pz-tabs").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  ["planen","module","halle"].forEach(k => $("#pz-"+k).hidden = b.dataset.t!==k); window.scrollTo(0,0); };
+renderPzFragen(); renderModule(); renderHalle();
 
 /* ===================== Navigation ===================== */
 document.querySelectorAll(".navtabs button").forEach(b => b.onclick = () => {
