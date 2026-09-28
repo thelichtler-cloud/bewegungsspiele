@@ -387,6 +387,31 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <use href="#kopf"/>
       <ellipse cx="20" cy="18.5" rx="2.4" ry="1.8" fill="#2D3142"/>
     </symbol>
+    <symbol id="k-einbein" viewBox="0 0 40 62">
+      <line x1="18" y1="42" x2="18" y2="58" stroke="#2D3142" stroke-width="6" stroke-linecap="round"/>
+      <polyline points="23,42 31,48 20,50" stroke="#2D3142" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="12" y1="27" x2="10" y2="4" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="28" y1="27" x2="30" y2="4" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <rect x="10" y="22" width="20" height="22" rx="7" fill="currentColor"/>
+      <use href="#kopf"/>
+      <path d="M16.5 17.5 Q20 20 23.5 17.5" stroke="#2D3142" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="k-krebs" viewBox="0 0 40 62">
+      <line x1="12" y1="41" x2="6" y2="58" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <polyline points="28,44 34,33 38,57" stroke="#2D3142" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="8" y="35" width="23" height="12" rx="6" fill="currentColor"/>
+      <g transform="translate(-12,15) scale(.85)"><use href="#kopf"/></g>
+      <path d="M2 29 Q5 31.5 8 29" stroke="#2D3142" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="k-stuetz" viewBox="0 0 40 62">
+      <polyline points="21,40 33,32 37,44" stroke="#2D3142" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="17,41 29,38 32,50" stroke="#2D3142" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="12" y1="26" x2="11" y2="57" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="25" y1="26" x2="22" y2="57" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <rect x="9" y="21" width="19" height="21" rx="7" fill="currentColor" transform="rotate(-12 18 31)"/>
+      <g transform="translate(-4,-1)"><use href="#kopf"/></g>
+      <ellipse cx="16" cy="17.5" rx="2.2" ry="1.7" fill="#2D3142"/>
+    </symbol>
     <symbol id="k-krabbel" viewBox="0 0 40 62">
       <polyline points="31,44 30,57 39,57" stroke="#2D3142" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <line x1="15" y1="42" x2="14" y2="58" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
@@ -500,7 +525,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div id="tag-teilen" class="q" hidden><p>Den ganzen Tag verschicken</p>
       <img id="tag-vorschau" class="tvorschau" alt="Vorschau Tagesplan">
       <div class="grid3 tknoepfe" style="margin-top:10px"><button class="opt" data-art="bild">🖼<br>Bild</button><button class="opt" data-art="folge">🗂<br>Bildfolge</button><button class="opt" data-art="pdf">📄<br>PDF</button></div>
-      <p class="hint" id="tag-status">Bild = der Tag auf einen Blick · Bildfolge / PDF = zusätzlich eine Seite pro Stunde.</p>
+      <p class="hint" id="tag-status">Bild = der Tag auf einen Blick · Bildfolge / PDF = dazu jede Stunde mit allen Spielen und Stationen zum Nachlesen.</p>
       <button class="ghost breit" id="tag-leeren">🗑 Tagesplan leeren</button></div>
   </main>
 
@@ -589,7 +614,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 2.0 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 2.1 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -1995,8 +2020,8 @@ const SPIELE = [
     kinder:[
       {x:70,y:30,c:"gruen",p:"lauf"},{x:140,y:100,c:"gruen",p:"lauf"},{x:220,y:60,c:"gruen",p:"lauf",flip:1},
       {x:40,y:120,c:"gruen",p:"lauf"},{x:180,y:10,c:"gruen",p:"lauf"},{x:250,y:128,c:"lila",p:"ruf",flip:1}],
-    dinge:[{typ:"huetchen",x:40,y:40},{typ:"huetchen",x:126,y:70},{typ:"huetchen",x:230,y:130},
-      {typ:"huetchen",x:110,y:170},{typ:"huetchen",x:150,y:36},{typ:"huetchen",x:28,y:176},
+    dinge:[{typ:"huetchen",x:40,y:40,c:"gelb"},{typ:"huetchen",x:126,y:70,c:"blau"},{typ:"huetchen",x:230,y:130,c:"rot"},
+      {typ:"huetchen",x:110,y:170,c:"gelb"},{typ:"huetchen",x:150,y:36,c:"rot"},{typ:"huetchen",x:28,y:176,c:"blau"},
       {typ:"blase",x:262,y:112,text:"Gelb!"}],
     pfeile:[{von:[100,54],nach:[124,64],c:"gruen",dash:1},{von:[160,142],nach:[118,160],c:"gruen",dash:1,bogen:6}]},
   legende:[["gruen","Kinder"],["lila","Rufer/in"]]
@@ -3389,11 +3414,11 @@ Object.assign(SCHRITTE, {
 "tier-yoga": {
   schrittDinge:[{typ:"matte",x:127,y:54,w:36,h:14,text:" "},{typ:"matte",x:16,y:150,w:38,h:16,text:" "},{typ:"matte",x:68,y:150,w:38,h:16,text:" "},{typ:"matte",x:120,y:150,w:38,h:16,text:" "},{typ:"matte",x:172,y:150,w:38,h:16,text:" "},{typ:"matte",x:224,y:150,w:38,h:16,text:" "}],
   schritte: [
-    { kinder:[{x:130,y:20,c:"orange",p:"arme"},{x:20,y:116,c:"lila",p:"arme"},{x:72,y:116,c:"lila",p:"arme"},{x:124,y:116,c:"lila",p:"arme"},{x:176,y:116,c:"lila",p:"arme"},{x:228,y:116,c:"lila",p:"arme",flip:1}],
+    { kinder:[{x:130,y:20,c:"orange",p:"einbein"},{x:20,y:116,c:"lila",p:"einbein"},{x:72,y:116,c:"lila",p:"einbein"},{x:124,y:116,c:"lila",p:"einbein"},{x:176,y:116,c:"lila",p:"einbein"},{x:228,y:116,c:"lila",p:"einbein",flip:1}],
       extra:[{typ:"blase",x:220,y:40,text:"Baum!"}] },
-    { kinder:[{x:130,y:20,c:"orange",p:"sitz"},{x:20,y:116,c:"lila",p:"sitz"},{x:72,y:116,c:"lila",p:"sitz"},{x:124,y:116,c:"lila",p:"sitz"},{x:176,y:116,c:"lila",p:"sitz"},{x:228,y:116,c:"lila",p:"sitz",flip:1}],
+    { kinder:[{x:130,y:20,c:"orange",p:"krabbel"},{x:20,y:116,c:"lila",p:"krabbel"},{x:72,y:116,c:"lila",p:"krabbel"},{x:124,y:116,c:"lila",p:"krabbel"},{x:176,y:116,c:"lila",p:"krabbel"},{x:228,y:116,c:"lila",p:"krabbel",flip:1}],
       extra:[{typ:"blase",x:226,y:40,text:"Katze: Miau!"}] },
-    { kinder:[{x:130,y:20,c:"orange",p:"steh"},{x:20,y:116,c:"lila",p:"steh"},{x:72,y:116,c:"lila",p:"steh"},{x:124,y:116,c:"lila",p:"steh"},{x:176,y:116,c:"lila",p:"steh"},{x:228,y:116,c:"lila",p:"steh",flip:1}],
+    { kinder:[{x:130,y:20,c:"orange",p:"krabbel"},{x:20,y:116,c:"lila",p:"krabbel"},{x:72,y:116,c:"lila",p:"krabbel"},{x:124,y:116,c:"lila",p:"krabbel"},{x:176,y:116,c:"lila",p:"krabbel"},{x:228,y:116,c:"lila",p:"krabbel",flip:1}],
       extra:[{typ:"blase",x:226,y:40,text:"Hund: Po hoch!"}] },
     { kinder:[{x:130,y:20,c:"orange",p:"lieg"},{x:20,y:116,c:"lila",p:"lieg"},{x:72,y:116,c:"lila",p:"lieg"},{x:124,y:116,c:"lila",p:"lieg"},{x:176,y:116,c:"lila",p:"lieg"},{x:228,y:116,c:"lila",p:"lieg"}],
       extra:[{typ:"blase",x:226,y:40,text:"Kobra: Ssss …"}] },
@@ -3476,15 +3501,15 @@ Object.assign(SCHRITTE, {
     { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:104,y:14,c:"gruen",p:"arme",flip:1},{x:196,y:20,c:"gruen",p:"arme"},{x:154,y:80,c:"gruen",p:"arme",flip:1},{x:106,y:138,c:"gruen",p:"arme"},{x:236,y:120,c:"gruen",p:"arme",flip:1}],
       extra:[{typ:"blase",x:70,y:86,text:"Leichter Wind …"}],
       pfeile:[{von:[50,112],nach:[140,104],c:"lila",dash:1,bogen:-10}] },
-    { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:100,y:14,c:"gruen",p:"lauf"},{x:200,y:20,c:"gruen",p:"lauf"},{x:150,y:80,c:"gruen",p:"lauf"},{x:110,y:138,c:"gruen",p:"lauf"},{x:232,y:120,c:"gruen",p:"lauf"}],
+    { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:100,y:14,c:"gruen",p:"einbein"},{x:200,y:20,c:"gruen",p:"einbein"},{x:150,y:80,c:"gruen",p:"einbein"},{x:110,y:138,c:"gruen",p:"einbein"},{x:232,y:120,c:"gruen",p:"einbein"}],
       extra:[{typ:"blase",x:70,y:86,text:"Auf einem Bein!"}] },
-    { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:108,y:14,c:"gruen",p:"lauf",flip:1},{x:208,y:20,c:"gruen",p:"lauf"},{x:158,y:80,c:"gruen",p:"lauf",flip:1},{x:118,y:138,c:"gruen",p:"lauf"},{x:240,y:120,c:"gruen",p:"lauf",flip:1}],
+    { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:108,y:14,c:"gruen",p:"einbein",flip:1},{x:208,y:20,c:"gruen",p:"einbein"},{x:158,y:80,c:"gruen",p:"einbein",flip:1},{x:118,y:138,c:"gruen",p:"einbein"},{x:240,y:120,c:"gruen",p:"einbein",flip:1}],
       extra:[{typ:"blase",x:62,y:86,text:"Stärker!"}],
       pfeile:[{von:[50,112],nach:[146,106],c:"lila",dash:1,bogen:-10},{von:[50,130],nach:[112,170],c:"lila",dash:1,bogen:10}] },
-    { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:114,y:14,c:"gruen",p:"arme"},{x:214,y:20,c:"gruen",p:"arme",flip:1},{x:164,y:80,c:"gruen",p:"arme"},{x:124,y:138,c:"gruen",p:"arme",flip:1},{x:246,y:120,c:"gruen",p:"arme"}],
+    { kinder:[{x:14,y:100,c:"lila",p:"ruf"},{x:114,y:14,c:"gruen",p:"einbein"},{x:214,y:20,c:"gruen",p:"einbein",flip:1},{x:164,y:80,c:"gruen",p:"einbein"},{x:124,y:138,c:"gruen",p:"einbein",flip:1},{x:246,y:120,c:"gruen",p:"einbein"}],
       extra:[{typ:"blase",x:60,y:86,text:"Sturm!"}],
       pfeile:[{von:[50,112],nach:[152,108],c:"lila",dash:1,bogen:-12},{von:[50,130],nach:[118,172],c:"lila",dash:1,bogen:10},{von:[80,60],nach:[108,40],c:"lila",dash:1}] },
-    { kinder:[{x:14,y:100,c:"lila",p:"steh"},{x:100,y:14,c:"gruen",p:"lauf",flip:1},{x:200,y:20,c:"gruen",p:"lauf",flip:1},{x:150,y:80,c:"gruen",p:"lauf",flip:1},{x:110,y:138,c:"gruen",p:"lauf",flip:1},{x:232,y:120,c:"gruen",p:"lauf",flip:1}],
+    { kinder:[{x:14,y:100,c:"lila",p:"steh"},{x:100,y:14,c:"gruen",p:"einbein",flip:1},{x:200,y:20,c:"gruen",p:"einbein",flip:1},{x:150,y:80,c:"gruen",p:"einbein",flip:1},{x:110,y:138,c:"gruen",p:"einbein",flip:1},{x:232,y:120,c:"gruen",p:"einbein",flip:1}],
       extra:[{typ:"blase",x:70,y:86,text:"Anderes Bein!"}] }
   ]
 },
@@ -3839,7 +3864,7 @@ Object.assign(SCHRITTE, {
   ]
 },
 "farben-rennen": {
-  schrittDinge:[{typ:"reifen",x:60,y:73,r:14,c:"gelb"},{typ:"huetchen",x:60,y:74},{typ:"reifen",x:150,y:73,r:14,c:"blau"},{typ:"huetchen",x:150,y:74},{typ:"reifen",x:240,y:55,r:14,c:"rot"},{typ:"huetchen",x:240,y:56},{typ:"reifen",x:46,y:169,r:14,c:"rot"},{typ:"huetchen",x:46,y:170},{typ:"reifen",x:170,y:165,r:14,c:"gelb"},{typ:"huetchen",x:170,y:166},{typ:"reifen",x:110,y:149,r:14,c:"blau"},{typ:"huetchen",x:110,y:150}],
+  schrittDinge:[{typ:"huetchen",x:60,y:74,c:"gelb"},{typ:"huetchen",x:150,y:74,c:"blau"},{typ:"huetchen",x:240,y:56,c:"rot"},{typ:"huetchen",x:46,y:170,c:"rot"},{typ:"huetchen",x:170,y:166,c:"gelb"},{typ:"huetchen",x:110,y:150,c:"blau"}],
   schritte: [
     { kinder:[{x:90,y:20,c:"gruen",p:"lauf"},{x:180,y:70,c:"gruen",p:"lauf",flip:1},{x:20,y:90,c:"gruen",p:"lauf"},{x:120,y:90,c:"gruen",p:"lauf"},{x:200,y:10,c:"gruen",p:"lauf"},{x:250,y:128,c:"lila",p:"steh",flip:1}],
       pfeile:[{von:[124,40],nach:[160,40],c:"gruen",dash:1}] },
@@ -4066,14 +4091,14 @@ Object.assign(SCHRITTE, {
     { kinder:[{x:82,y:20,c:"orange",p:"steh"},{x:52,y:20,c:"orange",p:"steh"},{x:22,y:20,c:"orange",p:"steh"},{x:82,y:108,c:"blau",p:"steh"},{x:52,y:108,c:"blau",p:"steh"},{x:22,y:108,c:"blau",p:"steh"}],
       haende:[[0,1],[1,2],[3,4],[4,5]],
       extra:[{typ:"blase",x:150,y:94,text:"Hände auf die Schultern!"}] },
-    { kinder:[{x:186,y:12,c:"orange",p:"lauf"},{x:156,y:30,c:"orange",p:"lauf"},{x:126,y:12,c:"orange",p:"lauf"},{x:110,y:100,c:"blau",p:"lauf"},{x:80,y:100,c:"blau",p:"lauf"},{x:50,y:100,c:"blau",p:"lauf"}],
+    { kinder:[{x:190,y:18,c:"orange",p:"lauf"},{x:158,y:18,c:"orange",p:"lauf"},{x:126,y:18,c:"orange",p:"lauf"},{x:110,y:104,c:"blau",p:"lauf"},{x:78,y:104,c:"blau",p:"lauf"},{x:46,y:104,c:"blau",p:"lauf"}],
       haende:[[0,1],[1,2],[3,4],[4,5]],
       pfeile:[{von:[218,40],nach:[272,74],c:"orange",dash:1,bogen:-10}],
-      extra:[{typ:"text",x:201,y:10,text:"Kopf",gr:9}] },
-    { kinder:[{x:250,y:30,c:"orange",p:"lauf"},{x:220,y:12,c:"orange",p:"lauf"},{x:190,y:30,c:"orange",p:"lauf"},{x:186,y:108,c:"blau",p:"steh"},{x:156,y:126,c:"blau",p:"steh"},{x:100,y:108,c:"blau",p:"steh"}],
+      extra:[{typ:"text",x:205,y:14,text:"Kopf",gr:9}] },
+    { kinder:[{x:250,y:18,c:"orange",p:"lauf"},{x:218,y:18,c:"orange",p:"lauf"},{x:186,y:18,c:"orange",p:"lauf"},{x:190,y:108,c:"blau",p:"steh"},{x:158,y:108,c:"blau",p:"steh"},{x:96,y:108,c:"blau",p:"steh"}],
       haende:[[0,1],[1,2],[3,4]],
       extra:[{typ:"blase",x:84,y:90,text:"Stopp – anfassen!"}] },
-    { kinder:[{x:210,y:8,c:"orange",p:"lauf",flip:1},{x:150,y:8,c:"orange",p:"lauf",flip:1},{x:180,y:8,c:"orange",p:"lauf",flip:1},{x:236,y:126,c:"blau",p:"lauf"},{x:206,y:108,c:"blau",p:"lauf"},{x:176,y:126,c:"blau",p:"lauf"}],
+    { kinder:[{x:210,y:8,c:"orange",p:"lauf",flip:1},{x:150,y:8,c:"orange",p:"lauf",flip:1},{x:180,y:8,c:"orange",p:"lauf",flip:1},{x:240,y:112,c:"blau",p:"lauf"},{x:208,y:112,c:"blau",p:"lauf"},{x:176,y:112,c:"blau",p:"lauf"}],
       haende:[[1,2],[2,0],[3,4],[4,5]],
       extra:[{typ:"blase",x:100,y:40,text:"Neuer Kopf!"}] },
     { kinder:[{x:120,y:8,c:"orange",p:"lauf",flip:1},{x:60,y:8,c:"orange",p:"lauf",flip:1},{x:90,y:8,c:"orange",p:"lauf",flip:1},{x:232,y:100,c:"blau",p:"lauf"},{x:202,y:100,c:"blau",p:"lauf"},{x:172,y:100,c:"blau",p:"lauf"}],
@@ -4326,9 +4351,9 @@ Object.assign(SCHRITTE, {
 "krebsfussball": {
   schrittDinge:[{typ:"huetchen",x:22,y:74},{typ:"huetchen",x:22,y:126},{typ:"huetchen",x:278,y:74},{typ:"huetchen",x:278,y:126}],
   schritte: [
-    {kinder:[{x:62,y:40,c:"orange",p:"sitz"},{x:106,y:120,c:"orange",p:"sitz"},{x:170,y:64,c:"orange",p:"sitz"},{x:124,y:24,c:"blau",p:"sitz",flip:1},{x:196,y:128,c:"blau",p:"sitz",flip:1},{x:230,y:40,c:"blau",p:"sitz",flip:1}],extra:[{typ:"ball",x:150,y:110},{typ:"blase",x:150,y:190,text:"Bauch hoch, Po hoch!"}]},
-    {kinder:[{x:80,y:50,c:"orange",p:"sitz"},{x:120,y:110,c:"orange",p:"sitz"},{x:160,y:80,c:"orange",p:"sitz"},{x:130,y:28,c:"blau",p:"sitz",flip:1},{x:210,y:120,c:"blau",p:"sitz",flip:1},{x:222,y:50,c:"blau",p:"sitz",flip:1}],extra:[{typ:"ball",x:190,y:121},{typ:"blase",x:150,y:190,text:"Nur mit den Füßen!"}],pfeile:[{von:[198,122],nach:[236,110],c:"rot",dash:1}]},
-    {kinder:[{x:96,y:56,c:"orange",p:"sitz"},{x:150,y:120,c:"orange",p:"sitz"},{x:200,y:70,c:"orange",p:"sitz"},{x:140,y:20,c:"blau",p:"sitz",flip:1},{x:236,y:130,c:"blau",p:"sitz",flip:1},{x:242,y:30,c:"blau",p:"sitz",flip:1}],extra:[{typ:"ball",x:282,y:100},{typ:"blase",x:150,y:190,text:"Tor!"}],pfeile:[{von:[240,102],nach:[276,100],c:"rot",dash:1}]},
+    {kinder:[{x:62,y:40,c:"orange",p:"krebs"},{x:106,y:120,c:"orange",p:"krebs"},{x:170,y:64,c:"orange",p:"krebs"},{x:124,y:24,c:"blau",p:"krebs",flip:1},{x:196,y:128,c:"blau",p:"krebs",flip:1},{x:230,y:40,c:"blau",p:"krebs",flip:1}],extra:[{typ:"ball",x:150,y:110},{typ:"blase",x:150,y:190,text:"Bauch hoch, Po hoch!"}]},
+    {kinder:[{x:80,y:50,c:"orange",p:"krebs"},{x:120,y:110,c:"orange",p:"krebs"},{x:160,y:80,c:"orange",p:"krebs"},{x:130,y:28,c:"blau",p:"krebs",flip:1},{x:210,y:120,c:"blau",p:"krebs",flip:1},{x:222,y:50,c:"blau",p:"krebs",flip:1}],extra:[{typ:"ball",x:190,y:121},{typ:"blase",x:150,y:190,text:"Nur mit den Füßen!"}],pfeile:[{von:[198,122],nach:[236,110],c:"rot",dash:1}]},
+    {kinder:[{x:96,y:56,c:"orange",p:"krebs"},{x:150,y:120,c:"orange",p:"krebs"},{x:200,y:70,c:"orange",p:"krebs"},{x:140,y:20,c:"blau",p:"krebs",flip:1},{x:236,y:130,c:"blau",p:"krebs",flip:1},{x:242,y:30,c:"blau",p:"krebs",flip:1}],extra:[{typ:"ball",x:282,y:100},{typ:"blase",x:150,y:190,text:"Tor!"}],pfeile:[{von:[240,102],nach:[276,100],c:"rot",dash:1}]},
     {kinder:[{x:96,y:56,c:"orange",p:"sitz"},{x:130,y:116,c:"orange",p:"sitz"},{x:176,y:70,c:"orange",p:"sitz"},{x:110,y:12,c:"blau",p:"sitz",flip:1},{x:236,y:146,c:"blau",p:"sitz",flip:1},{x:212,y:100,c:"blau",p:"sitz",flip:1}],extra:[{typ:"ball",x:164,y:150},{typ:"blase",x:196,y:164,text:"Pause"},{typ:"text",x:150,y:196,text:"Ausruhen erlaubt – dann nicht mitspielen",gr:8}]},
     {kinder:[{x:70,y:40,c:"orange",p:"steh"},{x:100,y:110,c:"orange",p:"arme"},{x:150,y:60,c:"orange",p:"steh"},{x:190,y:20,c:"blau",p:"steh",flip:1},{x:220,y:120,c:"blau",p:"arme",flip:1},{x:240,y:60,c:"blau",p:"steh",flip:1}],extra:[{typ:"ball",x:160,y:130},{typ:"blase",x:150,y:190,text:"2–3 Min, dann Pause!"}]}
   ]
@@ -4481,7 +4506,7 @@ Object.assign(SCHRITTE, {
   schritte: [
     { kinder:[{x:80,y:79,c:"orange",p:"steh"},{x:57,y:79,c:"orange",p:"steh"},{x:34,y:79,c:"orange",p:"steh"},{x:11,y:79,c:"orange",p:"steh"},{x:11,y:130,c:"orange",p:"steh"},{x:34,y:130,c:"orange",p:"steh"}],
       extra:[{typ:"blase",x:190,y:40,text:"Hintereinander!"}] },
-    { kinder:[{x:147,y:79,c:"tuerkis",p:"arme"},{x:80,y:79,c:"orange",p:"steh"},{x:57,y:79,c:"orange",p:"steh"},{x:34,y:79,c:"orange",p:"steh"},{x:11,y:79,c:"orange",p:"steh"},{x:11,y:130,c:"orange",p:"steh"}],
+    { kinder:[{x:147,y:79,c:"tuerkis",p:"einbein"},{x:80,y:79,c:"orange",p:"steh"},{x:57,y:79,c:"orange",p:"steh"},{x:34,y:79,c:"orange",p:"steh"},{x:11,y:79,c:"orange",p:"steh"},{x:11,y:130,c:"orange",p:"steh"}],
       pfeile:[{von:[168,70],nach:[190,74],bogen:-8,c:"tuerkis"}],
       extra:[{typ:"text",x:190,y:176,text:"einzeln: 1 Bein · doppelt: 2 Beine",gr:9},{typ:"blase",x:190,y:40,text:"Grätschen!"}] },
     { kinder:[{x:220,y:22,c:"tuerkis",p:"lauf",flip:1},{x:80,y:79,c:"orange",p:"steh"},{x:57,y:79,c:"orange",p:"steh"},{x:34,y:79,c:"orange",p:"steh"},{x:11,y:79,c:"orange",p:"steh"},{x:11,y:130,c:"orange",p:"steh"}],
@@ -4517,13 +4542,13 @@ Object.assign(SCHRITTE, {
   schritte: [
     { kinder:[{x:100,y:31,c:"tuerkis",p:"lauf"},{x:54,y:31,c:"orange",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:8,y:31,c:"orange",p:"steh"},{x:196,y:31,c:"tuerkis",p:"lauf"},{x:140,y:132,c:"orange",p:"lauf",flip:1}],
       pfeile:[{von:[134,52],nach:[170,52],c:"tuerkis"},{von:[130,160],nach:[40,104],bogen:-12,c:"orange",dash:1}] },
-    { kinder:[{x:160,y:31,c:"tuerkis",p:"sitz"},{x:92,y:31,c:"tuerkis",p:"sitz"},{x:54,y:31,c:"orange",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:236,y:31,c:"tuerkis",p:"sitz"},{x:8,y:31,c:"orange",p:"steh"}],
+    { kinder:[{x:160,y:31,c:"tuerkis",p:"krabbel"},{x:92,y:31,c:"tuerkis",p:"krabbel"},{x:54,y:31,c:"orange",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:236,y:31,c:"tuerkis",p:"krabbel"},{x:8,y:31,c:"orange",p:"steh"}],
       extra:[{typ:"blase",x:180,y:156,text:"Katzengang!"}] },
     { kinder:[{x:180,y:132,c:"orange",p:"lauf",flip:1},{x:170,y:43,c:"tuerkis",p:"lieg"},{x:100,y:43,c:"tuerkis",p:"lieg"},{x:54,y:31,c:"orange",p:"steh"},{x:110,y:132,c:"orange",p:"lauf",flip:1},{x:31,y:31,c:"orange",p:"steh"}],
       extra:[{typ:"blase",x:190,y:22,text:"Auf dem Bauch ziehen"}] },
     { kinder:[{x:8,y:31,c:"orange",p:"steh"},{x:200,y:132,c:"orange",p:"lauf",flip:1},{x:236,y:31,c:"tuerkis",p:"steh"},{x:120,y:31,c:"tuerkis",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:54,y:31,c:"orange",p:"steh"}],
       pfeile:[{von:[154,24],nach:[190,24],c:"tuerkis"}], extra:[{typ:"blase",x:80,y:156,text:"Seitwärts!"}] },
-    { kinder:[{x:54,y:31,c:"orange",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:200,y:132,c:"orange",p:"lauf",flip:1},{x:8,y:31,c:"orange",p:"steh"},{x:230,y:78,c:"tuerkis",p:"arme"},{x:100,y:24,c:"tuerkis",p:"arme"}],
+    { kinder:[{x:54,y:31,c:"orange",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:200,y:132,c:"orange",p:"lauf",flip:1},{x:8,y:31,c:"orange",p:"steh"},{x:230,y:66,c:"tuerkis",p:"stuetz"},{x:100,y:26,c:"tuerkis",p:"stuetz",flip:1}],
       pfeile:[{von:[134,56],nach:[136,96],bogen:-10,c:"tuerkis"},{von:[266,100],nach:[268,60],bogen:-10,c:"tuerkis"}],
       extra:[{typ:"blase",x:100,y:170,text:"Hände auf die Bank!"}] },
     { kinder:[{x:130,y:31,c:"tuerkis",p:"lauf"},{x:200,y:31,c:"tuerkis",p:"lauf"},{x:8,y:31,c:"orange",p:"steh"},{x:54,y:31,c:"orange",p:"steh"},{x:31,y:31,c:"orange",p:"steh"},{x:100,y:132,c:"orange",p:"lauf",flip:1}],
@@ -5682,9 +5707,9 @@ MODULE.push(
   sicherheit:"Die Hände bleiben immer auf der Bank, die Arme gestreckt. Immer nur ein Kind pro Bankhälfte. Rundherum keine Gegenstände, die Bank steht nicht an der Wand.",
   feld:{ boden:"seite",
     kinder:[
-      {x:62,y:126,c:"orange",p:"sprung"},
+      {x:62,y:129,c:"orange",p:"stuetz"},
       {x:112,y:143,c:"blau",p:"steh"},
-      {x:170,y:126,c:"gruen",p:"sprung"},
+      {x:170,y:129,c:"gruen",p:"stuetz",flip:1},
       {x:0,y:143,c:"gelb",p:"steh"},
       {x:22,y:143,c:"lila",p:"steh"},
       {x:258,y:143,c:"rot",p:"arme"}
@@ -5700,10 +5725,10 @@ MODULE.push(
       extra:[{typ:"blase",x:150,y:40,text:"Zu zweit tragen"}] },
     { kinder:[{x:70,y:143,c:"orange",p:"steh"},{x:112,y:143,c:"blau",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:250,y:143,c:"rot",p:"steh",flip:1}],
       extra:[{typ:"blase",x:150,y:40,text:"Wackelt nichts?"},{typ:"kreis",cx:52,cy:179,r:12},{typ:"kreis",cx:238,cy:179,r:12}] },
-    { kinder:[{x:62,y:126,c:"orange",p:"sprung"},{x:112,y:143,c:"blau",p:"steh"},{x:170,y:126,c:"gruen",p:"sprung"},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:258,y:143,c:"rot",p:"arme"}],
+    { kinder:[{x:62,y:129,c:"orange",p:"stuetz"},{x:112,y:143,c:"blau",p:"steh"},{x:170,y:129,c:"gruen",p:"stuetz",flip:1},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:258,y:143,c:"rot",p:"arme"}],
       pfeile:[{von:[46,150],nach:[100,150],dash:1,bogen:-18},{von:[150,150],nach:[206,150],dash:1,bogen:-18}],
       extra:[{typ:"blase",x:150,y:40,text:"Hände auf die Bank!"}] },
-    { kinder:[{x:140,y:126,c:"orange",p:"sprung"},{x:214,y:143,c:"blau",p:"steh"},{x:256,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:54,y:126,c:"lila",p:"sprung"},{x:24,y:143,c:"rot",p:"lauf",flip:1}],
+    { kinder:[{x:140,y:129,c:"orange",p:"stuetz",flip:1},{x:214,y:143,c:"blau",p:"steh"},{x:256,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:54,y:129,c:"lila",p:"stuetz"},{x:24,y:143,c:"rot",p:"lauf",flip:1}],
       pfeile:[{von:[44,150],nach:[96,150],dash:1,bogen:-18},{von:[128,150],nach:[180,150],dash:1,bogen:-18}],
       extra:[{typ:"blase",x:150,y:40,text:"Start ab Bankmitte"}] }
   ]
@@ -6535,6 +6560,8 @@ function bodenSVG(boden){
 function dingeSVG(dinge){
   let s="";
   for (const d of dinge||[]){
+    // zweites Gerät „dahinter“ (Seitenansicht): leicht versetzt und blasser
+    if (d.hinten){ s += `<g transform="translate(-9,-8)" opacity=".45">${dingeSVG([{...d, hinten:0}])}</g>`; continue; }
     if (d.typ==="wand") s += `<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" rx="4" fill="#fff" stroke="${FARBEN.ink}" stroke-width="1.5"/><text x="${d.x+d.w/2}" y="${d.y+d.h/2+4}" font-size="10" font-weight="800" text-anchor="middle" fill="${FARBEN.ink}">${esc(d.text)}</text>`;
     if (d.typ==="bank") s += `<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" rx="3" fill="#B98A55" stroke="#8A6236" stroke-width="1.5"/><text x="${d.x+d.w/2}" y="${d.y+d.h/2+4}" font-size="10" font-weight="800" text-anchor="middle" fill="#fff">${esc(d.text)}</text>`;
     if (d.typ==="blase"){ const w=Math.max(52, String(d.text).length*6.6+18); s += `<g><rect x="${d.x-w/2}" y="${d.y-14}" width="${w}" height="20" rx="10" fill="#fff" stroke="${FARBEN.ink}" stroke-width="1.5"/><text x="${d.x}" y="${d.y}" font-size="11" font-weight="800" text-anchor="middle" fill="${FARBEN.ink}">${esc(d.text)}</text></g>`; }
@@ -6552,6 +6579,7 @@ function dingeSVG(dinge){
       let pts=[]; for(let i=0;i<=n;i++){ const o=Math.sin(i/n*Math.PI*3)*a; pts.push(`${(d.x1+dx*i+px*o).toFixed(1)},${(d.y1+dy*i+py*o).toFixed(1)}`); }
       s += `<polyline points="${pts.join(" ")}" fill="none" stroke="#9A6A3A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`; }
     if (d.typ==="linie") s += `<line x1="${d.x}" y1="14" x2="${d.x}" y2="186" stroke="#fff" stroke-width="5"/><text x="${d.x}" y="11" font-size="9" font-weight="800" text-anchor="middle" fill="${FARBEN.ink}">${esc(d.text)}</text>`;
+    if (d.typ==="huetchen" && d.c && FARBEN[d.c]) { s += `<g transform="translate(${d.x},${d.y})"><rect x="-9" y="5" width="18" height="4" rx="1.5" fill="${FARBEN[d.c]}" stroke="rgba(0,0,0,.25)"/><path d="M-6 5 L-1.5 -10 L1.5 -10 L6 5Z" fill="${FARBEN[d.c]}" stroke="rgba(0,0,0,.25)"/><path d="M-4 -1 L4 -1" stroke="#fff" stroke-width="2"/></g>`; continue; }
     if (d.typ==="huetchen") s += d.um
       ? `<g transform="translate(${d.x},${d.y})"><ellipse cx="0" cy="-6" rx="8" ry="3" fill="#E07A10"/><path d="M-8 -6 L-2 7 L2 7 L8 -6Z" fill="#F5A623"/><rect x="-6" y="7" width="12" height="3" rx="1" fill="#E07A10"/></g>`
       : `<g transform="translate(${d.x},${d.y})"><rect x="-9" y="5" width="18" height="4" rx="1.5" fill="#E07A10"/><path d="M-6 5 L-1.5 -10 L1.5 -10 L6 5Z" fill="#F5A623"/><path d="M-4 -1 L4 -1" stroke="#fff" stroke-width="2"/></g>`;
@@ -6625,7 +6653,7 @@ const markerDefs = pre => "<defs>" + Object.entries(FARBEN).map(([k,v]) =>
 
 // Standbild: Übersicht (frame weggelassen) oder ein einzelner Schritt
 function feldSVG(sp, mini, frame){
-  const f = frame || sp.feld;
+  const f = frame || {...sp.feld, dinge: mitHinten(sp, sp.feld.dinge)};
   const vb = mini && sp.feld.boden!=="seite" ? "30 14 240 170" : "0 0 300 200";
   let s = `<svg class="${mini?"":"feld"}" viewBox="${vb}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spielfeld ${esc(sp.name)}">`;
   const pre = neueMarkerId();
@@ -6638,14 +6666,19 @@ function feldSVG(sp, mini, frame){
 
 /* ===================== Schritt-Player ===================== */
 // Bild 0 = Übersicht, danach ein Bild je Anleitungsschritt
+// Seitenansicht: Geräte, die nebeneinander stehen, zusätzlich „dahinter“ zeichnen (sp.hinten = Liste der Typen)
+function mitHinten(sp, dinge){
+  if (!sp.hinten || !dinge) return dinge;
+  return dinge.filter(d => sp.hinten.includes(d.typ) && !d.hinten).map(d => ({...d, hinten:1})).concat(dinge);
+}
 // Parcours-Module: Aufbau beginnt in der leeren Halle, "plus" legt Geräte dauerhaft dazu
 function bilder(sp){
   if (!sp.schritte) return null;
   let kum = sp.schrittDinge || (sp.modul ? [] : sp.feld.dinge);
-  return [ {...sp.feld, titel:"Übersicht"} ].concat(sp.schritte.map((s,i) => {
+  return [ {...sp.feld, dinge: mitHinten(sp, sp.feld.dinge), titel:"Übersicht"} ].concat(sp.schritte.map((s,i) => {
     if (s.plus) kum = kum.concat(s.plus);
     return { kinder: s.kinder, haende: s.haende||[], pfeile: s.pfeile||[],
-      dinge: (s.dinge || kum).concat(s.extra||[]), titel: `Schritt ${i+1}` };
+      dinge: mitHinten(sp, (s.dinge || kum).concat(s.extra||[])), titel: `Schritt ${i+1}` };
   }));
 }
 // r = Drehung in Grad um die Körpermitte (z. B. beim Rutschen)
@@ -6915,7 +6948,7 @@ const PHASE_FARBE = {warm:FARBEN.gelb, haupt:FARBEN.orange, ritual:FARBEN.lila, 
 const ZIEL = { austoben:{warm:4,haupt:5}, normal:{warm:3,haupt:4}, runter:{warm:1,haupt:2} };
 
 function passtZurGruppe(sp){
-  const k = gruppeFuerSpiel();
+  const k = Math.max(3, gruppeFuerSpiel());   // bei 2 Kindern spielt eine Betreuerin mit
   return sp.kinder[0]<=k && sp.kinder[1]>=k
       && (team.betreuer >= 2 || sp.energie <= 2)   // nur 1 Betreuer: nur ruhige, einfache Spiele
       && sp.orte.includes(plan.ort)
@@ -6991,6 +7024,7 @@ function renderPlan(){
   const st = STIMMUNG.find(s=>s[0]===plan.stimmung)[1].replace("­","");
   $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}`;
   let html = plan.kinder > GROSS ? `<div class="note gross"><b>Große Gruppe:</b> Bei ${plan.kinder} Kindern die Spiele in 2 Gruppen parallel spielen (je ca. ${gruppeFuerSpiel()} Kinder) – ${plan.ort==="halle"?"die Halle":"den Hof"} in zwei Hälften teilen.${mitParcours()?" Der Parcours läuft mit allen gemeinsam.":""}${team.betreuer<4 ? ` <b>Dafür sind 4 Betreuer vorgesehen (2 pro Spiel) – es fehlen ${4-team.betreuer}.</b>` : ""}</div>` : "";
+  if (plan.kinder < 3) html += `<div class="note gross"><b>Nur ${plan.kinder} Kinder:</b> Eine Betreuerin spielt einfach mit – dann klappen alle Spiele ab 3.</div>`;
   if (team.betreuer < 2) html += `<div class="note gross"><b>Nur 1 Betreuer:</b> Für ein Spiel sind 2 Betreuer vorgesehen. Deshalb schlägt die App nur ruhige, einfache Spiele vor.</div>`;
   if (mitParcours() && plan.parcours.length) html += betreuerHinweis(plan.kinder, plan.parcours, plan.zusatzIdx||0);
   const pg = geraeteSumme(plan.parcours);
@@ -7059,7 +7093,8 @@ const GERAETE = [
   ["reifen","Reifen","Reifen",20,1], ["huetchen","Hütchen","Hütchen",30,1], ["seile","Seile","Seil",15,1], ["baelle","Bälle","Ball",20,1]
 ];
 const GNAME = Object.fromEntries(GERAETE.map(g=>[g[0],g]));
-MODULE.forEach(m => { m.modul = true; m.farbe = PKAT[m.kat] || "tuerkis"; m.kategorie = m.kat;
+const HINTEN = {wackelbank:["smatte"], "balken-wanderung":["smatte"], bankwippe:["smatte"], himmelsleiter:["sprossen"], "barren-tunnel":["smatte"], kegelbahn:["huetchen"], rollberg:["sbank"], mattentunnel:["sbank"]};
+MODULE.forEach(m => { m.modul = true; m.farbe = PKAT[m.kat] || "tuerkis"; m.kategorie = m.kat; if (HINTEN[m.id]) m.hinten = HINTEN[m.id];
   // Kleinmaterial-Texte („Reifen (10)“, „Bälle“) in zählbare Geräte umwandeln – ohne Zahl: 1 pro Kind an der Station
   const KL = [[/Reifen/,"reifen"],[/Hütchen/,"huetchen"],[/Seil/,"seile"],[/Bäll|Ball/,"baelle"]];
   (m.klein||[]).forEach(x => { const r=/\((\d+)\)/.exec(x), k=(KL.find(([re])=>re.test(x))||[])[1]; if (k) m.geraete[k]=(m.geraete[k]||0)+(r?+r[1]:m.kinder); });
@@ -7373,6 +7408,7 @@ function einheitAG(){
   }
   const h = [];
   if (plan.kinder > GROSS) h.push(`Große Gruppe: Spiele in 2 Gruppen parallel (je ca. ${gruppeFuerSpiel()} Kinder)`);
+  if (plan.kinder < 3) h.push("Nur 2 Kinder: eine Betreuerin spielt mit");
   if (team.betreuer < 2) h.push("Nur 1 Betreuer: nur ruhige, einfache Spiele");
   if (nSt){ const bb = betreuerBedarf(plan.kinder, plan.parcours, plan.zusatzIdx||0); if (bb.fehlen) h.push(`Parcours: es fehlen ${bb.fehlen} Betreuer`); }
   const mat = new Set(); bl.forEach(e=>{ if (e.spiel) SP(e.spiel).material.forEach(m=>{ if(!/Musik/.test(m)) mat.add(m.replace(/ \(.*\)/,"")); }); });
@@ -7503,41 +7539,64 @@ function einheitSeiten(E){
   return seiten;
 }
 
-// Tagesplan: alle Einheiten auf einer Seite, pro Block eine Zeile
+// Tagesplan: alle Einheiten auf einer Seite – pro Spiel Mini-Bild + ein Satz, beim Parcours alle Stationen
 function tagSVG(){
   const W=1080, P=40, E = tagSortiert(); let s="", y=0;
   const k = kopfSVG(W, P, FARBEN.blau, "Tagesplan", [datumText(tag.datum), teamText()]); s += k.svg; y = k.h + 26;
   if (!E.length){ s += txt(P, y+40, ["Noch keine Einheiten."], 30, false, GRAU); y += 80; }
   for (const e of E){
-    const Z = zeitenVon(e), zl = [];
-    e.bloecke.forEach((b,bi)=>{
-      const wer = b.typ==="spiel" ? werText(e, b.key, 2) : b.typ==="parcours" ? b.module.map((_,i)=>werAus(e.wer,"st"+i,e.nSt)).flat().filter((x,i,a)=>a.indexOf(x)===i).join(", ") || (teilen.namen.length?"noch offen":`${b.module.length} Betreuer`) : "";
-      zl.push(...umbrechen(`${zuZeit(Z[bi].von)}  ${PHASEN[b.ph]}: ${blockTitel(b)}${wer?" – "+wer:""}`, 26, false, W-2*P-60, 2));
+    const farbe = e.art==="ag" ? FARBEN.orange : FARBEN.tuerkis, Z = zeitenVon(e);
+    // Kopf der Einheit
+    const kopf = umbrechen(`${zuZeit(e.beginn)}–${zuZeit(e.beginn+dauerVon(e))}  ${e.titel}`, 38, true, W-2*P-40, 2);
+    const unter = umbrechen(`${e.art==="ag"?"AG-Stunde":"Parcours"} · ${ORTE[e.ort]} · ${e.kinder} Kinder${e.aufbau?` · Parcours vorher aufbauen: ca. ${e.aufbau} Min`:""}`, 24, false, W-2*P-40, 2);
+    const kh = 30 + kopf.length*48 + unter.length*32 + 12;
+    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${kh}" rx="20" fill="${farbe}"/>` + txt(P+22, y+52, kopf, 38, true, "#fff", 1.26) + txt(P+22, y+52+kopf.length*48, unter, 24, false, "#fff", 1.33);
+    y += kh + 10;
+    const hw = hinweisSVG(W, P, y, e.hinweise||[]); s += hw.svg; y += hw.h;
+    e.bloecke.forEach((b, bi) => {
+      const zeit = `${zuZeit(Z[bi].von)} · ${PHASEN[b.ph]}${b.nr?" "+b.nr:""} · ${b.min} Min`;
+      if (b.typ==="ritual" || b.typ==="raeumen"){
+        const zl = umbrechen(`${zeit}:  ${blockTitel(b)}${b.typ==="raeumen" && b.abbau ? " – Parcours abbauen, alle helfen" : ""}`, 24, false, W-2*P-40, 2);
+        const h = zl.length*32 + 22;
+        s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="14" fill="#fff"/>` + txt(P+22, y+34, zl, 24, false, GRAU, 1.33); y += h + 8; return;
+      }
+      const TX = P+250, TW = W-P-TX-20; let inhalt = "", th = 0;
+      inhalt += txt(TX, y+38, [zeit], 22, true, GRAU); th = 38;
+      const name = umbrechen(blockTitel(b), 32, true, TW, 2); inhalt += txt(TX, y+th+40, name, 32, true, INK, 1.25); th += 40 + (name.length-1)*40;
+      const zeilen = [];
+      if (b.typ==="spiel" && b.spiel){ const sp = SP(b.spiel);
+        zeilen.push([umbrechen(sp.kurz, 23, false, TW, 2), 23, false, GRAU]);
+        zeilen.push([umbrechen("👤 "+werText(e, b.key, 2), 23, true, FARBEN.blau), 23, true, FARBEN.blau]);
+        if (sp.material.length) zeilen.push([umbrechen("Material: "+sp.material.map(m=>m.replace(/ \(.*\)/,"")).join(", "), 22, false, TW, 1), 22, false, GRAU]);
+      } else if (b.typ==="parcours"){
+        b.module.forEach((id,i)=>{ const m = MO(id); zeilen.push([umbrechen(`${i+1} ${m.name} – ${geraetText(m.geraete,true)} – 👤 ${werText(e,"st"+i,1)}`, 22, false, TW, 2), 22, false, INK]); });
+        if (b.zusatz && !b.zusatz.helfer) zeilen.push([umbrechen(`+ ${b.zusatz.n} Kinder: ${b.zusatz.spiel?SP(b.zusatz.spiel).name:"ruhiges Spiel"} – 👤 ${werText(e,"zusatz",2)}`, 22, true, TW, 2), 22, true, FARBEN.lila]);
+      }
+      for (const [zl, gr, f, fb] of zeilen){ th += 8; inhalt += txt(TX, y+th+gr, zl, gr, f, fb); th += zl.length*gr*1.3; }
+      const h = Math.max(172, th + 26);
+      let bild = "";
+      if (b.typ==="spiel" && b.spiel) bild = einbetten(feldSVG(SP(b.spiel),true), P+18, y+18, 210, 149);
+      else if (b.typ==="parcours" && b.module.length) bild = einbetten(hallenplanSVG(b.module.map(MO)), P+18, y+18, 210, 140);
+      s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="16" fill="#fff"/><rect x="${P}" y="${y}" width="8" height="${h}" rx="4" fill="${PHASE_FARBE[b.ph]}"/>` + bild + inhalt;
+      y += h + 8;
     });
-    (e.hinweise||[]).forEach(h=>zl.push(...umbrechen("⚠ "+h, 24, true, W-2*P-60, 2)));
-    const kopf = umbrechen(`${zuZeit(e.beginn)}–${zuZeit(e.beginn+dauerVon(e))}  ${e.titel}`, 36, true, W-2*P-60, 2);
-    const unter = umbrechen(`${e.art==="ag"?"AG-Stunde":"Parcours"} · ${ORTE[e.ort]} · ${e.kinder} Kinder${e.aufbau?` · Aufbau vorher ca. ${e.aufbau} Min`:""}`, 24, false, W-2*P-60, 2);
-    const h = 36 + kopf.length*46 + unter.length*32 + 12 + zl.length*34 + 20;
-    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="20" fill="#fff"/><rect x="${P}" y="${y}" width="14" height="${h}" rx="7" fill="${e.art==="ag"?FARBEN.orange:FARBEN.tuerkis}"/>`
-       + txt(P+40, y+50, kopf, 36, true, INK, 1.28) + txt(P+40, y+50+kopf.length*46, unter, 24, false, GRAU, 1.33)
-       + txt(P+40, y+50+kopf.length*46+unter.length*32+18, zl, 26, false, INK, 1.31);
-    y += h + 16;
+    y += 22;
   }
-  y += 20; s += txt(W/2, y, ["Einzelheiten: Bildfolge oder Bewegungsspiele-App"], 22, false, GRAU, 1.2, "middle"); y += 40;
+  y += 6; s += txt(W/2, y, ["Anleitungen zu jedem Spiel und jeder Station: Bildfolge / PDF"], 22, false, GRAU, 1.2, "middle"); y += 40;
   return {svg: rahmenSVG(W, y, s), w: W, h: y};
 }
 
 /* ---------- Dateien erzeugen und teilen ---------- */
 // Scharf rendern: das SVG wird in „faktor“-facher Größe gezeichnet (Standard 2,5× → ca. 2700 px breit).
 // Obergrenze ~16 Mio. Pixel, weil iPhones größere Bilder nicht zeichnen können.
-function svgZuBlob(bild, typ="image/png", faktor=2.5){
+function svgZuBlob(bild, typ="image/png", faktor=2.5, qualitaet=0.93){
   const f = Math.max(1, Math.min(faktor, Math.sqrt(16e6/(bild.w*bild.h)))), W = Math.round(bild.w*f), H = Math.round(bild.h*f);
   const svg = bild.svg.replace(`width="${bild.w}" height="${bild.h}"`, `width="${W}" height="${H}"`);
   return new Promise((ok, fehler) => {
     const img = new Image();
     img.onload = () => { const c = document.createElement("canvas"); c.width = W; c.height = H;
       const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.fillStyle = "#FFF8EE"; g.fillRect(0,0,W,H); g.drawImage(img, 0, 0, W, H);
-      c.toBlob(b => { if (!b) return fehler(new Error("Bild")); b.pw = W; b.ph = H; ok(b); }, typ, 0.93); };
+      c.toBlob(b => { if (!b) return fehler(new Error("Bild")); b.pw = W; b.ph = H; ok(b); }, typ, qualitaet); };
     img.onerror = () => fehler(new Error("SVG"));
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   });
@@ -7576,7 +7635,8 @@ async function seitenTeilen(seiten, name, art, statusEl){
     zaehle(`/geteilt-${name.split("_")[0].toLowerCase()}-${art}`, true);
     let files = [];
     if (art === "pdf"){ const bilder = [];
-      for (const sv of seiten){ const b = await svgZuBlob(sv, "image/jpeg", 2.5); bilder.push({w:b.pw, h:b.ph, bytes:new Uint8Array(await b.arrayBuffer())}); }
+      const pf = seiten.length > 8 ? 2 : 2.5;   // viele Seiten → etwas kleiner, damit das PDF handlich bleibt
+      for (const sv of seiten){ const b = await svgZuBlob(sv, "image/jpeg", pf, 0.88); bilder.push({w:b.pw, h:b.ph, bytes:new Uint8Array(await b.arrayBuffer())}); }
       files = [new File([await pdfAusBildern(bilder)], `${name}.pdf`, {type:"application/pdf"})]; }
     else { const liste = art === "bild" ? seiten.slice(0,1) : seiten;
       for (let i=0;i<liste.length;i++){ const b = await svgZuBlob(liste[i]); files.push(new File([b], liste.length>1 ? `${name}_${i+1}.png` : `${name}.png`, {type:"image/png"})); } }
@@ -7686,7 +7746,8 @@ $("#tag-namen").onchange = e => { teilen.namen = [...new Set(e.target.value.spli
 $("#tag-leeren").onclick = () => { if (confirm("Den ganzen Tagesplan leeren?")){ tag.einheiten = []; tag.datum = heuteISO(); tagMerken(); renderTag(); } };
 $("#tag-teilen").onclick = e => { const b = e.target.closest("[data-art]"); if (!b) return;
   const alt = teilen.datum; teilen.datum = tag.datum;
-  seitenTeilen([tagSVG(), ...tagSortiert().map(einheitSVG)], `Tagesplan_${tag.datum}`, b.dataset.art, $("#tag-status")).finally(()=>{ teilen.datum = alt; }); };
+  const seiten = [tagSVG(), ...tagSortiert().flatMap(E => [einheitSVG(E), ...einheitSeiten(E)])];
+  seitenTeilen(seiten, `Tagesplan_${tag.datum}`, b.dataset.art, $("#tag-status")).finally(()=>{ teilen.datum = alt; }); };
 
 /* ---------- Kleine Meldung unten ---------- */
 function meldung(text, knopf, aktion){
