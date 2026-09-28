@@ -107,6 +107,15 @@ button{font:inherit;color:inherit}
 .box.b{background:#EAF3FD}.box.g{background:#E8F5EC}.box.r{background:#FDECEA}.box.l{background:#F3EAF8}
 .box ul{margin:2px 0 0;padding-left:18px}
 .pagefoot{display:flex;justify-content:space-between;color:var(--muted);font-size:.72rem;margin-top:16px;border-top:1px dashed var(--line);padding-top:8px}
+#tor{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:24px}
+#tor[hidden]{display:none}
+.tor-box{width:min(360px,100%);text-align:center}
+.tor-box img{border-radius:18px;box-shadow:0 6px 18px rgba(242,140,40,.35)}
+.tor-box h1{margin:14px 0 4px;font-size:1.5rem}
+.tor-box p{color:var(--muted);margin:0 0 16px}
+.tor-box input{width:100%;border:2px solid var(--line);border-radius:14px;padding:14px;font:inherit;font-size:1.3rem;text-align:center;letter-spacing:.15em;margin-bottom:10px;background:#fff}
+.tor-fehler{color:#C0392B!important;font-weight:700;min-height:1.4em;margin-top:10px!important}
+body.gesperrt .app{visibility:hidden}
 .foot{text-align:center;color:var(--muted);font-size:.75rem;padding:10px 16px 0}
 .bigbtn{border:0;background:var(--blau);color:#fff;border-radius:16px;padding:14px;font-weight:800;font-size:1rem;cursor:pointer;width:100%;margin-top:4px;box-shadow:0 6px 18px rgba(46,134,222,.3)}
 .ghost{border:2px solid var(--ink);background:#fff;border-radius:16px;padding:12px;font-weight:800;cursor:pointer}
@@ -195,6 +204,16 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
   </defs>
 </svg>
 
+<div id="tor" role="dialog" aria-modal="true" aria-labelledby="tor-titel">
+  <form class="tor-box" id="tor-form" autocomplete="off">
+    <img src="icon-192.png" alt="" width="72" height="72">
+    <h1 id="tor-titel">Bewegungsspiele</h1>
+    <p>Bitte den Zugangscode eingeben.<br><small>Den Code bekommst du von deinem Team.</small></p>
+    <input id="tor-code" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="Zugangscode" aria-label="Zugangscode">
+    <button class="bigbtn" type="submit">Öffnen</button>
+    <p class="tor-fehler" id="tor-fehler" aria-live="polite"></p>
+  </form>
+</div>
 <div class="app">
   <header class="appbar">
     <h1>Bewegungsspiele</h1>
@@ -272,11 +291,39 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 </div>
 
 <script>
+/* ===================== Zugang & Zähler ===================== */
+// Zugangscode wird nur als Prüfsumme gespeichert. Neuen Code setzen: Claude fragen.
+const CODE_PRUEF = "5c811ec7";
+// Anonymer Nutzungszähler (GoatCounter). Eigenen Namen eintragen, z. B. "bewegung-asgs" – leer = aus.
+const ZAEHLER = "";
+function pruefsumme(s){ let h=0x811c9dc5; for (const b of new TextEncoder().encode(s)){ h^=b; h=Math.imul(h,0x01000193)>>>0; } return h.toString(16).padStart(8,"0"); }
+function zaehle(pfad, ereignis){
+  if (!ZAEHLER || !navigator.onLine) return;
+  try { const i=new Image(); i.src=`https://${ZAEHLER}.goatcounter.com/count?p=${encodeURIComponent(pfad)}${ereignis?"&e=true":""}&rnd=${Math.random().toString(36).slice(2)}`; } catch(e){}
+}
+(function(){
+  const lies=k=>{try{return localStorage.getItem(k);}catch(e){return null;}};
+  const merke=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+  const tor=document.getElementById("tor");
+  if (lies("zugang")===CODE_PRUEF){ tor.hidden=true; zaehle("/app-geoeffnet"); return; }
+  document.body.classList.add("gesperrt");
+  document.getElementById("tor-form").onsubmit = e => {
+    e.preventDefault();
+    const eingabe=document.getElementById("tor-code").value.trim().toLowerCase();
+    if (pruefsumme(eingabe+"|bewegung")===CODE_PRUEF){
+      merke("zugang",CODE_PRUEF); tor.hidden=true; document.body.classList.remove("gesperrt");
+      zaehle("/code-richtig",true); zaehle("/app-geoeffnet");
+    } else {
+      document.getElementById("tor-fehler").textContent="Der Code stimmt leider nicht.";
+      zaehle("/code-falsch",true);
+    }
+  };
+})();
 /* =====================================================================
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.0 · Stand 28.09.2026";
+const VERSION = "Version 1.2 · Stand 28.09.2026 · 100 Spiele";
 
 const SPIELE = [
 {
@@ -1278,6 +1325,1589 @@ const SPIELE = [
     pfeile:[{von:[180,146],nach:[162,134],c:"orange",dash:1}]},
   legende:[["blau","Drache"],["orange","Schleicher"]]
 }
+,
+{
+  id:"paarfangen", name:"Paarfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[8,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Fänger und Läufer sind immer zu zweit unterwegs – Hand in Hand.",
+  foerdert:"Absprache, Rücksicht, Ausdauer",
+  vorbereitung:"Feld abgrenzen und Paare bilden. Ein Paar ist das Fänger-Paar.",
+  ablauf:[
+    "Alle Kinder fassen sich zu zweit an der Hand.",
+    "Das Fänger-Paar versucht, ein anderes Paar abzuschlagen – ohne loszulassen.",
+    "Das abgeschlagene Paar wird zum neuen Fänger-Paar.",
+    "Wer loslässt, zählt nicht: Ein Paar, das sich loslässt, darf nicht abschlagen und kann nicht gefangen werden.",
+    "Nach ein paar Runden neue Paare bilden."
+  ],
+  wenige:"Bei 6–8 Kindern: nur die Fänger laufen zu zweit, die Läufer allein.",
+  viele:"Zwei oder drei Fänger-Paare, gut erkennbar (z. B. Paar mit Ball in der freien Hand).",
+  klasse1:"Nur schnell gehen statt rennen. Paare vorher kurz üben lassen, gemeinsam zu starten und zu bremsen.",
+  varianten:["Dreierketten statt Paare.","Paare laufen seitlich im Galopp."],
+  sicherheit:"Nicht am Partner ziehen. Bei ungerader Zahl gibt es eine Dreiergruppe.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:120,y:74,c:"blau",p:"lauf"},{x:150,y:74,c:"blau",p:"lauf"},
+      {x:196,y:20,c:"orange",p:"lauf"},{x:226,y:20,c:"orange",p:"lauf"},
+      {x:36,y:128,c:"orange",p:"lauf",flip:1},{x:66,y:128,c:"orange",p:"lauf",flip:1}],
+    dinge:[{typ:"hand",x1:140,y1:98,x2:160,y2:98,c:"blau"},{typ:"hand",x1:216,y1:44,x2:236,y2:44,c:"orange"},{typ:"hand",x1:56,y1:152,x2:76,y2:152,c:"orange"}],
+    pfeile:[{von:[182,92],nach:[204,70],bogen:-8},{von:[258,48],nach:[282,70],c:"orange",dash:1},{von:[34,150],nach:[18,176],c:"orange",dash:1}]},
+  legende:[["blau","Fänger-Paar"],["orange","Läufer-Paare"]]
+},
+{
+  id:"zauberer-fangen", name:"Zauberer-Fangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Der Zauberer verwandelt Kinder in Tiere oder Statuen – nur die gute Fee kann sie erlösen.",
+  foerdert:"Schnelligkeit, Fantasie, Körperspannung",
+  vorbereitung:"Feld abgrenzen. Einen Zauberer und eine Fee bestimmen und gut unterscheidbar machen (z. B. Fee trägt einen Ball).",
+  ablauf:[
+    "Der Zauberer schlägt Kinder ab und ruft dabei ein Tier oder „Statue!“.",
+    "Verzauberte Kinder bleiben an ihrem Platz und machen das Tier oder die Statue nach.",
+    "Nur die Fee kann erlösen: Sie tippt das verzauberte Kind an und sagt „Frei!“.",
+    "Die Fee selbst kann nicht verzaubert werden.",
+    "Nach 2–3 Minuten neue Zauberer und Feen bestimmen."
+  ],
+  wenige:"Ein Zauberer, keine Fee: Verzauberte werden von jedem Kind durch Abklatschen erlöst.",
+  viele:"Zwei bis drei Zauberer und zwei Feen.",
+  klasse1:"Nur Statuen statt Tiere. Die Betreuerin ist in der ersten Runde die Fee.",
+  varianten:["Verzauberte Tiere dürfen sich auf der Stelle bewegen (hüpfen, flattern), aber nicht weglaufen.","Die Fee erlöst mit einem Zauberspruch, den sich die Gruppe ausdenkt."],
+  sicherheit:"Verzauberte Kinder bleiben stehen oder hocken – nicht hinlegen, damit niemand darüber stolpert.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:124,y:66,c:"blau",p:"ruf"},{x:44,y:26,c:"orange",p:"arme"},{x:212,y:122,c:"orange",p:"arme",flip:1},
+      {x:74,y:122,c:"lila",p:"lauf"},{x:222,y:22,c:"orange",p:"lauf"},{x:246,y:74,c:"orange",p:"lauf"}],
+    dinge:[{typ:"blase",x:120,y:50,text:"Frosch!"}],
+    pfeile:[{von:[158,88],nach:[208,122],bogen:6},{von:[80,126],nach:[62,78],c:"lila",dash:1}]},
+  legende:[["blau","Zauberer"],["lila","Fee"],["orange","Kinder (Arme hoch = verzaubert)"]]
+},
+{
+  id:"linienfangen", name:"Linienfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[5,25], klassen:"1–4", orte:["halle"], material:[], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Alle – auch der Fänger – dürfen sich nur auf den Linien der Halle bewegen.",
+  foerdert:"Orientierung, Gleichgewicht, Überblick",
+  vorbereitung:"Gemeinsam die Hallenlinien anschauen. Festlegen, welche Linienfarben gelten (bei vielen Linien z. B. nur zwei Farben).",
+  ablauf:[
+    "Alle Kinder stellen sich auf eine Linie.",
+    "Der Fänger startet in der Mitte und darf – wie alle – nur auf den Linien laufen.",
+    "Überholen ist nicht erlaubt; an Kreuzungen kann man abbiegen.",
+    "Wer abgeschlagen wird oder die Linie verlässt, wird neuer Fänger.",
+    "Nach jedem Fängerwechsel kurz bis 3 zählen, bevor der neue Fänger startet."
+  ],
+  wenige:"Nur schnell gehen erlaubt, sonst ist man zu schnell gefangen – oder zu schwer zu fangen.",
+  viele:"Zwei bis drei Fänger. Alle Linienfarben freigeben, damit es sich verteilt.",
+  klasse1:"Nur gehen. Die Betreuerin zeigt vorher mit dem Finger, wo die Linien verlaufen.",
+  varianten:["Gefangene werden zu „Sperren“: Sie stehen mit ausgebreiteten Armen auf der Linie und blockieren sie.","Rückwärts oder im Seitgalopp auf den Linien."],
+  sicherheit:"Nur gehen oder langsam traben – auf den Linien kommen sich Kinder frontal entgegen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:120,y:77,c:"blau",p:"lauf"},{x:15,y:30,c:"orange",p:"lauf",flip:1},{x:247,y:90,c:"orange",p:"lauf"},
+      {x:60,y:137,c:"orange",p:"lauf"},{x:180,y:17,c:"orange",p:"lauf"},{x:190,y:137,c:"orange",p:"lauf",flip:1}],
+    dinge:[{typ:"strich",x1:30,y1:60,x2:262,y2:60},{typ:"strich",x1:30,y1:180,x2:262,y2:180},
+      {typ:"strich",x1:30,y1:60,x2:30,y2:180},{typ:"strich",x1:262,y1:60,x2:262,y2:180},
+      {typ:"strich",x1:30,y1:120,x2:150,y2:120}],
+    pfeile:[{von:[154,122],nach:[196,122],bogen:0},{von:[100,186],nach:[160,186],c:"orange",dash:1}]},
+  legende:[["blau","Fänger"],["orange","Läufer (nur auf Linien)"]]
+},
+{
+  id:"schwaenzchenfangen", name:"Schwänzchenfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[6,25], klassen:"1–4", orte:["halle","draussen"], material:["Seile (1 pro Kind)"], dauer:"10–15", energie:5, phasen:["haupt"],
+  kurz:"Jedes Kind hat ein Seil als Schwänzchen hinten im Hosenbund – wer schnappt die meisten?",
+  foerdert:"Schnelligkeit, Wendigkeit, Reaktion",
+  vorbereitung:"Jedes Kind steckt ein Seilende hinten in den Hosenbund, so dass ein langes Stück heraushängt (Boden nicht berühren).",
+  ablauf:[
+    "Alle laufen im Feld herum und versuchen, anderen das Schwänzchen herauszuziehen.",
+    "Das eigene Schwänzchen darf man nicht festhalten.",
+    "Wer ein Schwänzchen erwischt, lässt es fallen oder bringt es an den Rand.",
+    "Wer sein Schwänzchen verloren hat, holt sich am Rand ein neues und macht vorher eine Mini-Aufgabe (z. B. 5 Hampelmänner).",
+    "Nach 2–3 Minuten „Stopp!“ – kurz verschnaufen, neue Runde."
+  ],
+  wenige:"Nur ein Kind ist Fänger ohne Schwänzchen. Wer seins verliert, wird Fänger.",
+  viele:"Zwei Teams: Nur Schwänzchen vom anderen Team schnappen. Feld groß machen.",
+  klasse1:"Nur ein Fänger (die Betreuerin oder ein Kind), alle anderen haben Schwänzchen. Schnell gehen statt rennen.",
+  varianten:["Teamwertung: Welches Team hat nach 2 Minuten die meisten Schwänzchen gesammelt?","Wer ein Schwänzchen schnappt, steckt es sich zusätzlich hinten rein – wer hat das längste?"],
+  sicherheit:"Seil nicht um Bauch oder Hals binden, nur locker einstecken. Nicht schubsen oder festhalten.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:60,y:40,c:"blau",p:"lauf"},{x:100,y:40,c:"orange",p:"lauf"},
+      {x:190,y:30,c:"orange",p:"lauf",flip:1},{x:48,y:130,c:"orange",p:"lauf"},
+      {x:150,y:110,c:"blau",p:"lauf"},{x:228,y:118,c:"orange",p:"lauf"}],
+    dinge:[{typ:"seil",x1:100,y1:74,x2:88,y2:96,welle:3},{typ:"seil",x1:220,y1:64,x2:234,y2:86,welle:3},
+      {typ:"seil",x1:48,y1:164,x2:36,y2:186,welle:3},{typ:"seil",x1:228,y1:152,x2:216,y2:174,welle:3}],
+    pfeile:[{von:[92,50],nach:[104,70],bogen:-6},{von:[182,128],nach:[220,146],bogen:6}]},
+  legende:[["blau","greift nach Schwänzchen"],["orange","läuft weg"]]
+},
+{
+  id:"kreuzfangen", name:"Kreuzfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[6,20], klassen:"2–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["haupt"],
+  kurz:"Der Fänger jagt immer nur ein Kind – wer zwischen beiden durchläuft, wird selbst gejagt.",
+  foerdert:"Hilfsbereitschaft, Überblick, Schnelligkeit",
+  vorbereitung:"Feld abgrenzen. Einen Fänger bestimmen.",
+  ablauf:[
+    "Der Fänger ruft laut den Namen des Kindes, das er jagt.",
+    "Die anderen Kinder helfen: Wer zwischen Fänger und gejagtem Kind hindurchläuft („kreuzt“), wird ab sofort gejagt.",
+    "Der Fänger muss dann dem kreuzenden Kind nachlaufen und ruft dessen Namen.",
+    "Wird das gejagte Kind abgeschlagen, ist es der neue Fänger.",
+    "Nach jedem Wechsel ruft der neue Fänger laut, wen er jagt."
+  ],
+  wenige:"Feld klein machen, damit Kreuzen möglich ist.",
+  viele:"Zwei Felder mit je einem Fänger – mit mehr als 20 Kindern wird es zu unübersichtlich.",
+  klasse1:"Für Klasse 1/2 eher Versteinern spielen. Wenn doch: nur gehen und die Betreuerin ruft laut, wer gejagt wird.",
+  varianten:["Der Fänger trägt einen Ball und gibt ihn beim Kreuzen nicht ab – so sieht man ihn gut.","Nur Kreuzen in Paaren (Hand in Hand) gilt."],
+  sicherheit:"Beim Kreuzen genug Abstand zum Fänger lassen – nicht knapp vor ihm durchrennen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:40,y:80,c:"blau",p:"lauf"},{x:222,y:80,c:"rot",p:"lauf"},
+      {x:132,y:14,c:"orange",p:"lauf"},{x:60,y:138,c:"orange",p:"steh"},{x:180,y:136,c:"orange",p:"steh"},{x:246,y:18,c:"orange",p:"steh"}],
+    dinge:[],
+    pfeile:[{von:[76,104],nach:[216,104]},{von:[148,62],nach:[148,150],c:"orange",dash:1}]},
+  legende:[["blau","Fänger"],["rot","gejagtes Kind"],["orange","Mitspieler (kreuzen)"]]
+},
+{
+  id:"pinguinfangen", name:"Pinguinfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[5,25], klassen:"1–4", orte:["halle"], material:["Matten (3–5 Stück)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Alle watscheln wie Pinguine – auf den Eisschollen (Matten) ist man kurz sicher.",
+  foerdert:"Körperkoordination, Gleichgewicht, Spaß",
+  vorbereitung:"Matten als Eisschollen in der Halle verteilen. Pinguin-Watscheln einmal gemeinsam üben: Beine steif, Arme seitlich angelegt, kleine Schritte.",
+  ablauf:[
+    "Alle Kinder watscheln wie Pinguine – auch der Fänger (der Eisbär oder die Robbe).",
+    "Wer abgeschlagen wird, wird zum Fänger.",
+    "Auf einer Eisscholle ist man sicher – aber nur bis 3 gezählt.",
+    "Auf jede Scholle passen nur so viele Pinguine, wie die Betreuerin festlegt (z. B. zwei).",
+    "Wer rennt statt watschelt, muss einmal um eine Eisscholle watscheln."
+  ],
+  wenige:"Nur zwei Matten. Der Fänger darf etwas größere Schritte machen.",
+  viele:"Zwei bis drei Fänger und mehr Eisschollen.",
+  klasse1:"Bis 5 zählen erlaubt. Die Betreuerin ist in der ersten Runde die Robbe.",
+  varianten:["Eisschollen „schmelzen“: Nach jeder Runde wird eine Matte weggeräumt.","Pinguine rutschen auf dem Bauch auf die Matte (nur langsam)."],
+  sicherheit:"Nicht auf die Matten springen oder hechten. Matten rutschfest und mit Abstand zur Wand legen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:128,y:60,c:"blau",p:"lauf"},{x:34,y:20,c:"orange",p:"steh"},{x:226,y:116,c:"orange",p:"steh"},
+      {x:74,y:124,c:"orange",p:"lauf",flip:1},{x:196,y:30,c:"orange",p:"lauf"},{x:236,y:30,c:"orange",p:"lauf"}],
+    dinge:[{typ:"matte",x:16,y:44,w:66,h:30,text:" "},{typ:"matte",x:208,y:140,w:70,h:30,text:" "},
+      {typ:"matte",x:110,y:150,w:66,h:30,text:"Scholle"}],
+    pfeile:[{von:[160,84],nach:[194,62],bogen:-8},{von:[92,170],nach:[112,168],c:"orange",dash:1}]},
+  legende:[["blau","Fänger (Robbe)"],["orange","Pinguine"]]
+},
+{
+  id:"tierfangen", name:"Tierfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Der Fänger ruft ein Tier – und alle, auch er selbst, bewegen sich sofort so.",
+  foerdert:"Bewegungsvielfalt, Reaktion, Fantasie",
+  vorbereitung:"Feld abgrenzen. Vorher 4–5 Tiere und ihre Bewegung gemeinsam festlegen (Hase, Frosch, Krabbe, Storch, Elefant).",
+  ablauf:[
+    "Der Fänger ruft ein Tier, z. B. „Hase!“.",
+    "Alle Kinder und der Fänger bewegen sich wie dieses Tier – hier: hüpfen.",
+    "Der Fänger versucht abzuschlagen. Wer gefangen ist, wird neuer Fänger und ruft ein neues Tier.",
+    "Ruft der Fänger zwischendurch ein neues Tier, wechseln alle sofort die Bewegung.",
+    "Wer in der falschen Bewegungsart läuft, zählt als gefangen."
+  ],
+  wenige:"Funktioniert gut. Oft das Tier wechseln, damit es spannend bleibt.",
+  viele:"Zwei Fänger – nur einer darf rufen, oder sie wechseln sich ab.",
+  klasse1:"Mit drei einfachen Tieren starten (Hase, Pinguin, Elefant). Die Betreuerin ruft die Tiere.",
+  varianten:["Die Betreuerin ruft die Tiere, der Fänger fängt nur.","Krabbe (Vierfüßler rückwärts) und Bär (auf Händen und Füßen) für Größere."],
+  sicherheit:"Bei Tieren auf allen Vieren das Feld verkleinern und langsamer machen – Hände und Köpfe schützen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:118,y:70,c:"blau",p:"ruf"},{x:40,y:28,c:"orange",p:"arme"},{x:212,y:22,c:"orange",p:"arme",flip:1},
+      {x:54,y:128,c:"orange",p:"arme"},{x:190,y:120,c:"orange",p:"arme"},{x:246,y:84,c:"orange",p:"arme"}],
+    dinge:[{typ:"blase",x:132,y:52,text:"Hase!"}],
+    pfeile:[{von:[152,96],nach:[186,122],bogen:6},{von:[72,78],nach:[40,100],c:"orange",dash:1,bogen:-10}]},
+  legende:[["blau","Fänger (ruft das Tier)"],["orange","Kinder (hüpfen wie Hasen)"]]
+},
+{
+  id:"bananenfangen", name:"Bananenfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Wer gefangen wird, wird zur Banane – zwei Kinder müssen sie schälen, um sie zu befreien.",
+  foerdert:"Zusammenarbeit, Hilfsbereitschaft, Ausdauer",
+  vorbereitung:"Feld abgrenzen. Fänger bestimmen (1 Fänger pro 6–8 Kinder).",
+  ablauf:[
+    "Die Fänger versuchen, die anderen abzuschlagen.",
+    "Wer gefangen ist, wird eine Banane: Arme gestreckt über den Kopf, Hände zusammen.",
+    "Zwei Kinder „schälen“ die Banane: Jedes zieht vorsichtig einen Arm herunter.",
+    "Erst wenn beide Arme unten sind, ist die Banane befreit und läuft weiter.",
+    "Nach 2–3 Minuten neue Fänger."
+  ],
+  wenige:"Ein Kind reicht zum Schälen: erst den einen, dann den anderen Arm.",
+  viele:"Drei bis vier Fänger. Sind fast alle Bananen, ist die Runde vorbei.",
+  klasse1:"Arme nur antippen statt herunterziehen. Feld klein halten.",
+  varianten:["Obstsorten: Gefangene rufen „Banane!“, „Apfel!“ (rund machen) – jede Frucht wird anders befreit.","Die Banane muss nach dem Schälen einmal um sich selbst drehen."],
+  sicherheit:"Arme sanft herunterführen, nicht reißen. Die Banane steht still.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:216,y:70,c:"blau",p:"lauf",flip:1},{x:84,y:66,c:"gelb",p:"arme"},
+      {x:52,y:70,c:"orange",p:"steh"},{x:116,y:70,c:"orange",p:"steh",flip:1},
+      {x:40,y:140,c:"orange",p:"lauf"},{x:176,y:14,c:"orange",p:"lauf"}],
+    dinge:[{typ:"blase",x:99,y:42,text:"Schält!"}],
+    pfeile:[{von:[214,100],nach:[180,130],bogen:6},{von:[196,46],nach:[244,34],c:"orange",dash:1}]},
+  legende:[["blau","Fänger"],["gelb","Banane (gefangen)"],["orange","Läufer (schälen)"]]
+},
+{
+  id:"fuchs-huehner", name:"Fuchs und Hühner", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[6,25], klassen:"1–4", orte:["halle","draussen"], material:["Matte oder Reifen für den Hühnerstall"], dauer:"10–15", energie:4, phasen:["haupt"],
+  kurz:"Die Hühner picken auf dem Hof – kommt der Fuchs, flüchten sie in den Hühnerstall.",
+  foerdert:"Reaktion, Schnelligkeit, Mut",
+  vorbereitung:"Einen Hühnerstall festlegen (Matte oder ein Bereich aus mehreren Reifen) und in eine Ecke legen. Der Fuchs hat seinen Bau in der gegenüberliegenden Ecke.",
+  ablauf:[
+    "Die Hühner laufen vom Stall aus auf den Hof und „picken“ (bücken, gackern).",
+    "Der Fuchs wartet in seinem Bau.",
+    "Die Betreuerin (oder der Bauer) ruft „Der Fuchs kommt!“ – der Fuchs startet, alle Hühner rennen zurück in den Stall.",
+    "Wer vorher abgeschlagen wird, wird zum Fuchs-Helfer und startet in der nächsten Runde mit aus dem Bau.",
+    "Sind nur noch zwei Hühner übrig, ist das letzte Huhn der neue Fuchs."
+  ],
+  wenige:"Wer gefangen wird, tauscht einfach mit dem Fuchs.",
+  viele:"Zwei Ställe an verschiedenen Seiten. Zwei Füchse starten.",
+  klasse1:"Die Hühner dürfen sich nicht zu weit vom Stall entfernen (Hütchen-Grenze). Der Fuchs zählt laut bis 3 vor dem Start.",
+  varianten:["Der Fuchs ruft selbst – aber erst nach dem Satz „Ich hab solchen Hunger!“","Die Hühner hüpfen auf einem Bein zurück."],
+  sicherheit:"Draußen nur Reifen als Stall, keine Matten. Nicht in den Stall springen, sondern hineinlaufen und stehen bleiben.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:236,y:30,c:"rot",p:"lauf",flip:1},{x:130,y:10,c:"lila",p:"ruf"},
+      {x:16,y:96,c:"orange",p:"steh"},{x:110,y:110,c:"orange",p:"lauf",flip:1},
+      {x:170,y:74,c:"orange",p:"lauf",flip:1},{x:60,y:40,c:"orange",p:"lauf",flip:1}],
+    dinge:[{typ:"matte",x:12,y:132,w:84,h:54,text:"Stall"},{typ:"zone",x:230,y:10,w:58,h:22,c:"#E5533D",text:"Bau"},
+      {typ:"blase",x:190,y:22,text:"Fuchs!"}],
+    pfeile:[{von:[108,146],nach:[82,160],c:"orange",dash:1},{von:[232,62],nach:[204,90],bogen:-6},{von:[168,108],nach:[126,120],c:"orange",dash:1}]},
+  legende:[["rot","Fuchs"],["orange","Hühner"],["lila","Bauer/in (ruft)"]]
+},
+{
+  id:"rettungsball-fangen", name:"Rettungsball-Fangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro 4–5 Kinder)"], dauer:"10–15", energie:4, phasen:["haupt"],
+  kurz:"Wer einen Ball in der Hand hält, ist sicher – aber der Ball muss schnell weitergegeben werden.",
+  foerdert:"Passen und Fangen, Hilfsbereitschaft, Überblick",
+  vorbereitung:"Feld abgrenzen. Weiche Bälle an einige Läufer verteilen, ein bis zwei Fänger bestimmen.",
+  ablauf:[
+    "Die Fänger versuchen, die Läufer abzuschlagen.",
+    "Wer einen Ball in den Händen hält, kann nicht gefangen werden.",
+    "Den Ball darf man höchstens bis 3 zählen behalten – dann muss er zu einem anderen Kind (zuwerfen oder übergeben).",
+    "Die Läufer retten sich gegenseitig: Den Ball dem Kind zuwerfen, das gerade gejagt wird.",
+    "Wer ohne Ball abgeschlagen wird, ist neuer Fänger."
+  ],
+  wenige:"Ein Ball und ein Fänger.",
+  viele:"Mehr Fänger und entsprechend mehr Bälle – die Bälle bleiben knapper als die Läufer.",
+  klasse1:"Den Ball übergeben statt werfen. Bis 5 zählen erlaubt.",
+  varianten:["Der Ball muss mit einem Aufsetzer weitergespielt werden.","Nur wer den Ball fängt, ist sicher – fällt er runter, zählt er nicht."],
+  sicherheit:"Nur weiche Bälle und nur zuwerfen, nicht abwerfen. Fänger dürfen den Ball nicht wegschlagen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:156,y:100,c:"blau",p:"lauf",flip:1},{x:236,y:120,c:"blau",p:"lauf"},
+      {x:50,y:24,c:"orange",p:"ruf"},{x:104,y:104,c:"orange",p:"arme",flip:1},
+      {x:30,y:136,c:"orange",p:"lauf"},{x:210,y:20,c:"orange",p:"lauf"}],
+    dinge:[{typ:"ball",x:98,y:66}],
+    pfeile:[{von:[82,36],nach:[112,96],c:"rot",dash:1,bogen:-10},{von:[160,126],nach:[140,128],bogen:0}]},
+  legende:[["blau","Fänger"],["orange","Läufer (mit Ball = sicher)"]]
+},
+{
+  id:"kommando", name:"Kommando", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm"],
+  kurz:"Nur wenn vor der Anweisung „Kommando“ gesagt wird, führen alle sie aus.",
+  foerdert:"Zuhören, Konzentration, Körperwahrnehmung",
+  vorbereitung:"Die Kinder verteilen sich mit Blick zur Betreuerin im Raum.",
+  ablauf:[
+    "Die Betreuerin gibt Anweisungen: „Kommando: Arme hoch!“ – alle heben die Arme.",
+    "Fehlt das Wort „Kommando“ (z. B. nur „Hinsetzen!“), bleiben alle, wie sie sind.",
+    "Die Betreuerin macht die Bewegungen oft mit – auch mal falsch, um zu verwirren.",
+    "Wer sich vertut, macht eine kleine Zusatzaufgabe (z. B. einmal um sich selbst drehen) und spielt weiter.",
+    "Tempo langsam steigern. Später dürfen Kinder die Kommandos geben."
+  ],
+  wenige:"Jedes Kind darf reihum ein Kommando geben.",
+  viele:"In einem großen Halbkreis aufstellen, damit alle die Betreuerin sehen.",
+  klasse1:"Erst langsam und mit einfachen Bewegungen. Nur jedes dritte Mal ohne „Kommando“.",
+  varianten:["Bewegungen im Laufen: „Kommando: auf einem Bein hüpfen!“","Statt „Kommando“ gilt ein anderes Zauberwort, z. B. „Bitte“."],
+  sicherheit:"Keine besondere Gefahr. Genug Abstand zu den Nachbarn.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:236,y:78,c:"lila",p:"ruf",flip:1},
+      {x:56,y:20,c:"gruen",p:"arme"},{x:120,y:20,c:"gruen",p:"arme"},{x:88,y:78,c:"gruen",p:"arme"},
+      {x:150,y:78,c:"gruen",p:"steh"},{x:70,y:136,c:"gruen",p:"arme"}],
+    dinge:[{typ:"text",x:220,y:62,text:"„Kommando: Hoch!“",gr:10}],
+    pfeile:[]},
+  legende:[["lila","Betreuerin (gibt Kommandos)"],["gruen","Kinder"]]
+},
+{
+  id:"vier-ecken", name:"Vier Ecken", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (4 Stück)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Alle laufen in eine von vier Ecken – der Ansager ruft blind eine Zahl, und diese Ecke bekommt eine Zusatzaufgabe.",
+  foerdert:"Entscheidungen treffen, Ausdauer, Zahlen",
+  vorbereitung:"Vier Hütchen in die Ecken stellen und die Ecken mit 1 bis 4 nummerieren. Ein Kind ist Ansager und steht in der Mitte.",
+  ablauf:[
+    "Der Ansager schließt die Augen und zählt laut bis 10.",
+    "Währenddessen laufen alle anderen leise in eine Ecke ihrer Wahl.",
+    "Bei 10 ruft der Ansager eine Zahl von 1 bis 4.",
+    "Alle Kinder in dieser Ecke machen eine Zusatzaufgabe (z. B. 5 Hampelmänner, eine Runde um die Halle) – danach geht's weiter.",
+    "Nach ein paar Runden wird ein anderes Kind Ansager."
+  ],
+  wenige:"Nur drei Ecken nutzen.",
+  viele:"Zwei Ansager, die je eine Zahl rufen. Ecken weit auseinander.",
+  klasse1:"Ecken mit Farben oder Tieren statt Zahlen benennen. Die Betreuerin ist Ansagerin.",
+  varianten:["Jede Ecke hat eine Bewegungsart, mit der man hinlaufen muss (hüpfen, krabbeln …).","Die gewählte Ecke darf sich die nächste Zusatzaufgabe für alle ausdenken."],
+  sicherheit:"Leise laufen, nicht durch die Mitte am Ansager vorbeirennen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:135,y:74,c:"lila",p:"ruf"},
+      {x:30,y:20,c:"gruen",p:"steh"},{x:240,y:20,c:"gruen",p:"steh"},
+      {x:30,y:126,c:"gruen",p:"arme"},{x:62,y:126,c:"gruen",p:"arme"},{x:240,y:126,c:"gruen",p:"lauf"}],
+    dinge:[{typ:"huetchen",x:18,y:18},{typ:"huetchen",x:282,y:18},{typ:"huetchen",x:18,y:182},{typ:"huetchen",x:282,y:182},
+      {typ:"text",x:18,y:44,text:"1",gr:14},{typ:"text",x:282,y:44,text:"2",gr:14},{typ:"text",x:18,y:162,text:"3",gr:14},{typ:"text",x:282,y:162,text:"4",gr:14},
+      {typ:"blase",x:150,y:56,text:"Drei!"}],
+    pfeile:[{von:[270,68],nach:[270,118],c:"gruen",dash:1}]},
+  legende:[["lila","Ansager (Augen zu)"],["gruen","Kinder in den Ecken"]]
+},
+{
+  id:"schiff-ahoi", name:"Schiff ahoi", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Die Halle ist ein Schiff – auf Kommando laufen alle zu Bug, Heck, Backbord oder Steuerbord.",
+  foerdert:"Orientierung, Reaktion, Gruppen bilden",
+  vorbereitung:"Gemeinsam festlegen, welche Hallenseite Bug (vorne), Heck (hinten), Backbord (links) und Steuerbord (rechts) ist.",
+  ablauf:[
+    "Die Kinder laufen frei über das Deck.",
+    "„Bug!“, „Heck!“, „Backbord!“, „Steuerbord!“ – alle laufen zur passenden Seite.",
+    "„Deck schrubben!“ – alle knien und schrubben mit den Händen den Boden.",
+    "„Rettungsboot für drei!“ – schnell Dreiergruppen bilden und hinsetzen, als würde man rudern.",
+    "Wer übrig bleibt oder sich vertut, hilft dem Kapitän beim nächsten Kommando – dann wieder mitspielen."
+  ],
+  wenige:"Rettungsboote für zwei. Nur vier bis fünf Kommandos nutzen.",
+  viele:"Große Rettungsboote (für 4 oder 5). Laufen nur im Uhrzeigersinn.",
+  klasse1:"Statt Backbord/Steuerbord „Fenster“ und „Tür“. Mit drei Kommandos starten.",
+  varianten:["„Mann über Bord!“ – ein Kind legt sich hin, ein Partner hält seine Hand.","„Kapitän kommt!“ – alle salutieren und stehen stramm."],
+  sicherheit:"Beim Seitenwechsel nicht gegen die Wand laufen – eine Linie vor der Wand als Ziel nehmen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:150,y:74,c:"lila",p:"ruf"},
+      {x:240,y:40,c:"gruen",p:"lauf"},{x:240,y:110,c:"gruen",p:"steh"},{x:190,y:130,c:"gruen",p:"lauf"},
+      {x:60,y:30,c:"gruen",p:"lauf"},{x:66,y:122,c:"gruen",p:"lauf"}],
+    dinge:[{typ:"text",x:282,y:100,text:"Bug",gr:11},{typ:"text",x:20,y:100,text:"Heck",gr:11},
+      {typ:"text",x:150,y:18,text:"Backbord",gr:11},{typ:"text",x:150,y:190,text:"Steuerbord",gr:11},
+      {typ:"blase",x:172,y:56,text:"Bug!"}],
+    pfeile:[{von:[94,54],nach:[150,40],c:"gruen",dash:1,bogen:-8},{von:[98,146],nach:[176,152],c:"gruen",dash:1,bogen:6}]},
+  legende:[["lila","Kapitän"],["gruen","Matrosen"]]
+},
+{
+  id:"stopptanz", name:"Stopptanz", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Musik (optional)"], dauer:"10–15", energie:3, phasen:["warm"],
+  kurz:"Alle tanzen zur Musik – hört sie auf, frieren alle sofort ein.",
+  foerdert:"Rhythmus, Körperbeherrschung, Reaktion",
+  vorbereitung:"Musik bereitlegen. Ohne Musik klatscht oder trommelt die Betreuerin einen Rhythmus.",
+  ablauf:[
+    "Die Musik läuft – alle tanzen frei im Raum.",
+    "Plötzlich stoppt die Musik (oder das Klatschen) – alle erstarren wie Statuen.",
+    "Wer noch wackelt, macht eine lustige Mini-Aufgabe (z. B. Hühnertanz) und tanzt dann weiter.",
+    "Die Musik startet wieder.",
+    "Nach ein paar Runden darf ein Kind die Musik stoppen."
+  ],
+  wenige:"Jedes Kind darf reihum eine Statuen-Figur vorgeben.",
+  viele:"Die Betreuerin achtet nur auf eine Hallenhälfte pro Runde.",
+  klasse1:"Beim Stopp vorher eine Figur festlegen (Storch, Baum, Flugzeug) – das hilft beim Stillhalten.",
+  varianten:["Bei Stopp auf den Boden setzen – wer zuletzt sitzt, zeigt einen Tanzschritt vor.","Tierstopp: Bei Stopp wird ein Tier gerufen, alle erstarren in Tierform."],
+  sicherheit:"Genug Abstand zu anderen Tänzern. Keine wilden Drehungen mit ausgestreckten Armen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:30,y:30,c:"gruen",p:"arme"},{x:100,y:82,c:"gruen",p:"arme",flip:1},{x:170,y:26,c:"gruen",p:"steh"},
+      {x:60,y:136,c:"gruen",p:"arme"},{x:170,y:132,c:"gruen",p:"arme",flip:1},{x:246,y:96,c:"lila",p:"ruf",flip:1}],
+    dinge:[{typ:"blase",x:258,y:80,text:"Stopp!"}],
+    pfeile:[]},
+  legende:[["gruen","Tänzer (eingefroren)"],["lila","Betreuerin"]]
+},
+{
+  id:"farben-rennen", name:"Farben-Rennen", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen in verschiedenen Farben"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Eine Farbe wird gerufen – alle rennen zu einem Hütchen in dieser Farbe.",
+  foerdert:"Farben erkennen, Reaktion, Schnelligkeit",
+  vorbereitung:"Hütchen in drei bis vier Farben im ganzen Feld verteilen, jede Farbe mehrmals.",
+  ablauf:[
+    "Die Kinder laufen frei zwischen den Hütchen herum.",
+    "Die Betreuerin ruft eine Farbe, z. B. „Gelb!“.",
+    "Alle laufen zu einem gelben Hütchen und berühren es mit der Hand.",
+    "An einem Hütchen dürfen mehrere Kinder stehen.",
+    "Die letzten drei Kinder dürfen die nächste Farbe gemeinsam rufen."
+  ],
+  wenige:"Wenige Hütchen, weit auseinander – dann wird es ein richtiges Rennen.",
+  viele:"Viele Hütchen, damit sich nicht alle am selben Hütchen drängeln.",
+  klasse1:"Nur zwei Farben am Anfang. Gehen statt rennen in der ersten Runde.",
+  varianten:["Zwei Farben rufen: mit einer Hand und einem Fuß zwei verschiedene Hütchen berühren.","Farbe plus Körperteil: „Rot – mit dem Ellenbogen!“"],
+  sicherheit:"Hütchen nicht zu nah an der Wand. Nicht über Hütchen springen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:70,y:30,c:"gruen",p:"lauf"},{x:140,y:100,c:"gruen",p:"lauf"},{x:220,y:60,c:"gruen",p:"lauf",flip:1},
+      {x:40,y:120,c:"gruen",p:"lauf"},{x:180,y:10,c:"gruen",p:"lauf"},{x:250,y:128,c:"lila",p:"ruf",flip:1}],
+    dinge:[{typ:"huetchen",x:40,y:40},{typ:"huetchen",x:126,y:70},{typ:"huetchen",x:230,y:130},
+      {typ:"huetchen",x:110,y:170},{typ:"huetchen",x:150,y:36},{typ:"huetchen",x:28,y:176},
+      {typ:"blase",x:262,y:112,text:"Gelb!"}],
+    pfeile:[{von:[100,54],nach:[124,64],c:"gruen",dash:1},{von:[160,142],nach:[118,160],c:"gruen",dash:1,bogen:6}]},
+  legende:[["gruen","Kinder"],["lila","Rufer/in"]]
+},
+{
+  id:"klatsch-kommandos", name:"Klatsch-Kommandos", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:3, phasen:["warm"],
+  kurz:"Die Betreuerin klatscht – und die Zahl der Klatscher bestimmt, was alle tun.",
+  foerdert:"Zuhören, Zählen, Reaktion",
+  vorbereitung:"Die Klatsch-Kommandos gemeinsam festlegen und einmal langsam üben.",
+  ablauf:[
+    "Die Kinder laufen frei durch den Raum.",
+    "1× klatschen = hinsetzen.",
+    "2× klatschen = auf einem Bein stehen.",
+    "3× klatschen = hinlegen (Bauch oder Rücken).",
+    "4× klatschen = Hampelmann. Wer sich vertut, macht einfach schnell das Richtige – niemand scheidet aus.",
+    "Tempo steigern und die Reihenfolge durcheinanderwürfeln."
+  ],
+  wenige:"Kinder dürfen reihum klatschen.",
+  viele:"Laut und deutlich klatschen, eventuell mit Pausenzeichen vorher („Achtung!“).",
+  klasse1:"Nur mit zwei Kommandos starten, später eins dazunehmen.",
+  varianten:["Stampfen statt klatschen – die Kinder müssen genau hinhören.","Die Kinder erfinden ein eigenes Kommando für 5× klatschen."],
+  sicherheit:"Draußen bei 3× hinhocken statt hinlegen. Beim Laufen Abstand halten.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:236,y:70,c:"lila",p:"arme",flip:1},
+      {x:40,y:30,c:"gruen",p:"sitz"},{x:120,y:26,c:"gruen",p:"sitz"},{x:76,y:96,c:"gruen",p:"sitz"},
+      {x:160,y:110,c:"gruen",p:"lauf"},{x:40,y:140,c:"gruen",p:"sitz"}],
+    dinge:[{typ:"blase",x:250,y:52,text:"Klatsch"}],
+    pfeile:[{von:[180,134],nach:[196,150],c:"gruen",dash:1}]},
+  legende:[["lila","Betreuerin (klatscht)"],["gruen","Kinder (1× = sitzen)"]]
+},
+{
+  id:"reifen-reise", name:"Reifen-Reise", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[5,20], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (etwa 1 pro 2 Kinder)","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Wie Reise nach Jerusalem – aber es scheidet niemand aus: Alle müssen irgendwie in die übrigen Reifen passen.",
+  foerdert:"Zusammenarbeit, Kreativität, Rücksicht",
+  vorbereitung:"Reifen im Raum verteilen. Musik bereitlegen oder klatschen.",
+  ablauf:[
+    "Die Kinder laufen oder tanzen zwischen den Reifen herum.",
+    "Stoppt die Musik, stellt sich jedes Kind in einen Reifen – mindestens ein Fuß muss drin sein.",
+    "Nach jeder Runde nimmt die Betreuerin einen Reifen weg.",
+    "Es scheidet niemand aus – alle müssen weiter in die übrigen Reifen passen.",
+    "Zum Schluss: Wie viele passen in einen einzigen Reifen? Gemeinsam eine Lösung finden."
+  ],
+  wenige:"Zum Schluss müssen alle in einen einzigen Reifen – nur Füße oder Hände zählen.",
+  viele:"Zwei Gruppen mit eigenen Reifen, oder erst Reifen wegnehmen, wenn es schon eng ist.",
+  klasse1:"Nur ein Körperteil muss im Reifen sein (auch eine Hand gilt).",
+  varianten:["Jede Runde wird ein anderes Körperteil verlangt (Hand, Knie, Po).","Die Betreuerin gibt vor, wie die Kinder zu den Reifen laufen (hüpfen, rückwärts)."],
+  sicherheit:"Nicht in die Reifen springen, sie rutschen. Nicht drängeln oder schubsen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:40,y:40,c:"gruen",p:"steh"},{x:72,y:40,c:"gruen",p:"steh",flip:1},
+      {x:172,y:40,c:"gruen",p:"arme"},{x:202,y:40,c:"gruen",p:"steh",flip:1},
+      {x:104,y:126,c:"gruen",p:"steh"},{x:136,y:126,c:"gruen",p:"arme",flip:1}],
+    dinge:[{typ:"reifen",x:71,y:82,r:28,c:"tuerkis"},{typ:"reifen",x:202,y:82,r:28,c:"tuerkis"},{typ:"reifen",x:135,y:168,r:28,c:"tuerkis"},
+      {typ:"reifen",x:262,y:168,r:18,c:"tuerkis"},{typ:"text",x:262,y:140,text:"weg!",gr:11}],
+    pfeile:[]},
+  legende:[["gruen","Kinder (zu zweit im Reifen)"]]
+},
+{
+  id:"ruecken-an-ruecken", name:"Rücken an Rücken", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm"],
+  kurz:"Paare verbinden auf Zuruf Körperteile – bei „Wechsel!“ suchen alle schnell einen neuen Partner.",
+  foerdert:"Körperteile benennen, Kontakt, Reaktion",
+  vorbereitung:"Paare bilden. Bei ungerader Zahl ist ein Kind der Ansager (oder die Betreuerin spielt mit).",
+  ablauf:[
+    "Die Paare stehen im Raum verteilt.",
+    "Der Ansager ruft zwei Körperteile: „Rücken an Rücken!“, „Fuß an Fuß!“, „Hand an Knie!“",
+    "Die Paare verbinden sofort diese Körperteile.",
+    "Bei „Wechsel!“ suchen sich alle einen neuen Partner – auch der Ansager.",
+    "Wer übrig bleibt, wird neuer Ansager."
+  ],
+  wenige:"Die Betreuerin ruft immer, gewechselt wird trotzdem.",
+  viele:"Die Betreuerin ruft. Bei „Wechsel!“ darf man nicht zum Nachbarpaar wechseln.",
+  klasse1:"Einfache Körperteile (Hand, Fuß, Rücken, Knie). Vorher gemeinsam zeigen.",
+  varianten:["Dreiergruppen statt Paare.","Zwischen den Kommandos laufen alle zur Musik frei herum."],
+  sicherheit:"Vorsichtig verbinden, nicht stoßen – vor allem bei Kopf oder Schulter.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:40,y:30,c:"gruen",p:"steh",flip:1},{x:68,y:30,c:"blau",p:"steh"},
+      {x:170,y:30,c:"gruen",p:"steh",flip:1},{x:198,y:30,c:"blau",p:"steh"},
+      {x:60,y:124,c:"gruen",p:"steh",flip:1},{x:222,y:120,c:"lila",p:"ruf",flip:1}],
+    dinge:[{typ:"text",x:236,y:108,text:"„Wechsel!“",gr:11}],
+    pfeile:[{von:[90,140],nach:[140,110],c:"gruen",dash:1,bogen:-8},{von:[206,80],nach:[160,110],c:"blau",dash:1,bogen:8}]},
+  legende:[["gruen","Partner A"],["blau","Partner B"],["lila","Ansager"]]
+},
+{
+  id:"huetchen-schnapp", name:"Hütchen-Schnapp", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (1 pro Paar)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Zwei Kinder, ein Hütchen dazwischen – bei „Hütchen!“ schnappt, wer schneller ist.",
+  foerdert:"Reaktion, Zuhören, Körperteile benennen",
+  vorbereitung:"Paare bilden. Jedes Paar steht sich gegenüber, ein Hütchen liegt genau in der Mitte am Boden.",
+  ablauf:[
+    "Die Betreuerin ruft Körperteile: „Kopf!“, „Schulter!“, „Knie!“ – alle fassen schnell dorthin.",
+    "Irgendwann ruft sie „Hütchen!“ – jetzt versucht jedes Kind, das Hütchen zuerst zu schnappen.",
+    "Wer es hat, bekommt einen Punkt.",
+    "Nach ein paar Runden wechseln die Paare (z. B. ein Platz nach rechts).",
+    "Später ruft ein Kind die Kommandos."
+  ],
+  wenige:"Zu dritt: zwei schnappen, eins ruft – und dann wechseln.",
+  viele:"Alle Paare in zwei langen Reihen gegenüber aufstellen, so hört jeder gut.",
+  klasse1:"Langsam rufen und nur drei Körperteile nutzen. Erst schnappen, wenn wirklich „Hütchen!“ gerufen wird – vorher einmal üben.",
+  varianten:["Täuschwörter wie „Hühnchen!“ oder „Hüfte!“ – wer schnappt, macht eine Mini-Aufgabe.","Wer das Hütchen nicht bekommt, muss den anderen bis zu einer Linie fangen."],
+  sicherheit:"Mit genug Abstand gegenüberstellen, damit die Köpfe nicht zusammenstoßen – nur mit der Hand greifen.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:30,y:30,c:"gruen",p:"steh"},{x:92,y:30,c:"blau",p:"steh",flip:1},
+      {x:30,y:120,c:"gruen",p:"arme"},{x:92,y:120,c:"blau",p:"arme",flip:1},
+      {x:176,y:30,c:"gruen",p:"steh"},{x:238,y:30,c:"blau",p:"steh",flip:1}],
+    dinge:[{typ:"huetchen",x:76,y:74},{typ:"huetchen",x:76,y:164},{typ:"huetchen",x:222,y:74},
+      {typ:"text",x:222,y:130,text:"„Hütchen!“",gr:12}],
+    pfeile:[{von:[54,156],nach:[68,164],c:"gruen"},{von:[98,156],nach:[84,164],c:"blau"}]},
+  legende:[["gruen","Kind A"],["blau","Kind B"]]
+},
+{
+  id:"nummernwettlauf", name:"Nummernwettlauf", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (optional)"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Zwei Teams, jedes Kind hat eine Nummer – wird sie gerufen, rennen die beiden um die Teams herum zurück.",
+  foerdert:"Zuhören, Schnelligkeit, Teamgeist",
+  vorbereitung:"Zwei gleich große Teams bilden. Die Teams sitzen sich in zwei Reihen gegenüber. In jedem Team wird durchgezählt (1, 2, 3 …).",
+  ablauf:[
+    "Die Betreuerin ruft eine Nummer, z. B. „Drei!“.",
+    "Beide Kinder mit der Nummer 3 springen auf und laufen einmal außen um beide Teams herum.",
+    "Wer zuerst wieder auf seinem Platz sitzt, holt einen Punkt für sein Team.",
+    "Alle anderen feuern an.",
+    "Nach ein paar Runden neu durchzählen, damit andere Paare gegeneinander laufen."
+  ],
+  wenige:"Nur um das eigene Team laufen oder zu einem Hütchen und zurück.",
+  viele:"Zwei Nummern gleichzeitig rufen oder vier Teams (zwei Spielfelder).",
+  klasse1:"Nummern auch mit Fingern zeigen. Laufweg vorher einmal gemeinsam abgehen.",
+  varianten:["Rechenaufgabe statt Nummer: „2 plus 1!“","Laufweg mit Hütchen-Slalom oder über eine Linie hüpfen."],
+  sicherheit:"Laufrichtung festlegen (alle im Uhrzeigersinn), damit niemand zusammenstößt. Sitzende Kinder ziehen die Beine ein.",
+  feld:{ boden:"halle",
+    kinder:[
+      {x:70,y:56,c:"orange",p:"sitz"},{x:120,y:56,c:"orange",p:"sitz"},{x:214,y:14,c:"orange",p:"lauf",flip:1},
+      {x:70,y:118,c:"blau",p:"sitz"},{x:120,y:118,c:"blau",p:"sitz"},{x:236,y:96,c:"blau",p:"lauf"}],
+    dinge:[{typ:"text",x:85,y:52,text:"1",gr:12},{typ:"text",x:135,y:52,text:"2",gr:12},{typ:"text",x:185,y:74,text:"3",gr:12},
+      {typ:"text",x:85,y:114,text:"1",gr:12},{typ:"text",x:135,y:114,text:"2",gr:12},{typ:"text",x:185,y:140,text:"3",gr:12},
+      {typ:"huetchen",x:30,y:110},{typ:"huetchen",x:284,y:110}],
+    pfeile:[{von:[210,24],nach:[40,24],c:"orange",dash:1,bogen:-6},{von:[256,146],nach:[50,182],c:"blau",dash:1,bogen:10}]},
+  legende:[["orange","Team A"],["blau","Team B"]]
+}
+,
+{
+  id:"tic-tac-toe-staffel", name:"Tic-Tac-Toe-Staffel", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[6,24], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (9 pro Spielfeld)","Hütchen (3 pro Team)"], dauer:"15–20", energie:4, phasen:["haupt"],
+  kurz:"Drei in einer Reihe – aber jedes Hütchen muss erst ins Spielfeld gerannt werden.",
+  foerdert:"Schnelligkeit, Taktik, Absprache im Team",
+  vorbereitung:"9 Reifen als 3×3-Feld auslegen, etwa 10 Meter davor eine Startlinie. Zwei Teams, jedes bekommt 3 Hütchen.",
+  ablauf:[
+    "Die Teams stehen in Reihen hinter der Startlinie, das erste Kind hält ein Hütchen.",
+    "Auf „Los!“ läuft je ein Kind los und legt sein Hütchen in einen Reifen – Team 1 stellt es hin, Team 2 dreht es um.",
+    "Zurücklaufen, abklatschen, das nächste Kind läuft.",
+    "Liegen alle 3 Hütchen, wird ab jetzt ein eigenes Hütchen in einen anderen Reifen umgesetzt.",
+    "Wer zuerst drei in einer Reihe hat (waagerecht, senkrecht oder schräg), gewinnt die Runde."
+  ],
+  wenige:"1 gegen 1 oder 2 gegen 2 – jedes Kind läuft öfter.",
+  viele:"Zwei oder drei Spielfelder nebeneinander, Teams mit höchstens 4 Kindern.",
+  klasse1:"Nur die Legephase spielen: Wer hat nach 3 Hütchen eine Reihe? Die Betreuerin hilft beim Erkennen.",
+  varianten:["Mit Bällen statt Hütchen (Team 2 nimmt Bälle).","Das Team darf sich vorher nicht absprechen – jedes Kind entscheidet allein."],
+  sicherheit:"Die Reifen nicht betreten, nur daneben bücken. Genug Abstand zwischen den Laufwegen.",
+  feld:{ boden:"halle",
+    kinder:[{x:14,y:18,c:"orange",p:"steh"},{x:44,y:18,c:"orange",p:"steh"},{x:112,y:34,c:"orange",p:"lauf"},
+      {x:14,y:124,c:"blau",p:"steh"},{x:44,y:124,c:"blau",p:"steh"},{x:112,y:112,c:"blau",p:"lauf"}],
+    dinge:[{typ:"linie",x:84,text:"Start"},
+      {typ:"reifen",x:204,y:52,r:14},{typ:"reifen",x:238,y:52,r:14},{typ:"reifen",x:272,y:52,r:14},
+      {typ:"reifen",x:204,y:98,r:14},{typ:"reifen",x:238,y:98,r:14},{typ:"reifen",x:272,y:98,r:14},
+      {typ:"reifen",x:204,y:144,r:14},{typ:"reifen",x:238,y:144,r:14},{typ:"reifen",x:272,y:144,r:14},
+      {typ:"huetchen",x:204,y:52},{typ:"huetchen",x:238,y:98},{typ:"huetchen",x:272,y:52,um:1},{typ:"huetchen",x:204,y:144,um:1}],
+    pfeile:[{von:[146,56],nach:[184,58],c:"orange"},{von:[146,134],nach:[184,138],c:"blau"}]},
+  legende:[["orange","Team 1 (Hütchen stehend)"],["blau","Team 2 (Hütchen umgedreht)"]]
+},
+{
+  id:"umzugsstaffel", name:"Umzugsstaffel", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[4,24], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (2 pro Team)","Bälle","Hütchen"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Das Team zieht um: Alles muss aus dem alten Reifen in den neuen – ein Teil pro Lauf.",
+  foerdert:"Schnelligkeit, Teamgeist, Zählen",
+  vorbereitung:"Pro Team zwei Reifen: einer an der Startlinie mit 6–8 Teilen (Bälle, Hütchen), einer etwa 10 Meter entfernt leer. Teams mit 3–5 Kindern.",
+  ablauf:[
+    "Die Teams stehen hinter ihrem vollen Reifen.",
+    "Das erste Kind nimmt ein Teil, läuft zum leeren Reifen und legt es hinein.",
+    "Zurücklaufen, abklatschen – das nächste Kind holt das nächste Teil.",
+    "Ist alles umgezogen, setzt sich das Team hin.",
+    "Nächste Runde: Alles wird wieder zurückgeholt."
+  ],
+  wenige:"Alle gegen die Uhr – schaffen wir es beim zweiten Mal schneller?",
+  viele:"Mehr Teams nebeneinander statt längerer Reihen.",
+  klasse1:"Nur Bälle, kürzere Strecke.",
+  varianten:["Jedes Teil anders tragen: Ball auf dem Kopf, Hütchen zwischen den Knien …","Beim Zurücklaufen eine Bewegungsart vorgeben (hüpfen, rückwärts)."],
+  sicherheit:"Teile ablegen, nicht werfen. Laufwege der Teams nicht kreuzen.",
+  feld:{ boden:"halle",
+    kinder:[{x:14,y:20,c:"orange",p:"steh"},{x:46,y:20,c:"orange",p:"steh"},{x:150,y:18,c:"orange",p:"lauf"},
+      {x:14,y:120,c:"blau",p:"steh"},{x:46,y:120,c:"blau",p:"steh"},{x:180,y:118,c:"blau",p:"lauf",flip:1}],
+    dinge:[{typ:"reifen",x:100,y:52,r:17},{typ:"ball",x:94,y:48},{typ:"ball",x:106,y:58},{typ:"huetchen",x:102,y:50},
+      {typ:"reifen",x:258,y:52,r:17},{typ:"ball",x:188,y:56},
+      {typ:"reifen",x:100,y:152,r:17},{typ:"ball",x:94,y:150},{typ:"huetchen",x:106,y:152},
+      {typ:"reifen",x:258,y:152,r:17},{typ:"ball",x:252,y:148},{typ:"huetchen",x:264,y:154}],
+    pfeile:[{von:[198,48],nach:[236,50],c:"orange"},{von:[176,170],nach:[126,170],c:"blau",dash:1}]},
+  legende:[["orange","Team 1"],["blau","Team 2"]]
+},
+{
+  id:"reifen-staffel", name:"Reifen-Staffel", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (1 pro Team)","Hütchen"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Auf halbem Weg liegt ein Reifen – hineinsteigen, über den Kopf ziehen, weiter!",
+  foerdert:"Schnelligkeit, Beweglichkeit, Teamgeist",
+  vorbereitung:"Startlinie, pro Team ein Reifen auf halber Strecke und ein Wendehütchen am Ende. Teams mit 3–5 Kindern.",
+  ablauf:[
+    "Die Teams stehen in Reihen hinter der Startlinie.",
+    "Das erste Kind läuft zum Reifen und steigt hinein.",
+    "Es zieht den Reifen hoch, über den Kopf und legt ihn wieder genau an seinen Platz.",
+    "Weiter um das Hütchen, auf dem Rückweg geradeaus zurück und das nächste Kind abklatschen.",
+    "Ist das ganze Team durch, setzt es sich hin."
+  ],
+  wenige:"Alle gegen die Uhr, jedes Kind läuft zweimal.",
+  viele:"Mehr Teams statt längerer Reihen, damit keiner lange wartet.",
+  klasse1:"Den Reifen nur von unten nach oben ziehen – ohne Zeitdruck üben lassen.",
+  varianten:["Zwei Reifen hintereinander.","Hinweg: Reifen über den Kopf – Rückweg: von oben nach unten."],
+  sicherheit:"Den Reifen ablegen, nicht werfen. Wendehütchen nicht an der Wand aufstellen.",
+  feld:{ boden:"halle",
+    kinder:[{x:14,y:18,c:"orange",p:"steh"},{x:44,y:18,c:"orange",p:"steh"},{x:135,y:14,c:"orange",p:"arme"},
+      {x:14,y:120,c:"blau",p:"steh"},{x:44,y:120,c:"blau",p:"steh"},{x:210,y:116,c:"blau",p:"lauf"}],
+    dinge:[{typ:"linie",x:84,text:"Start"},{typ:"reifen",x:150,y:26,r:16,c:"orange"},{typ:"schatten",x:150,y:58},
+      {typ:"reifen",x:150,y:154,r:18,c:"orange"},{typ:"huetchen",x:262,y:48},{typ:"huetchen",x:262,y:150}],
+    pfeile:[{von:[170,50],nach:[246,48],c:"orange",dash:1},{von:[100,156],nach:[126,156],c:"blau"},{von:[176,154],nach:[206,154],c:"blau"}]},
+  legende:[["orange","Team 1"],["blau","Team 2"]]
+},
+{
+  id:"raupe", name:"Raupe", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[4,25], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Die Gruppe wird zur Raupe und schlängelt sich durch den Hütchen-Slalom – ohne zu reißen.",
+  foerdert:"Zusammenarbeit, Rücksicht, Rhythmus",
+  vorbereitung:"Pro Gruppe einen Slalom aus 4–5 Hütchen aufstellen. Gruppen mit 3–6 Kindern.",
+  ablauf:[
+    "Die Kinder stellen sich hintereinander und legen die Hände auf die Schultern des Vorderkinds.",
+    "Das erste Kind ist der Kopf und führt die Raupe durch den Slalom.",
+    "Reißt die Raupe, bleiben alle stehen, fassen wieder an und gehen weiter.",
+    "Am Ende wechselt der Kopf nach hinten – das nächste Kind führt.",
+    "Tempo langsam steigern: gehen, schnelles Gehen, Hopserlauf."
+  ],
+  wenige:"Eine kurze Raupe mit 3 Kindern, die Betreuerin baut den Slalom kniffliger.",
+  viele:"Mehrere Raupen auf eigenen Bahnen, höchstens 6 Kinder pro Raupe.",
+  klasse1:"Nur gehen, Hütchen weit auseinander.",
+  varianten:["Das hintere Kind (Schwanz) gibt die Kommandos: „links!“, „rechts!“.","Zwei Raupen im Rennen gegeneinander."],
+  sicherheit:"Nicht ziehen oder schubsen – das Tempo bestimmt das langsamste Kind.",
+  feld:{ boden:"draussen",
+    kinder:[{x:22,y:14,c:"orange",p:"lauf"},{x:52,y:14,c:"orange",p:"lauf"},{x:82,y:14,c:"orange",p:"lauf"},
+      {x:22,y:118,c:"blau",p:"lauf"},{x:52,y:118,c:"blau",p:"lauf"},{x:82,y:118,c:"blau",p:"lauf"}],
+    dinge:[{typ:"huetchen",x:150,y:50},{typ:"huetchen",x:200,y:50},{typ:"huetchen",x:250,y:50},
+      {typ:"huetchen",x:150,y:154},{typ:"huetchen",x:200,y:154},{typ:"huetchen",x:250,y:154}],
+    pfeile:[{von:[118,40],nach:[174,60],bogen:-12,c:"orange",dash:1},{von:[118,144],nach:[174,164],bogen:-12,c:"blau",dash:1}]},
+  legende:[["orange","Raupe 1"],["blau","Raupe 2"]]
+},
+{
+  id:"transportkette", name:"Transportkette", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (5–10)","Reifen (2)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Alle Bälle wandern von Hand zu Hand durch die Kette – wie schnell schafft ihr es?",
+  foerdert:"Zusammenarbeit, Fangen, Konzentration",
+  vorbereitung:"Die Kinder stellen sich in einer Reihe auf, etwa einen großen Schritt Abstand. Am Anfang ein Reifen mit Bällen, am Ende ein leerer Reifen.",
+  ablauf:[
+    "Das erste Kind nimmt einen Ball und reicht ihn an das nächste weiter.",
+    "Sofort kommt der nächste Ball hinterher – die Kette arbeitet ohne Pause.",
+    "Das letzte Kind legt die Bälle in den Zielreifen.",
+    "Die Betreuerin stoppt die Zeit, bis alle Bälle angekommen sind.",
+    "Danach wechseln die Kinder die Plätze und versuchen, die Zeit zu schlagen."
+  ],
+  wenige:"Größere Abstände – die Kinder müssen nach jedem Weitergeben ans Ende laufen.",
+  viele:"Zwei Ketten gegeneinander oder eine lange Kette mit mehr Bällen.",
+  klasse1:"Nur reichen, nicht werfen. Weniger Bälle.",
+  varianten:["Werfen statt Reichen – fällt ein Ball, muss er zurück an den Anfang.","Mit geschlossenen Augen weitergeben (sehr langsam)."],
+  sicherheit:"Keine Gefahr, wenn gereicht wird. Beim Werfen nur kurze, weiche Würfe.",
+  feld:{ boden:"halle",
+    kinder:[{x:38,y:66,c:"blau",p:"steh"},{x:78,y:66,c:"blau",p:"arme"},{x:118,y:66,c:"blau",p:"steh"},
+      {x:158,y:66,c:"blau",p:"arme"},{x:198,y:66,c:"blau",p:"steh"},{x:238,y:66,c:"blau",p:"steh"}],
+    dinge:[{typ:"reifen",x:40,y:150,r:18},{typ:"ball",x:34,y:146},{typ:"ball",x:46,y:154},{typ:"ball",x:36,y:156},
+      {typ:"reifen",x:262,y:150,r:18},{typ:"ball",x:262,y:150},{typ:"ball",x:112,y:70},{typ:"ball",x:192,y:70}],
+    pfeile:[{von:[60,50],nach:[250,50],c:"rot",dash:1},{von:[40,128],nach:[48,114],c:"rot"},{von:[258,114],nach:[262,128],c:"rot"}]},
+  legende:[["blau","Kette"]]
+},
+{
+  id:"zauberteppich", name:"Zauberteppich", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[4,24], klassen:"1–4", orte:["halle"], material:["Matten (1 pro 4–6 Kinder)"], dauer:"10–15", energie:2, phasen:["haupt"],
+  kurz:"Die Gruppe steht auf dem Zauberteppich und muss ihn umdrehen – ohne den Boden zu berühren.",
+  foerdert:"Zusammenarbeit, Absprache, Gleichgewicht",
+  vorbereitung:"Pro Gruppe eine leichte Matte auslegen. Gruppen mit 4–6 Kindern – es muss eng werden, aber alle müssen Platz haben.",
+  ablauf:[
+    "Alle stellen sich auf die Matte – der Boden ringsum ist verzaubert.",
+    "Die Gruppe soll die Matte umdrehen, ohne dass ein Fuß den Boden berührt.",
+    "Tipp: Alle rücken auf eine Hälfte, die freie Hälfte wird hochgeklappt und umgeschlagen.",
+    "Berührt jemand den Boden, beginnt die Gruppe noch einmal – ohne Schimpfen.",
+    "Zum Schluss erzählt jede Gruppe, wie sie es geschafft hat."
+  ],
+  wenige:"3–4 Kinder mit einer kleinen Matte.",
+  viele:"Mehrere Gruppen mit eigener Matte, gut verteilt in der Halle.",
+  klasse1:"Ein Fuß darf einmal pro Runde auf den Boden („Zauberschritt“).",
+  varianten:["Ohne Sprechen – nur mit Zeichen.","Die Matte muss zusätzlich eine halbe Drehung machen."],
+  sicherheit:"Nur leichte Matten verwenden. Langsam bewegen, nicht schubsen, niemanden von der Matte drängen.",
+  feld:{ boden:"halle",
+    kinder:[{x:96,y:36,c:"blau",p:"arme"},{x:126,y:36,c:"blau",p:"steh"},{x:156,y:36,c:"blau",p:"arme"},
+      {x:96,y:98,c:"blau",p:"steh"},{x:126,y:98,c:"blau",p:"steh"},{x:156,y:98,c:"blau",p:"arme",flip:1}],
+    dinge:[{typ:"matte",x:86,y:40,w:110,h:112,text:" "},{typ:"blase",x:250,y:40,text:"Drehen!"}],
+    pfeile:[{von:[214,140],nach:[214,56],bogen:-26,c:"blau",dash:1}]},
+  legende:[["blau","Gruppe auf der Matte"]]
+},
+{
+  id:"gordischer-knoten", name:"Gordischer Knoten", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["haupt"],
+  kurz:"Alle Hände sind verknotet – gemeinsam wird der Knoten gelöst, ohne loszulassen.",
+  foerdert:"Zusammenarbeit, Geduld, Absprache",
+  vorbereitung:"Gruppen mit 6–10 Kindern stehen eng im Kreis. Vorher klären: Wer nicht an den Händen fassen möchte, wird Knoten-Berater.",
+  ablauf:[
+    "Alle strecken die Hände in die Mitte und schließen die Augen.",
+    "Jede Hand fasst eine andere Hand – nicht die vom Nachbarn und nicht beide Hände vom selben Kind.",
+    "Augen auf: Ohne loszulassen versucht die Gruppe, den Knoten zu entwirren – drüber steigen, drunter durchschlüpfen, drehen.",
+    "Am Ende steht die Gruppe in einem Kreis (manchmal auch in zwei).",
+    "Geht es gar nicht weiter, darf die Betreuerin einmal ein Handpaar lösen."
+  ],
+  wenige:"Mit 5 Kindern ist der Knoten klein – gut zum Kennenlernen.",
+  viele:"Mehrere Gruppen, höchstens 10 Kinder pro Knoten.",
+  klasse1:"Kleine Gruppen mit 5–6 Kindern, Augen offen lassen beim Fassen.",
+  varianten:["Ohne Sprechen.","Knoten-Berater geben von außen Tipps."],
+  sicherheit:"Mitmachen ist freiwillig – Berührung ist nicht für jedes Kind angenehm. Nicht an Armen reißen, Griff locker lassen und beim Drehen nachgeben.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:8,c:"blau",p:"arme"},{x:74,y:40,c:"blau",p:"steh"},{x:196,y:40,c:"blau",p:"arme",flip:1},
+      {x:74,y:112,c:"blau",p:"arme"},{x:196,y:112,c:"blau",p:"steh",flip:1},{x:135,y:140,c:"lila",p:"steh"}],
+    dinge:[{typ:"kreis",cx:150,cy:96,r:58},{typ:"hand",x1:102,y1:66,x2:212,y2:130,c:"blau"},{typ:"hand",x1:198,y1:62,x2:98,y2:132,c:"blau"}],
+    pfeile:[{von:[240,96],nach:[244,124],bogen:10,c:"lila",dash:1}]},
+  legende:[["blau","Knoten-Kinder"],["lila","Knoten-Berater (freiwillig)"]]
+},
+{
+  id:"kreisjaegerball", name:"Kreisjägerball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[8,30], klassen:"1–4", orte:["halle","draussen"], material:["weicher Ball (Softball)"], dauer:"15–20", energie:4, phasen:["haupt"],
+  kurz:"Außen stehen die Jäger im Kreis, innen weichen die Hasen dem Ball aus.",
+  foerdert:"Werfen, Ausweichen, Reaktion",
+  vorbereitung:"Großen Kreis markieren oder anfassen und auseinandergehen. Etwa ein Drittel der Kinder geht in die Mitte.",
+  ablauf:[
+    "Die Kinder außen werfen oder rollen den Softball auf die Kinder in der Mitte – nur unterhalb der Hüfte.",
+    "Die Kinder in der Mitte weichen aus: springen, zur Seite laufen.",
+    "Wer getroffen wird, geht nach außen und wirft mit.",
+    "Wer den Ball wirft, bleibt außen – den Kreis nicht betreten, nur zum Ballholen.",
+    "Sind nur noch 1–2 Kinder in der Mitte, beginnt eine neue Runde mit neuen Kindern innen."
+  ],
+  wenige:"Kleiner Kreis, zwei Kinder innen, die Betreuerin wirft mit.",
+  viele:"Zwei Bälle oder zwei Kreise.",
+  klasse1:"Nur rollen – dann ist das Ausweichen leicht und niemand wird hart getroffen.",
+  varianten:["Wer in der Mitte den Ball fängt, bekommt ein Extraleben.","Außen dürfen sich die Kinder den Ball zuspielen, bevor geworfen wird."],
+  sicherheit:"Nur Softball, nur unterhalb der Hüfte zielen. Kopftreffer zählen nicht.",
+  feld:{ boden:"halle",
+    kinder:[{x:36,y:52,c:"orange",p:"ruf"},{x:234,y:52,c:"orange",p:"steh",flip:1},{x:66,y:140,c:"orange",p:"steh"},{x:204,y:140,c:"orange",p:"steh",flip:1},
+      {x:122,y:54,c:"blau",p:"lauf"},{x:162,y:98,c:"blau",p:"lauf",flip:1}],
+    dinge:[{typ:"kreis",cx:150,cy:100,r:86},{typ:"ball",x:84,y:78}],
+    pfeile:[{von:[90,82],nach:[124,98],c:"rot",dash:1},{von:[160,122],nach:[136,118],c:"blau"}]},
+  legende:[["orange","Jäger außen"],["blau","Hasen in der Mitte"]]
+},
+{
+  id:"huetchenball", name:"Hütchenball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (2–3 weiche)","Hütchen (etwa 1 pro Kind)"], dauer:"15–20", energie:4, phasen:["haupt"],
+  kurz:"Jedes Team schützt seine Hütchen – und versucht, die Hütchen der anderen umzuwerfen.",
+  foerdert:"Zielen, Werfen, Abwehren, Teamgeist",
+  vorbereitung:"Feld mit Mittellinie teilen. Hinter jeder Grundlinie eine Hütchen-Reihe aufstellen, die Zone davor darf niemand betreten.",
+  ablauf:[
+    "Zwei Teams, jedes in seiner Hälfte.",
+    "Mit dem Ball wird auf die Hütchen des anderen Teams geworfen oder gerollt.",
+    "Die Verteidiger fangen oder blocken die Bälle – aber nicht in der Hütchen-Zone.",
+    "Umgefallene Hütchen bleiben liegen.",
+    "Welches Team hat zuerst alle Hütchen der anderen umgeworfen?"
+  ],
+  wenige:"Wenige Hütchen und nur ein Ball.",
+  viele:"Mehr Bälle und mehr Hütchen. Teams mit höchstens 10 Kindern, sonst zwei Felder.",
+  klasse1:"Nur rollen, Hütchen näher an der Mittellinie.",
+  varianten:["Wer ein Hütchen trifft, darf ein eigenes wieder aufstellen.","Jedes Team hat ein „König-Hütchen“, das doppelt zählt."],
+  sicherheit:"Nur weiche Bälle, nicht auf Kinder zielen. Die Mittellinie wird nicht übertreten.",
+  feld:{ boden:"halle",
+    kinder:[{x:56,y:24,c:"orange",p:"steh"},{x:96,y:96,c:"orange",p:"ruf"},{x:56,y:140,c:"orange",p:"lauf"},
+      {x:214,y:24,c:"blau",p:"steh",flip:1},{x:178,y:120,c:"blau",p:"arme",flip:1},{x:222,y:74,c:"blau",p:"lauf",flip:1}],
+    dinge:[{typ:"strich",x1:40,y1:14,x2:40,y2:186},{typ:"strich",x1:260,y1:14,x2:260,y2:186},
+      {typ:"huetchen",x:24,y:40},{typ:"huetchen",x:24,y:80},{typ:"huetchen",x:24,y:120},{typ:"huetchen",x:24,y:160},
+      {typ:"huetchen",x:276,y:40},{typ:"huetchen",x:276,y:80},{typ:"huetchen",x:276,y:120},{typ:"huetchen",x:276,y:160},{typ:"ball",x:132,y:104}],
+    pfeile:[{von:[138,108],nach:[268,120],bogen:14,c:"rot",dash:1}]},
+  legende:[["orange","Team 1"],["blau","Team 2"]]
+},
+{
+  id:"zehnerball", name:"Zehnerball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[6,24], klassen:"1–4", orte:["halle","draussen"], material:["Ball (weich)","Hütchen (optional, Feld markieren)"], dauer:"15–20", energie:4, phasen:["warm","haupt"],
+  kurz:"Zehn Pässe hintereinander, ohne dass die anderen den Ball abfangen – alle zählen laut mit!",
+  foerdert:"Passen, Fangen, Freilaufen, Zählen",
+  vorbereitung:"Feld abgrenzen, zwei Teams bilden (gut unterscheidbar aufstellen).",
+  ablauf:[
+    "Ein Team hat den Ball und passt ihn sich zu – alle zählen laut mit.",
+    "Mit dem Ball in der Hand darf man nicht laufen.",
+    "Das andere Team versucht, den Ball abzufangen – ohne Berühren und ohne Festhalten.",
+    "Wird der Ball abgefangen oder fällt er auf den Boden, bekommt das andere Team den Ball und beginnt bei 1.",
+    "Wer 10 Pässe schafft, bekommt einen Punkt."
+  ],
+  wenige:"3 gegen 1 oder 2 gegen 1: Die Überzahl passt, das Kind in der Mitte fängt ab.",
+  viele:"Zwei Felder nebeneinander, Teams mit höchstens 5 Kindern.",
+  klasse1:"Nur 5 Pässe, Abfangen nur aus einem Schritt Abstand.",
+  varianten:["Nicht zurück zu dem Kind passen, von dem der Ball kam.","Nur Bodenpässe."],
+  sicherheit:"Kein Körperkontakt beim Abfangen, einen Schritt Abstand zum Ball-Kind halten.",
+  feld:{ boden:"draussen",
+    kinder:[{x:32,y:40,c:"orange",p:"ruf"},{x:196,y:22,c:"orange",p:"arme",flip:1},{x:222,y:120,c:"orange",p:"steh",flip:1},
+      {x:112,y:40,c:"blau",p:"arme"},{x:176,y:92,c:"blau",p:"lauf"},{x:80,y:126,c:"blau",p:"lauf"}],
+    dinge:[{typ:"ball",x:66,y:42},{typ:"blase",x:62,y:26,text:"4!"}],
+    pfeile:[{von:[72,40],nach:[196,34],bogen:-14,c:"orange",dash:1},{von:[216,72],nach:[234,116],c:"orange",dash:1}]},
+  legende:[["orange","Team mit Ball"],["blau","Abfänger"]]
+},
+{
+  id:"heisse-kartoffel", name:"Heiße Kartoffel", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[4,25], klassen:"1–4", orte:["halle","draussen"], material:["Ball","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Der Ball ist eine heiße Kartoffel – schnell weitergeben, bevor die Musik stoppt!",
+  foerdert:"Reaktion, Geschicklichkeit, Aufmerksamkeit",
+  vorbereitung:"Alle stehen im Kreis. Die Betreuerin steht mit der Musik (oder klatscht) außerhalb und schaut weg.",
+  ablauf:[
+    "Der Ball wird im Kreis schnell von Hand zu Hand weitergegeben.",
+    "Die Musik spielt – oder die Betreuerin klatscht.",
+    "Plötzlich „Stopp!“: Wer jetzt die Kartoffel hält, bekommt eine kleine Aufgabe.",
+    "Aufgaben zum Beispiel: 5 Hampelmänner, einmal um den Kreis hüpfen, ein Tier vormachen.",
+    "Danach geht es sofort weiter – niemand scheidet aus."
+  ],
+  wenige:"Kleiner Kreis, zwei Bälle.",
+  viele:"Zwei oder drei Bälle gleichzeitig, oder zwei Kreise.",
+  klasse1:"Reichen statt werfen, einfache Aufgaben.",
+  varianten:["Richtungswechsel auf Zuruf „Andersrum!“.","Der Ball muss unter einem Bein durchgegeben werden."],
+  sicherheit:"Weitergeben, nicht werfen – sonst fliegt die Kartoffel ins Gesicht.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:8,c:"rot",p:"steh"},{x:62,y:44,c:"rot",p:"steh"},{x:208,y:44,c:"rot",p:"steh",flip:1},
+      {x:62,y:118,c:"gelb",p:"arme"},{x:208,y:118,c:"rot",p:"steh",flip:1},{x:135,y:136,c:"rot",p:"steh"}],
+    dinge:[{typ:"kreis",cx:150,cy:96,r:66},{typ:"ball",x:94,y:130},{typ:"blase",x:150,y:100,text:"Stopp!"}],
+    pfeile:[{von:[104,56],nach:[134,30],bogen:-6,c:"rot",dash:1},{von:[172,30],nach:[204,56],bogen:-6,c:"rot",dash:1}]},
+  legende:[["rot","Kinder im Kreis"],["gelb","hält die Kartoffel"]]
+},
+{
+  id:"burgwaechter", name:"Burgwächter", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[5,20], klassen:"1–4", orte:["halle","draussen"], material:["weicher Ball","Reifen","Hütchen"], dauer:"15–20", energie:3, phasen:["haupt"],
+  kurz:"In der Mitte steht die Burg – der Wächter verteidigt sie gegen die Werfer im Kreis.",
+  foerdert:"Zielen, Passen, Reaktion",
+  vorbereitung:"In die Kreismitte einen Reifen legen, darin 1–3 Hütchen als Burg. Ein Kind ist Wächter, alle anderen stehen im großen Kreis.",
+  ablauf:[
+    "Die Kinder im Kreis werfen oder rollen den Ball auf die Burg.",
+    "Der Wächter wehrt mit Händen, Beinen oder Körper ab – den Reifen darf er nicht betreten.",
+    "Die Werfer passen sich den Ball schnell zu, um den Wächter auszutricksen.",
+    "Wer die Burg trifft, wird der neue Wächter.",
+    "Bleibt die Burg lange stehen, gibt es nach einer Minute einen Wächterwechsel."
+  ],
+  wenige:"Kleiner Kreis, die Betreuerin spielt mit.",
+  viele:"Zwei Wächter, zwei Bälle oder zwei Kreise.",
+  klasse1:"Nur rollen, großer Kreis, Burg aus nur einem Hütchen.",
+  varianten:["Zwei Burgen in zwei Reifen, zwei Wächter.","Nur mit der schwächeren Hand werfen."],
+  sicherheit:"Nur weiche Bälle und flach werfen – nicht auf den Wächter zielen.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:8,c:"orange",p:"steh"},{x:36,y:50,c:"orange",p:"ruf"},{x:234,y:50,c:"orange",p:"steh",flip:1},
+      {x:62,y:136,c:"orange",p:"steh"},{x:208,y:136,c:"orange",p:"steh",flip:1},{x:170,y:76,c:"blau",p:"arme",flip:1}],
+    dinge:[{typ:"kreis",cx:150,cy:100,r:86},{typ:"reifen",x:132,y:112,r:18,c:"rot"},{typ:"huetchen",x:125,y:112},{typ:"huetchen",x:139,y:112},{typ:"ball",x:84,y:84}],
+    pfeile:[{von:[90,88],nach:[116,106],c:"rot",dash:1}]},
+  legende:[["orange","Werfer"],["blau","Burgwächter"]]
+},
+{
+  id:"bankball", name:"Bankball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[4,24], klassen:"1–4", orte:["halle"], material:["Bänke (1–2)","weicher Ball"], dauer:"15–20", energie:3, phasen:["haupt"],
+  kurz:"Wie Mini-Volleyball mit Fangen: Der Ball muss über die Bank ins andere Feld.",
+  foerdert:"Werfen, Fangen, Raumgefühl",
+  vorbereitung:"Eine Bank (oder zwei hintereinander) quer als Netz aufstellen. Zu beiden Seiten ein Feld abgrenzen, zwei Teams.",
+  ablauf:[
+    "Ein Kind wirft den Ball über die Bank ins andere Feld.",
+    "Das andere Team versucht, den Ball zu fangen, bevor er den Boden berührt.",
+    "Wer fängt, wirft von dort aus zurück (höchstens drei Schritte).",
+    "Fällt der Ball im Feld auf den Boden, bekommt das werfende Team einen Punkt.",
+    "Wer punktet, darf den nächsten Ball werfen."
+  ],
+  wenige:"1 gegen 1 oder 2 gegen 2 auf kleinem Feld.",
+  viele:"Zwei Bälle gleichzeitig oder zwei Spielfelder nebeneinander. Teams mit höchstens 6 Kindern.",
+  klasse1:"Der Ball darf einmal aufspringen, bevor er gefangen wird.",
+  varianten:["Vor dem Zurückwerfen muss der Ball einmal im Team gepasst werden.","Nur mit beiden Händen über dem Kopf werfen."],
+  sicherheit:"Nicht über die Bank steigen oder springen. Weiche Bälle, nicht auf Kinder zielen.",
+  feld:{ boden:"halle",
+    kinder:[{x:40,y:28,c:"orange",p:"steh"},{x:92,y:80,c:"orange",p:"ruf"},{x:40,y:136,c:"orange",p:"lauf"},
+      {x:224,y:28,c:"blau",p:"steh",flip:1},{x:190,y:96,c:"blau",p:"arme",flip:1},{x:236,y:136,c:"blau",p:"steh",flip:1}],
+    dinge:[{typ:"bank",x:143,y:20,w:14,h:160,text:""},{typ:"ball",x:152,y:52}],
+    pfeile:[{von:[120,78],nach:[200,94],bogen:-34,c:"rot",dash:1}]},
+  legende:[["orange","Team 1"],["blau","Team 2"]]
+},
+{
+  id:"mattenball", name:"Mattenball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[8,24], klassen:"2–4", orte:["halle"], material:["Matten (2)","weicher Ball"], dauer:"20–30", energie:4, phasen:["haupt"],
+  kurz:"Das Team passt sich den Ball zu und legt ihn auf der gegnerischen Matte ab.",
+  foerdert:"Passen, Freilaufen, Zusammenspiel",
+  vorbereitung:"An beiden Hallenenden eine Matte als Ziel auslegen. Zwei Teams, gut unterscheidbar aufstellen.",
+  ablauf:[
+    "Das Team mit dem Ball passt ihn sich zu – mit dem Ball in der Hand darf man nicht laufen.",
+    "Ziel: Ein Kind legt den Ball auf der gegnerischen Matte ab – das ist ein Punkt.",
+    "Die Matten darf niemand betreten, auch die Verteidiger nicht.",
+    "Die Gegner dürfen Pässe abfangen, aber niemandem den Ball aus der Hand reißen.",
+    "Nach einem Punkt beginnt das andere Team an seiner Matte."
+  ],
+  wenige:"Kleines Feld, 3 gegen 3 oder 4 gegen 4 – mit weniger geht es kaum.",
+  viele:"Zwei Bälle oder zwei Spielfelder quer in der Halle. Teams mit höchstens 8 Kindern.",
+  klasse1:"Nur für Klasse 2–4 geeignet. Jüngere spielen lieber Zehnerball.",
+  varianten:["Vor dem Ablegen muss jedes Kind im Team den Ball einmal gehabt haben.","Der Ball darf nur mit einem Bodenpass angenommen werden."],
+  sicherheit:"Nicht auf die Matte hechten oder rutschen. Kein Festhalten, kein Rempeln.",
+  feld:{ boden:"halle",
+    kinder:[{x:96,y:112,c:"orange",p:"lauf"},{x:170,y:28,c:"orange",p:"ruf"},{x:226,y:88,c:"orange",p:"lauf"},
+      {x:50,y:40,c:"blau",p:"steh"},{x:142,y:100,c:"blau",p:"lauf",flip:1},{x:210,y:140,c:"blau",p:"arme",flip:1}],
+    dinge:[{typ:"matte",x:12,y:62,w:30,h:76,text:" "},{typ:"matte",x:258,y:62,w:30,h:76,text:" "},{typ:"ball",x:204,y:40}],
+    pfeile:[{von:[208,48],nach:[236,86],c:"orange",dash:1},{von:[254,110],nach:[270,104],c:"orange"}]},
+  legende:[["orange","Team 1 (spielt nach rechts)"],["blau","Team 2"]]
+},
+{
+  id:"prellstaffel", name:"Prellstaffel", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro Team)","Hütchen"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
+  kurz:"Den Ball prellen, um das Hütchen laufen und zurück – ohne dass er wegspringt.",
+  foerdert:"Ballgefühl, Koordination, Schnelligkeit",
+  vorbereitung:"Startlinie, gegenüber pro Team ein Wendehütchen. Teams mit 3–5 Kindern, jedes Team hat einen Ball.",
+  ablauf:[
+    "Die Teams stehen in Reihen hinter der Startlinie, das erste Kind hat den Ball.",
+    "Es prellt den Ball bis zum Hütchen, einmal herum und zurück.",
+    "Springt der Ball weg, holen und an der Stelle weitermachen.",
+    "Den Ball dem nächsten Kind in die Hände geben – nicht werfen.",
+    "Ist das ganze Team durch, setzt es sich hin."
+  ],
+  wenige:"Jedes Kind hat einen Ball, alle gegen die Uhr.",
+  viele:"Mehr Teams nebeneinander statt längerer Reihen.",
+  klasse1:"Kürzere Strecke. Wer noch nicht prellen kann, rollt den Ball mit der Hand.",
+  varianten:["Mit der schwächeren Hand prellen.","Hütchen-Slalom statt einem Wendehütchen."],
+  sicherheit:"Genug Abstand zwischen den Bahnen. Wendehütchen nicht an der Wand.",
+  feld:{ boden:"halle",
+    kinder:[{x:14,y:18,c:"orange",p:"steh"},{x:46,y:18,c:"orange",p:"steh"},{x:150,y:18,c:"orange",p:"lauf"},
+      {x:14,y:120,c:"blau",p:"steh"},{x:46,y:120,c:"blau",p:"steh"},{x:196,y:118,c:"blau",p:"lauf",flip:1}],
+    dinge:[{typ:"linie",x:84,text:"Start"},{typ:"ball",x:184,y:56},{typ:"ball",x:196,y:158},{typ:"huetchen",x:258,y:52},{typ:"huetchen",x:258,y:154}],
+    pfeile:[{von:[194,40],nach:[242,46],c:"orange"},{von:[190,172],nach:[110,172],c:"blau",dash:1}]},
+  legende:[["orange","Team 1"],["blau","Team 2"]]
+},
+{
+  id:"huetchentor-rollen", name:"Hütchentor-Rollen", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro Paar)","Hütchen (2 pro Paar)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Zu zweit rollen sich die Kinder den Ball durch ein kleines Hütchentor zu.",
+  foerdert:"Zielen, Ballgefühl, Konzentration",
+  vorbereitung:"Paare bilden. Zwischen jedem Paar zwei Hütchen als Tor aufstellen (etwa zwei Fußlängen breit).",
+  ablauf:[
+    "Die Kinder stehen sich gegenüber, das Tor genau in der Mitte.",
+    "Sie rollen sich den Ball durch das Tor zu.",
+    "Nach drei Treffern hintereinander geht jedes Kind einen Schritt zurück.",
+    "Geht der Ball daneben, bleibt man beim Abstand.",
+    "Welches Paar schafft den größten Abstand?"
+  ],
+  wenige:"Die Betreuerin spielt mit einem Kind im Paar.",
+  viele:"Alle Paare nebeneinander in einer langen Reihe – so rollt kein Ball in fremde Tore.",
+  klasse1:"Breiteres Tor, kurzer Abstand.",
+  varianten:["Mit der schwächeren Hand oder mit dem Fuß spielen.","Das Tor wird nach jedem Treffer schmaler."],
+  sicherheit:"Keine besondere Gefahr.",
+  feld:{ boden:"draussen",
+    kinder:[{x:84,y:8,c:"orange",p:"steh"},{x:186,y:8,c:"blau",p:"steh",flip:1},
+      {x:48,y:70,c:"orange",p:"steh"},{x:222,y:70,c:"blau",p:"steh",flip:1},
+      {x:14,y:132,c:"orange",p:"steh"},{x:256,y:132,c:"blau",p:"steh",flip:1}],
+    dinge:[{typ:"huetchen",x:150,y:28},{typ:"huetchen",x:150,y:56},{typ:"huetchen",x:150,y:90},{typ:"huetchen",x:150,y:118},
+      {typ:"huetchen",x:150,y:152},{typ:"huetchen",x:150,y:180},{typ:"ball",x:120,y:44}],
+    pfeile:[{von:[126,44],nach:[184,44],c:"rot",dash:1},{von:[80,106],nach:[218,106],c:"rot",dash:1},{von:[48,168],nach:[252,168],c:"rot",dash:1}]},
+  legende:[["orange","Kind A"],["blau","Kind B"]]
+},
+{
+  id:"krebsfussball", name:"Krebsfußball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  kinder:[6,24], klassen:"1–4", orte:["halle"], material:["großer weicher Ball","Hütchen (4)"], dauer:"15–20", energie:4, phasen:["haupt"],
+  kurz:"Fußball im Krebsgang: Bauch nach oben, auf Händen und Füßen – und den Ball nur mit den Füßen spielen.",
+  foerdert:"Kraft, Körperspannung, Koordination",
+  vorbereitung:"Kleines Feld abgrenzen, an beiden Enden ein Tor aus zwei Hütchen. Zwei Teams bilden, alle üben kurz den Krebsgang.",
+  ablauf:[
+    "Alle bewegen sich im Krebsgang: Hände und Füße am Boden, Bauch nach oben, Po in der Luft.",
+    "Der Ball wird nur mit den Füßen gespielt, Hände bleiben am Boden.",
+    "Tore gibt es, wenn der Ball zwischen den Hütchen durchrollt.",
+    "Kurz ausruhen ist erlaubt – dann darf man sich hinsetzen, aber nicht spielen.",
+    "Runden kurz halten (2–3 Minuten), dann Pause und neue Runde."
+  ],
+  wenige:"Ein gemeinsames Tor: Wer den Ball am häufigsten hineinspielt?",
+  viele:"Zwei Bälle oder zwei Felder, Teams mit höchstens 6 Kindern.",
+  klasse1:"Hinsetzen und mit den Füßen schießen ist erlaubt, breitere Tore.",
+  varianten:["Jedes Team hat einen Torwart, der im Sitzen hält.","Ball mit dem Kopf spielen ist verboten – nur Füße und Po."],
+  sicherheit:"Nur weiche Bälle, nicht nach Köpfen treten. Auf Handgelenke achten – viele kurze Pausen.",
+  feld:{ boden:"halle",
+    kinder:[{x:62,y:40,c:"orange",p:"sitz"},{x:106,y:120,c:"orange",p:"sitz"},{x:170,y:64,c:"orange",p:"sitz"},
+      {x:124,y:24,c:"blau",p:"sitz",flip:1},{x:196,y:128,c:"blau",p:"sitz",flip:1},{x:230,y:40,c:"blau",p:"sitz",flip:1}],
+    dinge:[{typ:"huetchen",x:22,y:74},{typ:"huetchen",x:22,y:126},{typ:"huetchen",x:278,y:74},{typ:"huetchen",x:278,y:126},{typ:"ball",x:210,y:104}],
+    pfeile:[{von:[218,104],nach:[268,100],c:"rot",dash:1}]},
+  legende:[["orange","Team 1 (spielt nach rechts)"],["blau","Team 2"]]
+},
+{
+  id:"ball-zirkus", name:"Ball-Zirkus", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro Kind)","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Manege frei: Jedes Kind übt mit seinem Ball kleine Kunststücke.",
+  foerdert:"Ballgefühl, Koordination, Mut zum Ausprobieren",
+  vorbereitung:"Jedes Kind nimmt sich einen Ball und sucht sich einen freien Platz.",
+  ablauf:[
+    "Die Betreuerin sagt ein Kunststück an, alle probieren es aus.",
+    "Ideen: prellen, hochwerfen und fangen, hochwerfen – klatschen – fangen, Ball um den Bauch kreisen lassen.",
+    "Schwieriger: prellen im Gehen, Ball durch die Beine in Achten führen, hinter dem Rücken hochwerfen.",
+    "Wer ein eigenes Kunststück erfindet, zeigt es vor – alle machen nach.",
+    "Zum Schluss: große Zirkusvorstellung, jedes Kind zeigt sein Lieblingsstück."
+  ],
+  wenige:"Mehr Zeit zum Ausprobieren, jedes Kind darf ein Kunststück vorgeben.",
+  viele:"Im Kreis üben, damit keine Bälle durcheinander fliegen.",
+  klasse1:"Große Bälle, einfache Stücke: hochwerfen und fangen, Ball um den Bauch.",
+  varianten:["Zu zweit: ein Kind macht vor, das andere nach.","Zur Musik prellen – bei Stopp den Ball festhalten."],
+  sicherheit:"Genug Abstand zueinander, Bälle nicht zu hoch werfen.",
+  feld:{ boden:"halle",
+    kinder:[{x:34,y:30,c:"tuerkis",p:"arme"},{x:122,y:30,c:"tuerkis",p:"steh"},{x:216,y:30,c:"tuerkis",p:"ruf",flip:1},
+      {x:34,y:118,c:"tuerkis",p:"steh"},{x:122,y:118,c:"lila",p:"arme"},{x:216,y:118,c:"tuerkis",p:"steh",flip:1}],
+    dinge:[{typ:"ball",x:66,y:14},{typ:"ball",x:158,y:74},{typ:"ball",x:212,y:14},{typ:"ball",x:70,y:156},{typ:"ball",x:154,y:104},{typ:"ball",x:252,y:160},{typ:"blase",x:190,y:108,text:"Hopp!"}],
+    pfeile:[{von:[158,56],nach:[158,68],c:"rot"},{von:[80,146],nach:[64,140],bogen:8,c:"rot"}]},
+  legende:[["tuerkis","Artisten"],["lila","macht ein Kunststück vor"]]
+},
+{
+  id:"kellner-lauf", name:"Kellner-Lauf", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen","Bälle"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Ein umgedrehtes Hütchen ist das Tablett – der Ball darf beim Slalom nicht herunterfallen.",
+  foerdert:"Gleichgewicht, Körperbeherrschung, Konzentration",
+  vorbereitung:"Pro Team einen Slalom aus 3–4 Hütchen. Jedes Team bekommt ein umgedrehtes Hütchen mit einem Ball darin. Teams mit 3–5 Kindern.",
+  ablauf:[
+    "Das erste Kind hält das Hütchen-Tablett mit einer Hand vor sich, der Ball liegt darin.",
+    "Es geht als Kellner durch den Slalom und außen zurück.",
+    "Fällt der Ball heraus: stehen bleiben, Ball aufheben und weiter.",
+    "Tablett an das nächste Kind übergeben.",
+    "Ist das ganze Team durch, setzt es sich hin."
+  ],
+  wenige:"Jedes Kind hat ein Tablett, alle gleichzeitig gegen die Uhr.",
+  viele:"Mehr Teams nebeneinander, jedes mit eigenem Slalom.",
+  klasse1:"Mit zwei Händen tragen erlaubt, großer Ball.",
+  varianten:["Zwei Tabletts – in jeder Hand eins.","Das Tablett auf dem Kopf tragen."],
+  sicherheit:"Nur schnell gehen, nicht rennen – der Kellner schaut auf den Weg, nicht nur auf den Ball.",
+  feld:{ boden:"halle",
+    kinder:[{x:14,y:18,c:"orange",p:"steh"},{x:44,y:18,c:"orange",p:"steh"},{x:100,y:18,c:"orange",p:"arme"},
+      {x:14,y:120,c:"blau",p:"steh"},{x:44,y:120,c:"blau",p:"steh"},{x:188,y:118,c:"blau",p:"arme"}],
+    dinge:[{typ:"linie",x:84,text:"Start"},
+      {typ:"huetchen",x:162,y:52},{typ:"huetchen",x:208,y:52},{typ:"huetchen",x:254,y:52},
+      {typ:"huetchen",x:162,y:154},{typ:"huetchen",x:208,y:154},{typ:"huetchen",x:254,y:154},
+      {typ:"huetchen",x:132,y:24,um:1},{typ:"ball",x:132,y:16},{typ:"huetchen",x:220,y:124,um:1},{typ:"ball",x:220,y:116}],
+    pfeile:[{von:[138,46],nach:[190,62],bogen:-12,c:"orange",dash:1},{von:[226,158],nach:[270,166],c:"blau",dash:1}]},
+  legende:[["orange","Team 1"],["blau","Team 2"]]
+},
+{
+  id:"reifen-kunststuecke", name:"Reifen-Kunststücke", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (1 pro Kind)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Rollen, drehen, kreisen lassen: Jedes Kind probiert mit seinem Reifen Kunststücke aus.",
+  foerdert:"Koordination, Geschicklichkeit, Ausdauer",
+  vorbereitung:"Jedes Kind holt sich einen Reifen und sucht einen freien Platz.",
+  ablauf:[
+    "Reifen rollen: mit der Hand anschubsen und neben dem Reifen herlaufen.",
+    "Kreisel: Reifen hochkant hinstellen, am Rand schnell drehen und zuschauen, wie er kreiselt.",
+    "Hula-Hoop um die Hüfte – oder um den Arm.",
+    "Zu zweit: Ein Kind rollt den Reifen, das andere versucht hindurchzulaufen oder ihn zu fangen.",
+    "Zum Schluss zeigt jedes Kind sein bestes Kunststück."
+  ],
+  wenige:"Die Kinder probieren alle Stücke nacheinander, die Betreuerin rollt als Partnerin mit.",
+  viele:"Stationen: Rollen, Kreisel, Hula-Hoop, Durchlaufen – nach 2 Minuten wechseln.",
+  klasse1:"Rollen und Hula-Hoop reichen. Durchlaufen nur durch einen langsam rollenden Reifen.",
+  varianten:["Reifen mit Rückwärtsdrall werfen, sodass er zurückrollt.","Wer schafft es, den kreiselnden Reifen umzudrehen, bevor er liegt?"],
+  sicherheit:"Viel Abstand, Reifen nur flach über den Boden rollen – nicht werfen.",
+  feld:{ boden:"halle",
+    kinder:[{x:24,y:14,c:"tuerkis",p:"arme"},{x:108,y:14,c:"tuerkis",p:"lauf"},{x:236,y:14,c:"tuerkis",p:"steh",flip:1},
+      {x:24,y:120,c:"tuerkis",p:"ruf"},{x:188,y:118,c:"tuerkis",p:"lauf",flip:1},{x:246,y:120,c:"tuerkis",p:"steh",flip:1}],
+    dinge:[{typ:"reifen",x:39,y:42,r:20,c:"orange"},{typ:"reifen",x:170,y:44,r:16,c:"orange"},
+      {typ:"reifen",x:110,y:158,r:16,c:"orange"},{typ:"reifen",x:238,y:180,r:10,c:"gelb"}],
+    pfeile:[{von:[188,44],nach:[228,44],c:"orange",dash:1},{von:[128,158],nach:[170,152],c:"orange",dash:1}]},
+  legende:[["tuerkis","Kinder"]]
+}
+,
+{
+  id:"reifen-huepfstrasse", name:"Reifen-Hüpfstraße", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,20], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (etwa 8–10 pro Hüpfstraße)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Reifen liegen als Hüpfmuster – einbeinig in die einzelnen, beidbeinig in die doppelten, wie bei Himmel und Hölle.",
+  foerdert:"Sprungkraft, Koordination, Rhythmus",
+  vorbereitung:"Reifen als Muster auslegen: einzeln, doppelt nebeneinander, einzeln, doppelt … Am Anfang eine Startstelle festlegen.",
+  ablauf:[
+    "Die Kinder stellen sich hintereinander am Start auf.",
+    "In einen einzelnen Reifen wird einbeinig gehüpft, in zwei nebeneinander liegende Reifen mit gegrätschten Beinen.",
+    "Am Ende umdrehen und außen herum zurücklaufen.",
+    "Das nächste Kind startet, sobald das vordere Kind zwei Reifen weit ist.",
+    "Nach ein paar Runden das Muster gemeinsam ändern."
+  ],
+  wenige:"Ein kurzes Muster, dafür schwierigere Aufgaben: rückwärts, nur auf dem linken Bein, mit Drehung.",
+  viele:"Zwei oder drei Hüpfstraßen nebeneinander, 5–7 Kinder pro Straße.",
+  klasse1:"Kurzes Muster, erst beidbeinig durch alle Reifen hüpfen, dann einbeinig nur in einzelne.",
+  varianten:["Die Kinder legen selbst ein neues Muster und erklären es den anderen.","Mit Ball: Beim Hüpfen den Ball hochwerfen und fangen."],
+  sicherheit:"Reifen können auf glattem Hallenboden wegrutschen – nicht auf den Rand springen, sondern in die Mitte. Genug Abstand zum vorderen Kind.",
+  feld:{ boden:"halle",
+    kinder:[{x:12,y:22,c:"orange",p:"steh"},{x:12,y:76,c:"orange",p:"steh"},{x:12,y:130,c:"orange",p:"steh"},
+      {x:88,y:50,c:"tuerkis",p:"lauf"},{x:158,y:50,c:"tuerkis",p:"lauf"},{x:246,y:40,c:"tuerkis",p:"arme",flip:1}],
+    dinge:[{typ:"reifen",x:70,y:122,r:14},{typ:"reifen",x:104,y:106,r:14},{typ:"reifen",x:104,y:138,r:14},{typ:"reifen",x:138,y:122,r:14},
+      {typ:"reifen",x:172,y:106,r:14},{typ:"reifen",x:172,y:138,r:14},{typ:"reifen",x:206,y:122,r:14},{typ:"reifen",x:240,y:122,r:14}],
+    pfeile:[{von:[60,168],nach:[250,168],c:"tuerkis",dash:1}]},
+  legende:[["tuerkis","hüpft gerade"],["orange","wartet am Start"]]
+},
+{
+  id:"seilspringen", name:"Seilspringen", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,25], klassen:"1–4", orte:["halle","draussen"], material:["Seile (Springseile und 1–2 lange Seile)"], dauer:"15–20", energie:3, phasen:["warm","haupt"],
+  kurz:"Drei Stationen vom liegenden Seil bis zum großen Schwungseil – jedes Kind wählt seine Stufe.",
+  foerdert:"Sprungkraft, Rhythmus, Ausdauer",
+  vorbereitung:"Drei Stationen einrichten: 1 = Seile liegen am Boden, 2 = Springseile zum Selberspringen, 3 = ein langes Seil zum Schwingen.",
+  ablauf:[
+    "Stufe 1: Beidbeinig seitlich über das liegende Seil hin- und herhüpfen, dann einbeinig.",
+    "Stufe 2: Mit dem eigenen Springseil springen – erst langsam „schwingen, springen“, dann durchgehend.",
+    "Stufe 3: Zwei Kinder schwingen ein langes Seil, ein Kind läuft hinein und springt.",
+    "Die Kinder bleiben so lange an einer Station, wie sie möchten, und wechseln dann.",
+    "Zum Schluss darf jedes Kind zeigen, was es geschafft hat."
+  ],
+  wenige:"Alle gehen gemeinsam von Stufe zu Stufe, die Betreuerin schwingt das lange Seil mit.",
+  viele:"Jede Station doppelt aufbauen, feste Gruppen wechseln auf Signal.",
+  klasse1:"Beim langen Seil erst „Schlange“ und „Welle“ (Seil am Boden bewegen), dann ganz langsam schwingen.",
+  varianten:["Zu zweit mit einem Springseil: nebeneinander oder gegenüber springen.","Seil-Reime: Zu einem Abzählreim springen."],
+  sicherheit:"Genug Abstand zwischen den Springern – ein schwingendes Seil braucht Platz. Seile nicht um den Hals legen.",
+  feld:{ boden:"halle",
+    kinder:[{x:22,y:40,c:"tuerkis",p:"lauf"},{x:56,y:118,c:"tuerkis",p:"steh"},{x:124,y:68,c:"tuerkis",p:"arme"},
+      {x:186,y:66,c:"lila",p:"arme"},{x:224,y:74,c:"tuerkis",p:"lauf"},{x:262,y:66,c:"lila",p:"arme",flip:1}],
+    dinge:[{typ:"strich",x1:102,y1:30,x2:102,y2:190},{typ:"strich",x1:178,y1:30,x2:178,y2:190},
+      {typ:"text",x:55,y:20,text:"1",gr:13},{typ:"text",x:140,y:20,text:"2",gr:13},{typ:"text",x:235,y:20,text:"3",gr:13},
+      {typ:"seil",x1:18,y1:100,x2:94,y2:100,welle:0},{typ:"seil",x1:122,y1:124,x2:160,y2:124,welle:4},
+      {typ:"seil",x1:212,y1:112,x2:266,y2:112,welle:5}],
+    pfeile:[{von:[40,90],nach:[60,112],bogen:-10,c:"tuerkis"}]},
+  legende:[["tuerkis","Springer"],["lila","schwingen das lange Seil"]]
+},
+{
+  id:"bank-kunststuecke", name:"Bank-Kunststücke", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,20], klassen:"1–4", orte:["halle"], material:["Bänke","Matten"], dauer:"15–20", energie:2, phasen:["haupt"],
+  kurz:"Katzengang, Bauchrutschen, seitwärts gehen, drüberspringen – die Bank wird zur Zirkusbühne.",
+  foerdert:"Gleichgewicht, Kraft, Körperspannung",
+  vorbereitung:"Eine oder zwei Bänke aufstellen, rechts und links Matten legen.",
+  ablauf:[
+    "Die Kinder stehen hintereinander am Bankende und gehen nacheinander.",
+    "Aufgabe 1: Katzengang – auf Händen und Füßen über die Bank.",
+    "Aufgabe 2: Auf dem Bauch liegen und sich mit den Armen nach vorne ziehen.",
+    "Aufgabe 3: Seitwärts über die Bank gehen.",
+    "Aufgabe 4: Neben der Bank stehen, Hände auf die Bank und mit beiden Beinen seitlich hin- und herspringen.",
+    "Jede Aufgabe 2–3 Durchgänge, dann die nächste."
+  ],
+  wenige:"Mehr Durchgänge, dazu schwierigere Aufgaben: rückwärts, mit Ball in der Hand.",
+  viele:"Zwei oder drei Bänke nebeneinander, 6 Kinder pro Bank.",
+  klasse1:"Beim Balancieren eine Hand halten, Überspringen nur mit Abstützen.",
+  varianten:["Die Kinder erfinden selbst ein Bank-Kunststück.","Zwei Kinder starten an beiden Enden und kommen aneinander vorbei."],
+  sicherheit:"Bank auf ebenem Boden, Matten auf beiden Seiten. Immer nur ein Kind pro Bankhälfte. Betreuerin steht an der Bank.",
+  feld:{ boden:"halle",
+    kinder:[{x:40,y:34,c:"tuerkis",p:"sitz"},{x:104,y:31,c:"tuerkis",p:"arme"},{x:176,y:34,c:"tuerkis",p:"sitz"},{x:236,y:132,c:"tuerkis",p:"lauf"},
+      {x:12,y:130,c:"orange",p:"steh"},{x:52,y:130,c:"orange",p:"steh"}],
+    dinge:[{typ:"bank",x:24,y:74,w:250,h:14,text:"Bank"},{typ:"matte",x:24,y:92,w:250,h:30,text:"Matte"}],
+    pfeile:[{von:[70,150],nach:[36,96],bogen:-10,c:"orange",dash:1}]},
+  legende:[["tuerkis","macht ein Kunststück"],["orange","wartet"]]
+},
+{
+  id:"purzelbaumland", name:"Purzelbaumland", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,20], klassen:"1–4", orte:["halle"], material:["Matten"], dauer:"15–20", energie:2, phasen:["haupt"],
+  kurz:"Eine Mattenbahn mit drei Stationen: Baumstammrollen, Purzelbaum, Krokodilkriechen.",
+  foerdert:"Körpergefühl, Mut, Koordination",
+  vorbereitung:"Drei oder mehr Matten hintereinander legen und jeder Matte eine Aufgabe geben.",
+  ablauf:[
+    "Matte 1: Baumstammrollen – lang ausgestreckt seitlich über die Matte rollen.",
+    "Matte 2: Purzelbaum (Rolle vorwärts) – Kinn auf die Brust, rund machen.",
+    "Matte 3: Krokodilkriechen – flach auf dem Bauch, nur mit den Armen nach vorne ziehen.",
+    "Die Kinder starten nacheinander, erst wenn die Matte vor ihnen frei ist.",
+    "Zurück geht es außen herum. Nach ein paar Runden Aufgaben tauschen."
+  ],
+  wenige:"Mehr Runden und neue Aufgaben: Rolle rückwärts, Hasenhüpfen, Robben.",
+  viele:"Zwei Mattenbahnen nebeneinander oder Kinder, die warten, machen am Rand Tier-Aufgaben.",
+  klasse1:"Purzelbaum mit Hilfestellung oder stattdessen „Päckchen rollen“ (zusammengerollt zur Seite kippen).",
+  varianten:["Mattenberg: eine Matte doppelt legen und darüberkrabbeln.","Zu zweit Hand in Hand über die Matte rollen."],
+  sicherheit:"Beim Purzelbaum steht die Betreuerin an der Matte und gibt Hilfestellung (Hand am Nacken und Po). Kinder nie gleichzeitig auf einer Matte.",
+  feld:{ boden:"halle",
+    kinder:[{x:12,y:24,c:"orange",p:"steh"},{x:52,y:24,c:"orange",p:"steh"},
+      {x:46,y:104,c:"tuerkis",p:"sitz"},{x:134,y:104,c:"tuerkis",p:"sitz"},{x:222,y:104,c:"tuerkis",p:"sitz"},{x:120,y:50,c:"lila",p:"arme"}],
+    dinge:[{typ:"matte",x:20,y:98,w:82,h:74,text:" "},{typ:"matte",x:108,y:98,w:82,h:74,text:" "},{typ:"matte",x:196,y:98,w:82,h:74,text:" "},
+      {typ:"text",x:61,y:186,text:"Baumstamm",gr:10},{typ:"text",x:149,y:186,text:"Purzelbaum",gr:10},{typ:"text",x:237,y:186,text:"Krokodil",gr:10}],
+    pfeile:[{von:[270,90],nach:[200,30],bogen:10,dash:1}]},
+  legende:[["tuerkis","auf der Mattenbahn"],["orange","wartet"],["lila","Betreuerin gibt Hilfestellung"]]
+},
+{
+  id:"flussspringen", name:"Flussspringen", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[3,25], klassen:"1–4", orte:["halle","draussen"], material:["2 lange Seile (pro Fluss)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Zwei Seile bilden einen Fluss, der immer breiter wird – jedes Kind springt da, wo es sich traut.",
+  foerdert:"Sprungkraft, Selbsteinschätzung, Mut",
+  vorbereitung:"Zwei lange Seile so hinlegen, dass sie an einem Ende fast zusammen liegen und am anderen weit auseinander.",
+  ablauf:[
+    "Die Kinder stehen auf einer Seite des Flusses.",
+    "Jedes Kind sucht sich eine Stelle aus und springt beidbeinig über den Fluss, ohne ins Wasser zu treten.",
+    "Wer es geschafft hat, probiert beim nächsten Mal eine breitere Stelle.",
+    "Wer ins Wasser tritt, wählt einfach wieder eine schmalere Stelle – niemand scheidet aus.",
+    "Danach mit Anlauf, einbeinig oder rückwärts."
+  ],
+  wenige:"Die Kinder springen nacheinander und feuern sich an.",
+  viele:"Zwei oder drei Flüsse nebeneinander, immer in dieselbe Richtung springen.",
+  klasse1:"Nur beidbeinig aus dem Stand, der Fluss ist am schmalen Ende nur so breit wie ein Fuß.",
+  varianten:["Steine im Fluss: Reifen als Zwischenstopp.","Paarspringen: Hand in Hand über den Fluss."],
+  sicherheit:"Draußen nicht auf nassem Boden spielen. In der Halle auf ausreichend Platz zum Landen achten und nur in eine Richtung springen.",
+  feld:{ boden:"draussen",
+    kinder:[{x:24,y:136,c:"tuerkis",p:"steh"},{x:110,y:136,c:"tuerkis",p:"steh"},{x:210,y:140,c:"tuerkis",p:"arme"},
+      {x:40,y:8,c:"tuerkis",p:"arme"},{x:132,y:60,c:"tuerkis",p:"lauf"},{x:236,y:8,c:"tuerkis",p:"arme"}],
+    dinge:[{typ:"seil",x1:14,y1:96,x2:286,y2:60,welle:0},{typ:"seil",x1:14,y1:110,x2:286,y2:146,welle:0},
+      {typ:"text",x:60,y:106,text:"schmal",gr:10},{typ:"text",x:250,y:106,text:"breit",gr:10}],
+    pfeile:[{von:[122,150],nach:[146,62],bogen:-12,c:"tuerkis",dash:1}]},
+  legende:[["tuerkis","Springer"]]
+},
+{
+  id:"seilbilder", name:"Seilbilder", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[6,25], klassen:"1–4", orte:["halle","draussen"], material:["Seile (etwa 3–4 pro Gruppe)"], dauer:"15–20", energie:1, phasen:["warm","haupt"],
+  kurz:"Gruppen legen mit Seilen Formen, Buchstaben oder Tiere – die anderen raten und balancieren dann darüber.",
+  foerdert:"Kreativität, Zusammenarbeit, Gleichgewicht",
+  vorbereitung:"Gruppen mit 3–5 Kindern bilden, jede Gruppe bekommt 3–4 Seile und einen eigenen Platz.",
+  ablauf:[
+    "Jede Gruppe legt heimlich ein Bild aus Seilen: eine Form, einen Buchstaben oder ein Tier.",
+    "Dann gehen alle Gruppen im Uhrzeigersinn zum nächsten Bild und raten, was es ist.",
+    "Ist das Bild erraten, balancieren die Kinder langsam hintereinander über die Seile.",
+    "Weiter zum nächsten Bild, bis alle Bilder besucht sind.",
+    "Neue Runde mit einem neuen Thema (z. B. Buchstaben aus den Namen)."
+  ],
+  wenige:"Alle legen zusammen ein großes Bild, die Betreuerin rät.",
+  viele:"Mehr Gruppen, jede Gruppe darf nur 3 Seile nehmen – so bleibt genug Material.",
+  klasse1:"Einfache Formen vorgeben: Kreis, Dreieck, Haus, Sonne.",
+  varianten:["Die Betreuerin nennt ein Wort, alle Gruppen legen es gleichzeitig.","Über das Bild nicht balancieren, sondern darüber hüpfen."],
+  sicherheit:"Seile flach auslegen, beim Balancieren langsam gehen. Keine besondere Gefahr.",
+  feld:{ boden:"halle",
+    kinder:[{x:14,y:24,c:"blau",p:"steh"},{x:14,y:92,c:"blau",p:"arme"},
+      {x:196,y:24,c:"orange",p:"arme",flip:1},{x:246,y:40,c:"orange",p:"steh",flip:1},{x:128,y:12,c:"orange",p:"arme"},{x:236,y:112,c:"orange",p:"steh",flip:1}],
+    dinge:[{typ:"seil",x1:70,y1:110,x2:110,y2:74,welle:0},{typ:"seil",x1:110,y1:74,x2:150,y2:110,welle:0},
+      {typ:"seil",x1:74,y1:112,x2:74,y2:170,welle:0},{typ:"seil",x1:74,y1:170,x2:146,y2:170,welle:0},{typ:"seil",x1:146,y1:112,x2:146,y2:170,welle:0},
+      {typ:"blase",x:236,y:178,text:"Haus!"}],
+    pfeile:[{von:[228,140],nach:[164,132],c:"orange",dash:1}]},
+  legende:[["blau","hat das Bild gelegt"],["orange","rät und balanciert"]]
+},
+{
+  id:"seil-limbo", name:"Seil-Limbo", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  kinder:[4,25], klassen:"1–4", orte:["halle","draussen"], material:["1 langes Seil","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm"],
+  kurz:"Zwei Kinder halten ein Seil, alle gehen darunter durch – und das Seil wird immer tiefer.",
+  foerdert:"Beweglichkeit, Körpergefühl, Spaß",
+  vorbereitung:"Ein langes Seil. Zwei Kinder halten es an den Enden etwa auf Schulterhöhe.",
+  ablauf:[
+    "Die Kinder gehen in einer Schlange nacheinander unter dem Seil durch.",
+    "Nach jeder Runde wird das Seil ein Stück tiefer gehalten.",
+    "Man darf rückwärts gebeugt, seitlich oder krabbelnd durch – nur das Seil nicht berühren.",
+    "Wer das Seil berührt, darf trotzdem weitermachen und probiert es in der nächsten Runde anders.",
+    "Die Seilhalter wechseln alle zwei Runden."
+  ],
+  wenige:"Die Betreuerin und ein Kind halten das Seil, die anderen gehen im Kreis immer wieder durch.",
+  viele:"Zwei Seile hintereinander oder zwei Limbo-Stationen.",
+  klasse1:"Das Seil nur bis Hüfthöhe senken, danach geht es krabbelnd weiter.",
+  varianten:["Limbo-Musik dazu – wenn sie stoppt, frieren alle ein.","Zu zweit Hand in Hand unter dem Seil durch."],
+  sicherheit:"Seil locker halten und sofort loslassen, wenn sich jemand verfängt. Nicht darüber springen.",
+  feld:{ boden:"halle",
+    kinder:[{x:122,y:10,c:"lila",p:"arme"},{x:122,y:138,c:"lila",p:"arme"},
+      {x:132,y:78,c:"tuerkis",p:"sitz"},{x:70,y:70,c:"tuerkis",p:"lauf"},{x:20,y:70,c:"tuerkis",p:"steh"},{x:210,y:70,c:"tuerkis",p:"arme",flip:1}],
+    dinge:[{typ:"seil",x1:150,y1:50,x2:150,y2:150,welle:3}],
+    pfeile:[{von:[40,120],nach:[250,120],c:"tuerkis",dash:1}]},
+  legende:[["lila","halten das Seil"],["tuerkis","gehen unten durch"]]
+},
+{
+  id:"wer-ist-der-anfuehrer", name:"Wer ist der Anführer?", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[7,25], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Der Kreis macht die Bewegungen eines geheimen Anführers nach – der Detektiv in der Mitte muss ihn finden.",
+  foerdert:"Beobachten, Konzentration, Unauffälligkeit",
+  vorbereitung:"Alle stehen im Kreis. Ein Kind (der Detektiv) geht kurz vor die Tür oder hält sich die Augen zu.",
+  ablauf:[
+    "Die Gruppe bestimmt leise einen Anführer.",
+    "Der Anführer macht Bewegungen vor (klatschen, stampfen, Kopf nicken …), alle machen sie sofort nach.",
+    "Der Detektiv stellt sich in die Mitte und beobachtet.",
+    "Der Anführer wechselt immer wieder die Bewegung, ohne dass es auffällt.",
+    "Der Detektiv hat drei Versuche. Danach wird der Anführer der neue Detektiv."
+  ],
+  wenige:"Schon ab 6–7 Kindern möglich, dann nur zwei Rateversuche.",
+  viele:"Zwei Detektive, die sich beraten dürfen.",
+  klasse1:"Die Betreuerin flüstert dem Anführer Ideen zu. Nur große, langsame Bewegungen.",
+  varianten:["Zwei geheime Anführer, die sich abwechseln.","Im Sitzen mit Handbewegungen – zum Runterkommen."],
+  sicherheit:"Keine besondere Gefahr.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:8,c:"lila",p:"arme"},{x:60,y:40,c:"lila",p:"arme"},{x:210,y:40,c:"orange",p:"arme",flip:1},{x:60,y:118,c:"lila",p:"arme"},{x:210,y:118,c:"lila",p:"arme",flip:1},
+      {x:135,y:84,c:"blau",p:"steh"}],
+    dinge:[{typ:"kreis",cx:150,cy:100,r:72},{typ:"blase",x:150,y:68,text:"Wer?"}],
+    pfeile:[{von:[168,104],nach:[206,74],c:"blau",dash:1}]},
+  legende:[["orange","geheimer Anführer"],["lila","machen nach"],["blau","Detektiv"]]
+},
+{
+  id:"menschen-memory", name:"Menschen-Memory", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[7,25], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Die Kinder sind die Memory-Karten: Paare haben dieselbe Bewegung, der Rater deckt durch Antippen auf.",
+  foerdert:"Merkfähigkeit, Beobachten, Absprache",
+  vorbereitung:"1–2 Kinder sind Rater und warten weg. Die anderen bilden Paare und vereinbaren eine gemeinsame Bewegung.",
+  ablauf:[
+    "Jedes Paar denkt sich eine Bewegung aus (z. B. Hampelmann, Hase, Drehung).",
+    "Alle verteilen sich im Raum, Paare stehen nicht nebeneinander.",
+    "Der Rater tippt zwei Kinder an – beide zeigen ihre Bewegung.",
+    "Passen sie zusammen, ist das Paar gefunden und setzt sich hin. Sonst wieder „umdrehen“ (stillstehen).",
+    "Wenn alle Paare gefunden sind, sind neue Rater dran."
+  ],
+  wenige:"Mit 3 Paaren und einem Rater – klappt ab 7 Kindern.",
+  viele:"Zwei Rater im Wettstreit oder zwei getrennte Spielfelder.",
+  klasse1:"Nur Tierbewegungen, die Betreuerin hilft beim Absprechen.",
+  varianten:["Geräusche-Memory: statt Bewegung ein Geräusch.","Die aufgedeckten Kinder dürfen sich zum Schluss zusammen eine Bewegung für die ganze Gruppe ausdenken."],
+  sicherheit:"Nur sanft antippen. Keine besondere Gefahr.",
+  feld:{ boden:"halle",
+    kinder:[{x:136,y:74,c:"lila",p:"lauf"},{x:40,y:24,c:"orange",p:"arme"},{x:220,y:118,c:"orange",p:"arme",flip:1},
+      {x:220,y:20,c:"tuerkis",p:"steh",flip:1},{x:40,y:118,c:"tuerkis",p:"steh"},{x:130,y:140,c:"tuerkis",p:"steh"}],
+    dinge:[{typ:"blase",x:150,y:60,text:"Tipp!"}],
+    pfeile:[{von:[132,96],nach:[76,50],c:"lila",dash:1},{von:[168,108],nach:[216,134],c:"lila",dash:1}]},
+  legende:[["lila","Rater"],["orange","aufgedecktes Paar"],["tuerkis","noch verdeckt"]]
+},
+{
+  id:"schlangen-fuehrung", name:"Schlangen-Führung", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,24], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (optional, als Hindernisse)"], dauer:"10–15", energie:1, phasen:["warm","haupt"],
+  kurz:"Eine Schlange mit Händen auf den Schultern – nur der Kopf hat die Augen offen und führt ganz langsam.",
+  foerdert:"Vertrauen, Verantwortung, Körpergefühl",
+  vorbereitung:"Gruppen mit 4–6 Kindern. Wer mag, stellt ein paar Hütchen als Hindernisse auf.",
+  ablauf:[
+    "Die Kinder stellen sich hintereinander und legen die Hände auf die Schultern des vorderen Kindes.",
+    "Das erste Kind ist der Kopf und hat die Augen offen, alle anderen schließen die Augen.",
+    "Der Kopf führt die Schlange langsam durch den Raum, um Hütchen herum.",
+    "Nach etwa einer Minute geht der Kopf ans Ende, das nächste Kind wird Kopf.",
+    "Zum Schluss erzählen die Kinder: Wie hat es sich angefühlt?"
+  ],
+  wenige:"Eine Schlange mit 3–4 Kindern, dafür längere Wege und mehr Hindernisse.",
+  viele:"Mehrere Schlangen, die sich nicht berühren dürfen.",
+  klasse1:"Nur 3–4 Kinder pro Schlange, die Augen dürfen blinzeln. Kurze Wege.",
+  varianten:["Der Kopf gibt Kommandos: „Stufe!“, „Kurve!“.","Das letzte Kind hat die Augen offen und steuert mit Tippsignalen nach vorne."],
+  sicherheit:"Nur im Gehtempo! Genug Abstand zu Wänden und Geräten, der Kopf passt auf alle auf.",
+  feld:{ boden:"halle",
+    kinder:[{x:232,y:66,c:"orange",p:"steh"},{x:196,y:72,c:"lila",p:"steh"},{x:160,y:78,c:"lila",p:"steh"},{x:124,y:84,c:"lila",p:"steh"},{x:88,y:90,c:"lila",p:"steh"},{x:52,y:96,c:"lila",p:"steh"}],
+    dinge:[{typ:"huetchen",x:70,y:40},{typ:"huetchen",x:170,y:40},{typ:"huetchen",x:120,y:172},{typ:"huetchen",x:220,y:170}],
+    pfeile:[{von:[268,110],nach:[250,170],bogen:-20,c:"orange",dash:1},{von:[244,178],nach:[150,184],c:"orange",dash:1}]},
+  legende:[["orange","Kopf (Augen offen)"],["lila","Augen zu"]]
+},
+{
+  id:"tier-yoga", name:"Tier-Yoga", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[3,25], klassen:"1–4", orte:["halle","draussen"], material:["Matten (optional)","Musik (optional)"], dauer:"10–15", energie:1, phasen:["warm","haupt"],
+  kurz:"Baum, Katze, Hund, Kobra und Schmetterling – ruhige Yoga-Figuren mit tiefer Atmung.",
+  foerdert:"Beweglichkeit, Gleichgewicht, Zur-Ruhe-Kommen",
+  vorbereitung:"Die Kinder verteilen sich mit Abstand, gern auf Matten. Leise Musik kann laufen.",
+  ablauf:[
+    "Baum: auf einem Bein stehen, Fuß ans andere Bein, Arme wie Äste nach oben.",
+    "Katze: Vierfüßlerstand, einen runden Buckel machen und miauen.",
+    "Hund: Hände und Füße am Boden, Po hoch – wie ein umgedrehtes V.",
+    "Kobra: auf dem Bauch liegen, Oberkörper langsam heben und leise zischen.",
+    "Schmetterling: sitzen, Fußsohlen zusammen, Knie wie Flügel sanft auf und ab.",
+    "Jede Figur drei ruhige Atemzüge halten. Zum Schluss auf dem Rücken liegen und ausruhen."
+  ],
+  wenige:"Die Kinder dürfen abwechselnd eine Figur ansagen und vormachen.",
+  viele:"Im großen Kreis, die Betreuerin macht vorne vor. Nicht jedes Kind braucht eine Matte.",
+  klasse1:"Kurze Tier-Geschichte erzählen: „Die Katze wacht auf und streckt sich …“",
+  varianten:["Die Kinder erfinden eigene Tier-Figuren (Flamingo, Frosch, Krokodil).","Yoga-Memory: Die Betreuerin sagt drei Tiere, die Kinder machen sie in der richtigen Reihenfolge."],
+  sicherheit:"Nichts erzwingen – jede Figur nur so weit, wie es angenehm ist. Draußen auf trockenem Boden.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:12,c:"orange",p:"arme"},
+      {x:40,y:78,c:"lila",p:"arme"},{x:104,y:84,c:"lila",p:"sitz"},{x:166,y:84,c:"lila",p:"sitz"},{x:230,y:78,c:"lila",p:"arme",flip:1},{x:135,y:140,c:"lila",p:"sitz"}],
+    dinge:[{typ:"matte",x:30,y:112,w:50,h:26,text:" "},{typ:"matte",x:94,y:116,w:50,h:26,text:" "},{typ:"matte",x:156,y:116,w:50,h:26,text:" "},{typ:"matte",x:220,y:110,w:50,h:26,text:" "},{typ:"blase",x:212,y:26,text:"Baum!"}],
+    pfeile:[]},
+  legende:[["orange","macht die Figur vor"],["lila","machen mit"]]
+},
+{
+  id:"was-hat-sich-veraendert", name:"Was hat sich verändert?", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["warm","haupt"],
+  kurz:"Ein Kind verändert heimlich 1–3 Dinge an seiner Haltung oder Kleidung – der Partner muss sie finden.",
+  foerdert:"Genaues Hinsehen, Merkfähigkeit, Konzentration",
+  vorbereitung:"Paare bilden, die sich gegenüberstehen.",
+  ablauf:[
+    "Die Partner schauen sich 20 Sekunden lang genau an.",
+    "Dann dreht sich ein Kind um und hält sich die Augen zu.",
+    "Das andere verändert 1–3 Dinge: Ärmel hoch, Hand in der Hosentasche, Schuh auf, anderer Fuß vorne …",
+    "Auf „Fertig!“ dreht sich der Partner zurück und rät, was anders ist.",
+    "Dann die Rollen tauschen."
+  ],
+  wenige:"Ein Kind stellt sich vor die Gruppe, alle raten gemeinsam.",
+  viele:"Paare im Raum verteilt. Oder als Gruppenspiel: 3 Kinder verändern sich, die anderen raten.",
+  klasse1:"Nur eine Veränderung, und zwar eine gut sichtbare.",
+  varianten:["Zwei Kinder tauschen heimlich einen Platz oder ein Kleidungsstück.","Eine ganze Gruppe stellt ein Standbild und verändert es."],
+  sicherheit:"Keine besondere Gefahr. Schuhe nach dem Spiel wieder zubinden!",
+  feld:{ boden:"halle",
+    kinder:[{x:70,y:22,c:"orange",p:"arme"},{x:190,y:22,c:"blau",p:"steh"},
+      {x:70,y:78,c:"orange",p:"steh"},{x:190,y:78,c:"blau",p:"steh"},
+      {x:70,y:134,c:"orange",p:"steh"},{x:190,y:134,c:"blau",p:"ruf",flip:1}],
+    dinge:[{typ:"blase",x:254,y:118,text:"Ärmel!"}],
+    pfeile:[]},
+  legende:[["orange","verändert sich"],["blau","dreht sich weg und rät"]]
+},
+{
+  id:"bewegungs-kofferpacken", name:"Bewegungs-Kofferpacken", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,15], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"„Ich packe in meinen Koffer …“ – mit Bewegungen, die immer mehr werden.",
+  foerdert:"Merkfähigkeit, Konzentration, Kreativität",
+  vorbereitung:"Alle stehen im Kreis.",
+  ablauf:[
+    "Das erste Kind sagt: „Ich packe in meinen Koffer …“ und macht eine Bewegung, z. B. einen Hampelmann.",
+    "Das nächste Kind wiederholt die erste Bewegung und fügt eine neue dazu.",
+    "So geht es reihum, die Kette wird immer länger.",
+    "Wer nicht weiterweiß, darf sich von allen helfen lassen – dann geht es weiter.",
+    "Zum Schluss macht die ganze Gruppe den kompletten Koffer zusammen."
+  ],
+  wenige:"Mehrere Runden, bis der Koffer richtig voll ist.",
+  viele:"Zwei Kreise, die sich zum Schluss ihre Koffer gegenseitig vorführen.",
+  klasse1:"Alle machen jede Bewegung gemeinsam mit – das Kind, das dran ist, fügt nur die neue hinzu.",
+  varianten:["Mit Geräusch zu jeder Bewegung.","Rückwärts-Koffer: Die Kette wird am Ende von hinten nach vorne ausgepackt."],
+  sicherheit:"Keine besondere Gefahr. Genug Abstand im Kreis für große Bewegungen.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:8,c:"orange",p:"ruf"},{x:60,y:40,c:"lila",p:"steh"},{x:210,y:40,c:"lila",p:"steh",flip:1},{x:60,y:118,c:"lila",p:"steh"},{x:210,y:118,c:"lila",p:"steh",flip:1},{x:135,y:136,c:"lila",p:"steh"}],
+    dinge:[{typ:"kreis",cx:150,cy:100,r:72},{typ:"blase",x:210,y:22,text:"Koffer!"}],
+    pfeile:[]},
+  legende:[["orange","ist dran"],["lila","machen mit"]]
+},
+{
+  id:"zauberwald", name:"Zauberwald-Geschichte", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Die Betreuerin erzählt eine Geschichte aus dem Zauberwald – die Kinder spielen sie mit ihrem Körper nach.",
+  foerdert:"Fantasie, Zuhören, Körperausdruck",
+  vorbereitung:"Die Kinder verteilen sich im Raum. Die Betreuerin überlegt sich grob eine Geschichte (oder erfindet sie spontan).",
+  ablauf:[
+    "Die Betreuerin beginnt: „Wir gehen ganz leise in den Zauberwald …“ – alle schleichen.",
+    "„Plötzlich werden wir zu Bäumen“ – alle stehen still, Arme als Äste.",
+    "„Der Wind weht“ – die Äste wiegen sich, erst leicht, dann stärker.",
+    "„Ein Zauberer verwandelt uns in Tiere“ – Frösche, Eulen, Schnecken …",
+    "Zum Schluss: „Wir legen uns ins weiche Moos und schlafen ein.“"
+  ],
+  wenige:"Die Kinder dürfen abwechselnd erzählen, was als Nächstes passiert.",
+  viele:"Genug Platz lassen, Bewegungen eher auf der Stelle als durch den Raum.",
+  klasse1:"Kurze Sätze, jede Bewegung vormachen.",
+  varianten:["Andere Welten: Unterwasser, Weltraum, Zirkus.","Ein Kind ist der Zauberer und verwandelt alle mit einer Geste."],
+  sicherheit:"Keine besondere Gefahr. Beim Schleichen nicht rennen.",
+  feld:{ boden:"draussen",
+    kinder:[{x:20,y:20,c:"lila",p:"ruf"},
+      {x:110,y:40,c:"gruen",p:"arme"},{x:190,y:30,c:"gruen",p:"arme",flip:1},{x:80,y:120,c:"gruen",p:"lauf"},{x:160,y:118,c:"gruen",p:"lauf"},{x:236,y:110,c:"gruen",p:"sitz",flip:1}],
+    dinge:[{typ:"blase",x:76,y:24,text:"Wind …"}],
+    pfeile:[{von:[114,176],nach:[156,176],c:"gruen",dash:1}]},
+  legende:[["lila","Betreuerin erzählt"],["gruen","Kinder im Zauberwald"]]
+},
+{
+  id:"klanglauf", name:"Klanglauf", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,20], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["warm","haupt"],
+  kurz:"Mit geschlossenen Augen hören, woher der Klang kommt – und ihm dann ganz langsam folgen.",
+  foerdert:"Hören, Konzentration, Vertrauen",
+  vorbereitung:"Alle stehen verteilt im Raum. Es muss ruhig sein.",
+  ablauf:[
+    "Alle schließen die Augen. Die Betreuerin klatscht oder klopft leise irgendwo im Raum.",
+    "Die Kinder zeigen mit dem Arm in die Richtung, aus der der Klang kommt, dann Augen auf – stimmt es?",
+    "Danach Paare bilden: Ein Kind schließt die Augen, das andere steht daneben und passt auf.",
+    "Die Betreuerin klatscht, das Kind geht ganz langsam dem Klang nach, der Partner sichert.",
+    "Wer beim Klang ankommt, macht die Augen auf. Rollen tauschen."
+  ],
+  wenige:"Die Kinder dürfen abwechselnd den Klang machen.",
+  viele:"Nur die Hälfte der Paare geht gleichzeitig, die anderen hören zu.",
+  klasse1:"Erst nur zeigen, noch nicht gehen. Beim Gehen dürfen die Augen einen Spalt offen bleiben.",
+  varianten:["Mehrere Klänge gleichzeitig (Klatschen, Schnipsen) – jedes Paar folgt seinem Klang.","Der Klang wandert langsam weiter."],
+  sicherheit:"Nur im Schneckentempo gehen! Der Partner hält die Hand bereit und stoppt vor Wänden und Geräten.",
+  feld:{ boden:"halle",
+    kinder:[{x:236,y:20,c:"orange",p:"ruf",flip:1},
+      {x:40,y:60,c:"lila",p:"arme"},{x:76,y:66,c:"blau",p:"steh"},
+      {x:100,y:132,c:"lila",p:"steh"},{x:136,y:136,c:"blau",p:"steh"},{x:210,y:120,c:"lila",p:"arme",flip:1}],
+    dinge:[{typ:"blase",x:200,y:24,text:"Klatsch"}],
+    pfeile:[{von:[74,80],nach:[222,48],c:"lila",dash:1,bogen:-10},{von:[134,146],nach:[220,78],c:"lila",dash:1}]},
+  legende:[["orange","macht den Klang"],["lila","Augen zu, folgt"],["blau","Partner sichert"]]
+},
+{
+  id:"baum-im-wind", name:"Baum im Wind", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["warm","haupt"],
+  kurz:"Die Kinder sind Bäume auf einem Bein – und der Wind wird immer stärker.",
+  foerdert:"Gleichgewicht, Körperspannung, Konzentration",
+  vorbereitung:"Die Kinder verteilen sich mit Armlänge Abstand im Raum.",
+  ablauf:[
+    "Alle stehen fest wie Bäume, die Arme sind Äste.",
+    "Die Betreuerin ist der Wind: „Ein leichter Wind weht“ – die Äste wiegen sich sanft.",
+    "„Der Baum wächst auf einem Bein“ – ein Fuß wird angehoben.",
+    "„Der Wind wird stärker!“ – die Bäume schwanken, bleiben aber auf einem Bein.",
+    "„Sturm!“ – ganz schwer. Danach wird es still, alle stehen wieder fest auf zwei Beinen.",
+    "Zweite Runde mit dem anderen Bein."
+  ],
+  wenige:"Die Kinder sind abwechselnd der Wind.",
+  viele:"Ein Wald im Kreis, der Wind geht durch die Mitte.",
+  klasse1:"Den Fuß nur leicht anheben, die Zehenspitzen dürfen den Boden berühren.",
+  varianten:["Mit geschlossenen Augen – das ist viel schwerer!","Zwei Bäume halten sich an den Händen und stützen sich im Sturm."],
+  sicherheit:"Genug Abstand, damit niemand beim Umkippen an andere stößt. Mit geschlossenen Augen nur kurz.",
+  feld:{ boden:"draussen",
+    kinder:[{x:14,y:80,c:"lila",p:"ruf"},
+      {x:110,y:20,c:"gruen",p:"arme"},{x:200,y:20,c:"gruen",p:"arme"},{x:150,y:80,c:"gruen",p:"arme"},{x:110,y:138,c:"gruen",p:"arme"},{x:230,y:120,c:"gruen",p:"arme",flip:1}],
+    dinge:[{typ:"blase",x:40,y:62,text:"Sturm!"}],
+    pfeile:[{von:[54,110],nach:[140,100],bogen:-14,c:"lila",dash:1},{von:[54,130],nach:[100,160],bogen:12,c:"lila",dash:1},{von:[54,90],nach:[100,44],bogen:12,c:"lila",dash:1}]},
+  legende:[["lila","Wind (Betreuerin)"],["gruen","Bäume auf einem Bein"]]
+},
+{
+  id:"fotograf", name:"Fotograf", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen, Bälle, Reifen (optional, als Motive)"], dauer:"10–15", energie:1, phasen:["warm","haupt"],
+  kurz:"Ein Kind ist die Kamera mit geschlossenen Augen – der Fotograf führt es zu einem Motiv und drückt ab.",
+  foerdert:"Vertrauen, Wahrnehmung, Verantwortung",
+  vorbereitung:"Paare bilden. Wer mag, legt vorher ein paar Motive aus (Hütchen, Ball, Reifen).",
+  ablauf:[
+    "Die Kamera schließt die Augen, der Fotograf führt sie an der Hand oder an den Schultern langsam durch den Raum.",
+    "Vor einem Motiv richtet er die Kamera aus und tippt ihr auf die Schulter – Klick!",
+    "Die Kamera öffnet für drei Sekunden die Augen: Das ist das Foto.",
+    "Nach drei Fotos Rollen tauschen.",
+    "Zum Schluss erzählt jede Kamera, welche Fotos sie „gemacht“ hat."
+  ],
+  wenige:"Die Betreuerin kann Fotografin sein. Mehr Fotos pro Runde.",
+  viele:"Die halbe Gruppe spielt, die anderen sind lebende Motive (Statuen).",
+  klasse1:"Nur ein oder zwei Fotos, kurze Wege, immer an der Hand führen.",
+  varianten:["Die Kamera muss danach das Motiv wiederfinden.","Nahaufnahme: ganz nah an ein Motiv heran (Hütchenspitze, Schuhband)."],
+  sicherheit:"Nur langsam gehen, der Fotograf ist für die Kamera verantwortlich. Genug Abstand zwischen den Paaren.",
+  feld:{ boden:"halle",
+    kinder:[{x:40,y:30,c:"lila",p:"steh"},{x:12,y:36,c:"orange",p:"steh"},
+      {x:180,y:24,c:"lila",p:"steh",flip:1},{x:212,y:30,c:"orange",p:"steh",flip:1},
+      {x:100,y:112,c:"lila",p:"arme"},{x:68,y:118,c:"orange",p:"steh"}],
+    dinge:[{typ:"huetchen",x:150,y:68},{typ:"reifen",x:220,y:150,r:16},{typ:"ball",x:130,y:36},{typ:"blase",x:160,y:110,text:"Klick!"}],
+    pfeile:[{von:[76,50],nach:[140,60],c:"orange",dash:1},{von:[134,150],nach:[196,152],c:"orange",dash:1}]},
+  legende:[["lila","Kamera (Augen zu)"],["orange","Fotograf"]]
+},
+{
+  id:"herr-wolf", name:"Wie spät ist es, Herr Wolf?", kategorie:"Schleichspiel", farbe:"gelb", neu:true,
+  kinder:[5,25], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:3, phasen:["warm","haupt"],
+  kurz:"Die Kinder fragen nach der Uhrzeit und kommen Schritt für Schritt näher – bis der Wolf „Essenszeit!“ ruft.",
+  foerdert:"Zählen, Mut, Reaktion",
+  vorbereitung:"Startlinie festlegen. Herr Wolf steht am anderen Ende mit dem Rücken zur Gruppe. Hinter der Startlinie ist das sichere Zuhause.",
+  ablauf:[
+    "Alle Kinder rufen: „Wie spät ist es, Herr Wolf?“",
+    "Der Wolf antwortet mit einer Uhrzeit, z. B. „4 Uhr!“ – alle gehen 4 Schritte auf ihn zu.",
+    "Das wiederholt sich, die Kinder kommen immer näher.",
+    "Irgendwann ruft der Wolf: „Essenszeit!“, dreht sich um und fängt.",
+    "Alle rennen zurück hinter die Startlinie. Gefangene Kinder werden in der nächsten Runde Wolfskinder und helfen fangen.",
+    "Nach 2–3 Runden gibt es einen neuen Wolf."
+  ],
+  wenige:"Der Wolf muss mit einem Bein hüpfen, sonst ist es zu schwer, alle zu erreichen.",
+  viele:"Von Anfang an zwei Wölfe. Das Feld nicht zu lang machen.",
+  klasse1:"Die Betreuerin ist in der ersten Runde der Wolf und zählt die Schritte mit.",
+  varianten:["Die Uhrzeit bestimmt die Gangart: Riesenschritte, Mäuseschritte, Hüpfer.","Herr Wolf ruft Tiere: So bewegen sich die Kinder vorwärts."],
+  sicherheit:"Nur antippen, nicht festhalten. Hinter der Startlinie genug Auslauf bis zur Wand.",
+  feld:{ boden:"halle",
+    kinder:[{x:250,y:78,c:"rot",p:"steh"},
+      {x:60,y:24,c:"gelb",p:"steh"},{x:120,y:60,c:"gelb",p:"lauf"},{x:74,y:124,c:"gelb",p:"steh"},{x:160,y:124,c:"gelb",p:"lauf"},{x:180,y:16,c:"gelb",p:"steh"}],
+    dinge:[{typ:"linie",x:40,text:"Start"},{typ:"blase",x:252,y:58,text:"4 Uhr!"}],
+    pfeile:[{von:[150,84],nach:[228,94],c:"gelb",dash:1},{von:[244,176],nach:[56,180],bogen:6,c:"rot",dash:1}]},
+  legende:[["rot","Herr Wolf"],["gelb","Kinder"]]
+},
+{
+  id:"bildhauer", name:"Bildhauer", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["ruhige Musik (optional)"], dauer:"15–20", energie:1, phasen:["warm","haupt"],
+  kurz:"Ein Kind ist der Bildhauer und formt seinen Partner zu einer Statue – danach gibt es einen Museumsrundgang.",
+  foerdert:"Körpergefühl, Kreativität, Rücksicht",
+  vorbereitung:"Paare bilden. Vorher klären: Formen mit Worten oder ganz vorsichtig mit den Händen – wie der Partner es mag.",
+  ablauf:[
+    "Die Statue steht locker da wie ein weicher Tonklumpen.",
+    "Der Bildhauer formt sie: Arme heben, Kopf drehen, Knie beugen – mit Worten oder vorsichtigem Führen.",
+    "Ist die Statue fertig, friert sie ein und bekommt einen Namen („Der müde Fußballer“).",
+    "Alle Bildhauer gehen im Museum herum und betrachten die anderen Statuen.",
+    "Dann Rollen tauschen."
+  ],
+  wenige:"Die Statuen stellen sich zusammen zu einem Gruppenbild auf.",
+  viele:"Die Hälfte der Paare stellt aus, die andere Hälfte ist Museumsbesucher – dann wechseln.",
+  klasse1:"Ein Thema vorgeben (Tiere, Sportler), die Betreuerin zeigt ein Beispiel.",
+  varianten:["Spiegel-Bildhauer: Der Bildhauer macht die Haltung vor, die Statue ahmt nach.","Denkmal zu dritt: Zwei Statuen gehören zusammen."],
+  sicherheit:"Nur sanft führen, keine unbequemen Haltungen. Wer nicht angefasst werden möchte, wird nur mit Worten geformt.",
+  feld:{ boden:"halle",
+    kinder:[{x:50,y:22,c:"blau",p:"arme"},{x:84,y:26,c:"orange",p:"steh",flip:1},
+      {x:200,y:30,c:"blau",p:"ruf",flip:1},{x:60,y:124,c:"blau",p:"arme"},
+      {x:150,y:100,c:"orange",p:"lauf"},{x:236,y:118,c:"orange",p:"lauf",flip:1}],
+    dinge:[{typ:"text",x:150,y:190,text:"Museumsrundgang",gr:10}],
+    pfeile:[{von:[140,150],nach:[100,176],bogen:-10,c:"orange",dash:1},{von:[232,140],nach:[240,84],bogen:10,c:"orange",dash:1}]},
+  legende:[["blau","Statue"],["orange","Bildhauer"]]
+},
+{
+  id:"pantomime-raten", name:"Pantomime-Raten", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
+  kurz:"Ein Kind stellt ein Tier, einen Beruf oder eine Sportart ohne Worte dar – die anderen raten.",
+  foerdert:"Körperausdruck, Fantasie, Beobachten",
+  vorbereitung:"Die Gruppe sitzt im Halbkreis, vorne ist die Bühne.",
+  ablauf:[
+    "Ein Kind überlegt sich leise etwas (oder bekommt es von der Betreuerin ins Ohr geflüstert).",
+    "Es stellt es vorne ohne Worte und ohne Geräusche dar.",
+    "Die anderen melden sich und raten.",
+    "Wer richtig rät, ist als Nächstes dran. Wer schon dran war, gibt an ein Kind weiter, das noch nicht dran war.",
+    "Themen wechseln: Tiere, Berufe, Sportarten, Dinge im Haushalt."
+  ],
+  wenige:"Jedes Kind ist mehrmals dran, schwierigere Begriffe.",
+  viele:"In Gruppen: Eine Gruppe stellt gemeinsam etwas dar (Zoo, Baustelle), die anderen raten.",
+  klasse1:"Nur Tiere – die Betreuerin hilft mit einem Flüster-Tipp.",
+  varianten:["Mit Geräuschen erlaubt.","Pantomime-Kette: Die Darstellung wird zu zweit weitergespielt."],
+  sicherheit:"Keine besondere Gefahr.",
+  feld:{ boden:"halle",
+    kinder:[{x:135,y:14,c:"orange",p:"arme"},
+      {x:40,y:120,c:"lila",p:"sitz"},{x:94,y:132,c:"lila",p:"ruf"},{x:150,y:136,c:"lila",p:"sitz"},{x:206,y:132,c:"lila",p:"sitz"},{x:250,y:118,c:"lila",p:"sitz",flip:1}],
+    dinge:[{typ:"zone",x:100,y:10,w:100,h:66,c:"#F2C14E",text:"Bühne"},{typ:"blase",x:96,y:108,text:"Affe?"}],
+    pfeile:[]},
+  legende:[["orange","stellt dar"],["lila","raten"]]
+}
 
 ];
 
@@ -1570,7 +3200,7 @@ $("#plan").onclick = e => {
 };
 $("#minus").onclick = () => { plan.kinder=Math.max(2,plan.kinder-1); renderFragen(); };
 $("#plus").onclick = () => { plan.kinder=Math.min(40,plan.kinder+1); renderFragen(); };
-$("#los").onclick = () => { neuerPlan(); renderPlan(); $("#p-fragen").hidden=true; $("#p-ergebnis").hidden=false; window.scrollTo(0,0); };
+$("#los").onclick = () => { zaehle("/ag-geplant",true); neuerPlan(); renderPlan(); $("#p-fragen").hidden=true; $("#p-ergebnis").hidden=false; window.scrollTo(0,0); };
 $("#mischen").onclick = () => { neuerPlan(); renderPlan(); };
 $("#aendern").onclick = () => { $("#p-ergebnis").hidden=true; $("#p-fragen").hidden=false; window.scrollTo(0,0); };
 
