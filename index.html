@@ -197,6 +197,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .hok{margin-top:6px;font-weight:800;font-size:.85rem;color:var(--gruen)}.hok.leer{color:#C0392B}
 .btr{display:block;color:var(--muted);font-size:.72rem;font-weight:700;margin-top:1px}
 .hst button:disabled{opacity:.35}
+.zahl.klein{width:56px;font-size:1.15rem;padding:4px 0;border-radius:10px}
 .hplan-box{margin-bottom:10px}.hplan{border-radius:12px}
 .stationen .phase .t{font-size:1.2rem}
 .breit{width:100%;margin-top:8px}
@@ -494,7 +495,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.8.3 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 1.8.4 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -7041,8 +7042,8 @@ $("#m-liste").onclick = e => { const b=e.target.closest(".gcard"); if(b) zeige(b
 // Wie oft wird ein Gerät in den Modulen gebraucht (für die Anzeige „in X Modulen“)
 const gebrauchtIn = k => MODULE.filter(m=>m.geraete[k]).length;
 function renderHalle(){
-  const zeile = ([k,n]) => `<div class="hzeile ${halle[k]?"":"null"}"><span>${n}<small>in ${gebrauchtIn(k)} Modulen</small></span>
-    <span class="hst"><button data-k="${k}" data-d="-1" aria-label="${n} weniger">−</button><b>${halle[k]}</b><button data-k="${k}" data-d="1" aria-label="${n} mehr">+</button></span></div>`;
+  const zeile = ([k,n]) => `<div class="hzeile ${halle[k]?"":"null"}"><span>${n}<small>in ${gebrauchtIn(k)} Modul${gebrauchtIn(k)===1?"":"en"}</small></span>
+    <span class="hst"><button data-k="${k}" data-d="-1" aria-label="${n} weniger">−</button><input class="zahl klein" type="number" inputmode="numeric" pattern="[0-9]*" min="0" max="60" data-k="${k}" value="${halle[k]}" aria-label="Anzahl ${n}" enterkeyhint="done"><button data-k="${k}" data-d="1" aria-label="${n} mehr">+</button></span></div>`;
   $("#halle-liste").innerHTML = `<div class="hkopf">Große Geräte</div>` + GERAETE.filter(g=>!g[4]).map(zeile).join("")
     + `<div class="hkopf">Kleinmaterial</div>` + GERAETE.filter(g=>g[4]).map(zeile).join("");
   const ok = MODULE.filter(m=>modulPasst(m)).length;
@@ -7060,6 +7061,13 @@ function renderHalleKurz(){
 $("#pz-hallekurz").onclick = e => { if (e.target.closest("#pz-halle-edit")) $('#pz-tabs button[data-t="halle"]').click(); };
 $("#halle-liste").onclick = e => { const b=e.target.closest("button"); if(!b) return;
   const k=b.dataset.k; halle[k]=Math.max(0,Math.min(60,(halle[k]||0)+ +b.dataset.d)); halleMerken(); renderHalle(); renderModule(); };
+// Anzahl direkt eintippen: beim Verlassen des Felds (oder Enter) übernehmen
+const hl = $("#halle-liste");
+hl.addEventListener("focusin", e => { if (e.target.matches("input.zahl")) e.target.select(); });
+hl.addEventListener("keydown", e => { if (e.target.matches("input.zahl") && e.key==="Enter") e.target.blur(); });
+hl.addEventListener("change", e => { const el=e.target; if (!el.matches("input.zahl")) return;
+  const v = parseInt(el.value,10); halle[el.dataset.k] = isNaN(v) ? 0 : Math.max(0, Math.min(60, v));
+  halleMerken(); renderHalle(); renderModule(); });
 $("#halle-null").onclick = () => { GERAETE.forEach(g=>halle[g[0]]=0); halleMerken(); renderHalle(); renderModule(); };
 $("#halle-std").onclick = () => { GERAETE.forEach(g=>halle[g[0]]=g[3]); halleMerken(); renderHalle(); renderModule(); };
 
