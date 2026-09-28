@@ -62,6 +62,9 @@ button{font:inherit;color:inherit}
 .q p{margin:0 0 8px;font-weight:800}
 .stepper{display:flex;align-items:center;justify-content:center;gap:22px}
 .stepper b{font-size:2.2rem;min-width:64px;text-align:center}
+.zahl{width:96px;font:inherit;font-size:2.2rem;font-weight:800;text-align:center;border:2px solid var(--line);border-radius:14px;padding:2px 0;background:#fff;color:var(--ink);-moz-appearance:textfield}
+.zahl:focus{outline:none;border-color:var(--blau);background:#EAF3FD}
+.zahl::-webkit-outer-spin-button,.zahl::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .stepper button{width:44px;height:44px;border-radius:50%;border:0;background:var(--soft);font-size:1.5rem;font-weight:800;cursor:pointer}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -350,7 +353,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     </div>
     <div id="p-fragen">
       <div class="q"><p>Wie viele Kinder sind da?</p>
-        <div class="stepper"><button id="minus" aria-label="weniger">−</button><b id="pkinder">12</b><button id="plus" aria-label="mehr">+</button></div></div>
+        <div class="stepper"><button id="minus" aria-label="weniger">−</button><input class="zahl" id="pkinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="40" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="plus" aria-label="mehr">+</button></div></div>
       <div class="q"><p>Wo seid ihr?</p><div class="grid2" data-p="ort"></div></div>
       <div class="q"><p>Wie ist die Stimmung?</p><div class="grid3" data-p="stimmung"></div></div>
       <div class="q"><p>Wie lange dauert die AG?</p><div class="grid3" data-p="dauer"></div></div>
@@ -371,7 +374,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div id="pz-planen">
       <div id="pz-fragen">
         <div class="q"><p>Wie viele Kinder sind da?</p>
-          <div class="stepper"><button id="pz-minus" aria-label="weniger">−</button><b id="pz-kinder">12</b><button id="pz-plus" aria-label="mehr">+</button></div></div>
+          <div class="stepper"><button id="pz-minus" aria-label="weniger">−</button><input class="zahl" id="pz-kinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="40" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="pz-plus" aria-label="mehr">+</button></div></div>
         <div class="q"><p>Schwerpunkt</p><div class="grid2" id="pz-fokus"></div></div>
         <p class="hint">Die App nimmt nur Stationen, für die eure Halle genug Geräte hat (siehe „Unsere Halle“).</p>
         <button class="bigbtn" id="pz-los">Parcours zusammenstellen →</button>
@@ -474,7 +477,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.8 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 1.8.1 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -6849,7 +6852,7 @@ function auswahl(){
 }
 
 function renderFragen(){
-  $("#pkinder").textContent = plan.kinder;
+  $("#pkinder").value = plan.kinder;
   optGruppe("ort", Object.entries(ORTE)); optGruppe("stimmung", STIMMUNG);
   optGruppe("dauer", [[30,"30 Min"],[45,"45 Min"],[60,"60 Min"]]);
   optGruppe("material", [["ja","Ja"],["nein","Nein, ohne"]]);
@@ -7098,7 +7101,7 @@ function renderParcours(){
     : `<div class="empty">Mit den Geräten eurer Halle passt leider kein Modul.<br>Bitte bei „Unsere Halle“ nachsehen.</div>`;
 }
 function renderPzFragen(){
-  $("#pz-kinder").textContent = pz.kinder;
+  $("#pz-kinder").value = pz.kinder;
   const f = [["mix","Bunt gemischt"], ...Object.keys(PKAT).map(k=>[k,k])];
   $("#pz-fokus").innerHTML = f.map(([v,l]) => `<button class="opt ${pz.fokus===v?"on":""}" data-v="${esc(v)}">${esc(l)}</button>`).join("");
 }
@@ -7134,6 +7137,18 @@ $("#pz-tabs").onclick = e => { const b=e.target.closest("button"); if(!b) return
   $("#pz-tabs").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
   ["planen","module","halle"].forEach(k => $("#pz-"+k).hidden = b.dataset.t!==k); window.scrollTo(0,0); };
 renderPzFragen(); renderModule(); renderHalle();
+
+/* Kinderzahl direkt eintippen: beim Tippen übernehmen, beim Verlassen auf 2–40 begrenzen */
+function zahlFeld(id, obj, render){
+  const el = $(id);
+  el.addEventListener("focus", () => el.select());
+  el.addEventListener("input", () => { const v = parseInt(el.value,10); if (v>=2 && v<=40) obj.kinder = v; });
+  const fertig = () => { const v = parseInt(el.value,10); obj.kinder = isNaN(v) ? obj.kinder : Math.max(2, Math.min(40, v)); render(); };
+  el.addEventListener("change", fertig); el.addEventListener("blur", fertig);
+  el.addEventListener("keydown", e => { if (e.key==="Enter") el.blur(); });
+}
+zahlFeld("#pkinder", plan, () => renderFragen());
+zahlFeld("#pz-kinder", pz, () => renderPzFragen());
 
 /* ===================== Navigation ===================== */
 document.querySelectorAll(".navtabs button").forEach(b => b.onclick = () => {
