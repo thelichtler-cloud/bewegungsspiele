@@ -187,6 +187,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .anzst{display:flex;justify-content:space-between;align-items:center;font-weight:800}
 .gcard.fehlt{opacity:.55}
 .pill.lang{white-space:normal}
+.note.gross{border-left:6px solid var(--gelb);margin:0 0 10px}
 .hplan-box{margin-bottom:10px}.hplan{border-radius:12px}
 .stationen .phase .t{font-size:1.2rem}
 .breit{width:100%;margin-top:8px}
@@ -353,7 +354,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     </div>
     <div id="p-fragen">
       <div class="q"><p>Wie viele Kinder sind da?</p>
-        <div class="stepper"><button id="minus" aria-label="weniger">−</button><input class="zahl" id="pkinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="40" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="plus" aria-label="mehr">+</button></div></div>
+        <div class="stepper"><button id="minus" aria-label="weniger">−</button><input class="zahl" id="pkinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="60" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="plus" aria-label="mehr">+</button></div></div>
       <div class="q"><p>Wo seid ihr?</p><div class="grid2" data-p="ort"></div></div>
       <div class="q"><p>Wie ist die Stimmung?</p><div class="grid3" data-p="stimmung"></div></div>
       <div class="q"><p>Wie lange dauert die AG?</p><div class="grid3" data-p="dauer"></div></div>
@@ -374,7 +375,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div id="pz-planen">
       <div id="pz-fragen">
         <div class="q"><p>Wie viele Kinder sind da?</p>
-          <div class="stepper"><button id="pz-minus" aria-label="weniger">−</button><input class="zahl" id="pz-kinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="40" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="pz-plus" aria-label="mehr">+</button></div></div>
+          <div class="stepper"><button id="pz-minus" aria-label="weniger">−</button><input class="zahl" id="pz-kinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="60" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="pz-plus" aria-label="mehr">+</button></div></div>
         <div class="q"><p>Schwerpunkt</p><div class="grid2" id="pz-fokus"></div></div>
         <p class="hint">Die App nimmt nur Stationen, für die eure Halle genug Geräte hat (siehe „Unsere Halle“).</p>
         <button class="bigbtn" id="pz-los">Parcours zusammenstellen →</button>
@@ -408,7 +409,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div class="q"><p>Name des Spiels *</p><input class="search" id="i-name" maxlength="80" placeholder="z. B. Zauberwald"></div>
     <div class="q"><p>Wie geht das Spiel? *</p><textarea class="search" id="i-ablauf" rows="6" placeholder="Kurz die Regeln beschreiben …"></textarea></div>
     <div class="q"><p>Wo?</p><div class="grid2" id="i-ort"><button class="opt on" data-v="Turnhalle">Turnhalle</button><button class="opt on" data-v="Schulhof">Schulhof</button></div></div>
-    <div class="q"><p>Wie viele Kinder?</p><div class="grid2"><input class="search" id="i-von" type="number" inputmode="numeric" min="1" max="40" placeholder="von"><input class="search" id="i-bis" type="number" inputmode="numeric" min="1" max="40" placeholder="bis"></div></div>
+    <div class="q"><p>Wie viele Kinder?</p><div class="grid2"><input class="search" id="i-von" type="number" inputmode="numeric" min="1" max="60" placeholder="von"><input class="search" id="i-bis" type="number" inputmode="numeric" min="1" max="60" placeholder="bis"></div></div>
     <div class="q"><p>Material</p><input class="search" id="i-material" placeholder="z. B. Bälle, Reifen – oder leer lassen"></div>
     <div class="q"><p>Spieldauer</p><div class="grid3" id="i-dauer"><button class="opt on" data-v="10–15 Min">10–15</button><button class="opt" data-v="15–20 Min">15–20</button><button class="opt" data-v="20–30 Min">20–30</button></div></div>
     <div class="q"><p>Wie wild ist es?</p><div class="grid3" id="i-energie"><button class="opt" data-v="ruhig">Ruhig</button><button class="opt on" data-v="mittel">Mittel</button><button class="opt" data-v="wild">Wild</button></div></div>
@@ -477,7 +478,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.8.1 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 1.8.2 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -6786,6 +6787,8 @@ const RITUALE = [
 ];
 
 /* ===================== AG planen ===================== */
+const MAX_KINDER = 60, GROSS = 30;   // ab mehr als GROSS Kindern: in 2 Gruppen parallel spielen
+const gruppeFuerSpiel = () => plan.kinder > GROSS ? Math.ceil(plan.kinder/2) : plan.kinder;
 const plan = {kinder:12, ort:"halle", stimmung:"normal", dauer:45, material:"ja", haupt:"spiele", listen:{}, idx:{}, parcours:[]};
 const mitParcours = () => plan.haupt==="parcours" && plan.ort==="halle";
 // Aufbau je AG-Länge (Minuten). Hauptteil: ein Spiel bei 30 Min, zwei Spiele bei 45/60 Min.
@@ -6800,7 +6803,8 @@ const PHASE_FARBE = {warm:FARBEN.gelb, haupt:FARBEN.orange, ritual:FARBEN.lila, 
 const ZIEL = { austoben:{warm:4,haupt:5}, normal:{warm:3,haupt:4}, runter:{warm:1,haupt:2} };
 
 function passtZurGruppe(sp){
-  return sp.kinder[0]<=plan.kinder && sp.kinder[1]>=plan.kinder
+  const k = gruppeFuerSpiel();
+  return sp.kinder[0]<=k && sp.kinder[1]>=k
       && sp.orte.includes(plan.ort)
       && (plan.material==="ja" || ohneMaterial(sp));
 }
@@ -6812,6 +6816,7 @@ function listeFuer(ph, minuten){
   const bewerte = sp => {
     const d = Math.abs(sp.energie-ziel); let s = d<=1 ? 0 : Math.round(d);
     if (ph==="haupt"){ const [von,bis]=dauerVonBis(sp); if (minuten < von-3 || minuten > bis+5) s += 1; }
+    if (plan.kinder > GROSS && sp.kinder[1] < 25) s += 1;   // Großgruppen-Spiele zuerst
     return s;
   };
   const sortiert = l => mischen(l).sort((a,b)=>bewerte(a.sp)-bewerte(b.sp));
@@ -6871,13 +6876,13 @@ function renderPlan(){
   const wahl = auswahl(), mat = new Set();
   const st = STIMMUNG.find(s=>s[0]===plan.stimmung)[1].replace("­","");
   $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}`;
-  let html = "";
+  let html = plan.kinder > GROSS ? `<div class="note gross"><b>Große Gruppe:</b> Bei ${plan.kinder} Kindern die Spiele in 2 Gruppen parallel spielen (je ca. ${gruppeFuerSpiel()} Kinder) – ${plan.ort==="halle"?"die Halle":"den Hof"} in zwei Hälften teilen.${mitParcours()?" Der Parcours läuft mit allen gemeinsam.":""}</div>` : "";
   const pg = geraeteSumme(plan.parcours);
   for (const b of bloecke()){
     if (b.parcours){
       const w = plan.parcours;
       html += `<div class="phase">${zeitKachel(b)}<div class="body">${w.length ? `<button class="open" data-parcours="1"><span class="ico">🧗</span>
-        <span><h4>Parcours · ${w.length} Stationen</h4><small>${esc(w.map(m=>m.name).join(" · "))}</small></span></button>
+        <span><h4>Parcours · ${w.length} Stationen</h4><small>${esc(w.map(m=>m.name).join(" · "))}</small>${(()=>{ const z=zusatzGruppe(plan.kinder,w,plan.zusatzIdx||0); return z && !z.helfer ? `<small class="warn">+ ${z.n} Kinder spielen parallel: ${z.sp ? esc(z.sp.name) : "ein ruhiges Spiel"}</small>` : ""; })()}</span></button>
         <button class="swap" data-k="parcours" aria-label="anderer Parcours">⟳</button>` : `<small>Kein Parcours möglich – bitte „Unsere Halle“ prüfen.</small>`}</div></div>`;
     } else if (b.ph==="warm" || b.ph==="haupt"){
       const x = wahl[b.key], sp = x && x.sp, anz = plan.listen[b.key].length;
@@ -6904,13 +6909,13 @@ function renderPlan(){
     <p class="hint">Tippen öffnet die Karte · ⟳ tauscht einen Block · 🎲 mischt die ganze Stunde neu.</p>`;
 }
 $("#plan").onclick = e => {
-  const s = e.target.closest(".swap"); if (s){ if (s.dataset.k==="parcours") plan.parcours = parcoursVorschlag(plan.kinder,"mix"); else plan.idx[s.dataset.k]++; renderPlan(); return; }
+  const s = e.target.closest(".swap"); if (s){ if (s.dataset.k==="parcours"){ plan.parcours = parcoursVorschlag(plan.kinder,"mix"); plan.zusatzIdx=(plan.zusatzIdx||0)+1; } else plan.idx[s.dataset.k]++; renderPlan(); return; }
   const o = e.target.closest(".open"); if (!o) return;
-  if (o.dataset.parcours) zeigeParcours(plan.parcours, plan.kinder);
+  if (o.dataset.parcours) zeigeParcours(plan.parcours, plan.kinder, false, plan.zusatzIdx||0);
   else if (o.dataset.ritual) zeigeRitual(o.dataset.ritual); else zeige(o.dataset.id);
 };
 $("#minus").onclick = () => { plan.kinder=Math.max(2,plan.kinder-1); renderFragen(); };
-$("#plus").onclick = () => { plan.kinder=Math.min(40,plan.kinder+1); renderFragen(); };
+$("#plus").onclick = () => { plan.kinder=Math.min(MAX_KINDER,plan.kinder+1); renderFragen(); };
 $("#los").onclick = () => { zaehle("/ag-geplant",true); neuerPlan(); renderPlan(); $("#p-fragen").hidden=true; $("#p-ergebnis").hidden=false; window.scrollTo(0,0); };
 $("#mischen").onclick = () => { neuerPlan(); renderPlan(); };
 $("#aendern").onclick = () => { $("#p-ergebnis").hidden=true; $("#p-fragen").hidden=false; window.scrollTo(0,0); };
@@ -6944,7 +6949,7 @@ const halle = Object.fromEntries(GERAETE.map(g=>[g[0],g[3]]));
 try { Object.assign(halle, JSON.parse(lies("halle")||"{}")); } catch(e){}
 const halleMerken = () => merke("halle", JSON.stringify(halle));
 
-const geraetText = (g, kurz) => Object.entries(g).map(([k,n]) => `${n} ${n===1?GNAME[k][2]:GNAME[k][1]}`).join(kurz?", ":" · ");
+const geraetText = (g, kurz) => Object.entries(g).map(([k,n]) => `${n} ${n===1?GNAME[k][2]:GNAME[k][1]}`).join(kurz?", ":" · ") || "nur Kleinmaterial";
 const modulPasst = (m, rest=halle) => Object.entries(m.geraete).every(([k,n]) => (rest[k]||0) >= n);
 
 /* ---------- Detailkarte eines Moduls ---------- */
@@ -7016,7 +7021,16 @@ $("#halle-liste").onclick = e => { const b=e.target.closest("button"); if(!b) re
   const k=b.dataset.k; halle[k]=Math.max(0,Math.min(30,(halle[k]||0)+ +b.dataset.d)); halleMerken(); renderHalle(); renderModule(); };
 
 /* ---------- Parcours zusammenstellen ---------- */
-const pz = {kinder:12, fokus:"mix", stationen:0, wahl:[], gemischt:0};
+const pz = {kinder:12, fokus:"mix", stationen:0, wahl:[], zusatzIdx:0};
+const PRO_STATION = 6;
+// Kinder, die nicht an die Stationen passen, spielen parallel ein ruhiges Spiel, das wenig Platz braucht
+function zusatzGruppe(kinder, wahl, idx=0){
+  const n = kinder - wahl.length*PRO_STATION; if (!wahl.length || n<=0) return null;
+  if (n < 3) return {n, sp:null, anzahl:0, helfer:true};
+  const l = SPIELE.filter(sp => sp.orte.includes("halle") && sp.energie<=2 && sp.kinder[0]<=n && sp.kinder[1]>=n
+    && !sp.material.some(m=>/Bank|Bänke|Matte|Kasten|Kästen/.test(m))).sort((a,b)=>a.energie-b.energie || a.name.localeCompare(b.name,"de"));
+  return {n, sp: l.length ? l[idx % l.length] : null, anzahl: l.length};
+}
 const stationenFuer = k => Math.max(3, Math.min(8, Math.ceil(k/4)));
 function restGeraete(ohne){ const r={...halle}; pz.wahl.forEach((m,i)=>{ if(i!==ohne) Object.entries(m.geraete).forEach(([k,n])=>r[k]-=n); }); return r; }
 // Vorschlag: möglichst verschiedene Bewegungsarten, Schwerpunkt bevorzugt, Geräte dürfen nicht ausgehen
@@ -7078,26 +7092,30 @@ function hallenplanSVG(wahl){
   return s + `<text x="150" y="196" font-size="7.5" text-anchor="middle" fill="${FARBEN.ink}" opacity=".7">Schema von oben – an eure Halle anpassen</text></svg>`;
 }
 
-function parcoursHTML(wahl, kinder, fuerDruck){
+function parcoursHTML(wahl, kinder, fuerDruck, zIdx=0){
   const {s, klein} = geraeteSumme(wahl);
-  const aufbau = wahl.reduce((a,m)=>a+m.aufbau,0), proSt = Math.max(1, Math.round(kinder/wahl.length));
+  const aufbau = wahl.reduce((a,m)=>a+m.aufbau,0), proSt = Math.min(PRO_STATION, Math.max(1, Math.round(kinder/wahl.length))), z = zusatzGruppe(kinder, wahl, zIdx);
   const ablauf = kinder <= wahl.length*2
     ? "Rundlauf: Alle starten nacheinander an Station 1 und laufen den Parcours immer wieder ab – mit Abstand, nicht überholen."
-    : `Stationsbetrieb: Je ${proSt} Kinder pro Station. Auf ein Signal (Pfiff oder Musik aus) geht jede Gruppe im Uhrzeigersinn eine Station weiter – etwa alle 3–4 Minuten.`;
+    : `Stationsbetrieb: Je ${proSt} Kinder pro Station (höchstens ${PRO_STATION}). Auf ein Signal (Pfiff oder Musik aus) geht jede Gruppe im Uhrzeigersinn eine Station weiter – etwa alle 3–4 Minuten.` + (z && !z.helfer ? ` Die ${z.n} übrigen Kinder spielen parallel am Rand; nach jeder Runde tauschen sie mit einer Stationsgruppe.` : "");
   return `
     <div class="hplan-box">${hallenplanSVG(wahl)}</div>
     <div class="stationen">${wahl.map((m,i)=>`<div class="phase"><div class="t" style="background:${FARBEN[m.farbe]}">${i+1}<small>Station</small></div>
       <div class="body"><button class="open" data-id="${m.id}"><span class="mini">${feldSVG(m,true)}</span>
       <span><h4>${esc(m.name)}</h4><small>${esc(m.kat)} · ${esc(geraetText(m.geraete,true))}</small></span></button>
-      ${fuerDruck?"":`<button class="swap" data-i="${i}" aria-label="andere Station">⟳</button>`}</div></div>`).join("")}</div>
+      ${fuerDruck?"":`<button class="swap" data-i="${i}" aria-label="andere Station">⟳</button>`}</div></div>`).join("")}
+      ${z ? `<div class="phase"><div class="t" style="background:${FARBEN.lila}">+${z.n}<small>Kinder</small></div><div class="body">${z.sp
+        ? `<button class="open" data-id="${z.sp.id}"><span class="mini">${feldSVG(z.sp,true)}</span><span><h4>${esc(z.sp.name)}</h4><small>Spielen parallel am Rand – braucht wenig Platz</small></span></button>${fuerDruck||z.anzahl<2?"":`<button class="swap" data-z="1" aria-label="anderes Spiel">⟳</button>`}`
+        : z.helfer ? `<span class="ico">🦺</span><span><h4>Stationschef${z.n>1?"s":""}</h4><small>${z.n===1?"Ein Kind hilft":"Zwei Kinder helfen"} an einer Station (Bälle zurückholen, Matten gerade ziehen) und wechsel${z.n===1?"t":"n"} jede Runde mit.</small></span>`
+        : `<span><h4>Ruhiges Spiel am Rand</h4><small>Für diese Gruppengröße bitte ein Spiel aus „Alle Spiele“ wählen.</small></span>`}</div></div>` : ""}</div>
     <div class="note"><b>Geräte:</b> ${esc(geraetText(s))}${klein.length?` · ${esc(klein.join(", "))}`:""}</div>
     <div class="note"><b>Aufbau:</b> ca. ${aufbau} Min – mit Kinderhilfe geht's schneller. Jede Station vor dem Start selbst prüfen.</div>
     <div class="note"><b>So läuft's:</b> ${esc(ablauf)}</div>`;
 }
 function renderParcours(){
-  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${pz.wahl.length} Stationen${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}`;
+  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${pz.wahl.length} Stationen${(()=>{ const z=zusatzGruppe(pz.kinder,pz.wahl); return z ? (z.helfer ? ` + ${z.n} Stationschef${z.n>1?"s":""}` : ` + ${z.n} im Zusatzspiel`) : ""; })()}${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}`;
   $("#pz-anz").textContent = pz.wahl.length;
-  $("#pz-plan").innerHTML = pz.wahl.length ? parcoursHTML(pz.wahl, pz.kinder)
+  $("#pz-plan").innerHTML = pz.wahl.length ? parcoursHTML(pz.wahl, pz.kinder, false, pz.zusatzIdx)
     : `<div class="empty">Mit den Geräten eurer Halle passt leider kein Modul.<br>Bitte bei „Unsere Halle“ nachsehen.</div>`;
 }
 function renderPzFragen(){
@@ -7107,24 +7125,24 @@ function renderPzFragen(){
 }
 $("#pz-fokus").onclick = e => { const b=e.target.closest("button"); if(!b) return; pz.fokus=b.dataset.v; renderPzFragen(); };
 $("#pz-minus").onclick = () => { pz.kinder=Math.max(2,pz.kinder-1); renderPzFragen(); };
-$("#pz-plus").onclick = () => { pz.kinder=Math.min(40,pz.kinder+1); renderPzFragen(); };
+$("#pz-plus").onclick = () => { pz.kinder=Math.min(MAX_KINDER,pz.kinder+1); renderPzFragen(); };
 $("#pz-los").onclick = () => { zaehle("/parcours-geplant",true); pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus); renderParcours(); $("#pz-fragen").hidden=true; $("#pz-ergebnis").hidden=false; window.scrollTo(0,0); };
-$("#pz-mischen").onclick = () => { pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length); renderParcours(); };
+$("#pz-mischen").onclick = () => { pz.zusatzIdx++; pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length); renderParcours(); };
 $("#pz-aendern").onclick = () => { $("#pz-ergebnis").hidden=true; $("#pz-fragen").hidden=false; window.scrollTo(0,0); };
 $("#pz-weniger").onclick = () => { if (pz.wahl.length>2){ pz.wahl.pop(); pz.wahl=ordneWand(pz.wahl); renderParcours(); } };
 $("#pz-mehr").onclick = () => { const w=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length+1); if (w.length>pz.wahl.length){ const neu=w.find(m=>!pz.wahl.includes(m)&&modulPasst(m,restGeraete(-1))); if(neu){ pz.wahl.push(neu); pz.wahl=ordneWand(pz.wahl); } renderParcours(); } };
 $("#pz-plan").onclick = e => {
-  const s=e.target.closest(".swap"); if (s){ stationTauschen(+s.dataset.i); renderParcours(); return; }
+  const s=e.target.closest(".swap"); if (s){ if (s.dataset.z) pz.zusatzIdx++; else stationTauschen(+s.dataset.i); renderParcours(); return; }
   const o=e.target.closest(".open"); if (o) zeige(o.dataset.id);
 };
-$("#pz-druck").onclick = () => zeigeParcours(pz.wahl, pz.kinder, true);
+$("#pz-druck").onclick = () => zeigeParcours(pz.wahl, pz.kinder, true, pz.zusatzIdx);
 // Parcours als Karte (zum Drucken oder aus dem AG-Plan heraus)
-function zeigeParcours(wahl, kinder, drucken){
+function zeigeParcours(wahl, kinder, drucken, zIdx=0){
   schliessen();
   $("#sheet").innerHTML = `<article class="sheet" style="--c:${FARBEN.tuerkis}">
     <div class="cat">Parcours</div><h2>Parcours mit ${wahl.length} Stationen</h2>
     <p class="kurz">Für ${kinder} Kinder · Turnhalle</p>
-    ${parcoursHTML(wahl, kinder, true)}
+    ${parcoursHTML(wahl, kinder, true, zIdx)}
     <p class="hint">Station antippen öffnet die Aufbau-Anleitung.</p>
     <div class="pagefoot"><span>Bewegungsspiele · Parcours</span><span>${new Date().toLocaleDateString("de-DE")}</span></div></article>`;
   $("#detail").classList.add("on"); $("#detail").scrollTop=0; document.body.style.overflow="hidden";
@@ -7142,8 +7160,8 @@ renderPzFragen(); renderModule(); renderHalle();
 function zahlFeld(id, obj, render){
   const el = $(id);
   el.addEventListener("focus", () => el.select());
-  el.addEventListener("input", () => { const v = parseInt(el.value,10); if (v>=2 && v<=40) obj.kinder = v; });
-  const fertig = () => { const v = parseInt(el.value,10); obj.kinder = isNaN(v) ? obj.kinder : Math.max(2, Math.min(40, v)); render(); };
+  el.addEventListener("input", () => { const v = parseInt(el.value,10); if (v>=2 && v<=MAX_KINDER) obj.kinder = v; });
+  const fertig = () => { const v = parseInt(el.value,10); obj.kinder = isNaN(v) ? obj.kinder : Math.max(2, Math.min(MAX_KINDER, v)); render(); };
   el.addEventListener("change", fertig); el.addEventListener("blur", fertig);
   el.addEventListener("keydown", e => { if (e.key==="Enter") el.blur(); });
 }
