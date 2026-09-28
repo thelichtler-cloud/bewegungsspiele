@@ -188,6 +188,15 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .gcard.fehlt{opacity:.55}
 .pill.lang{white-space:normal}
 .note.gross{border-left:6px solid var(--gelb);margin:0 0 10px}
+.teilbtn{background:var(--gruen);box-shadow:0 6px 18px rgba(59,170,92,.3);margin-top:10px}
+#teilen{margin-top:12px}
+.tfeld{display:flex;flex-direction:column;font-size:.78rem;font-weight:800;color:var(--muted);gap:3px}
+.zrow{padding:7px 0;border-bottom:1px solid var(--soft)}.zrow:last-child{border-bottom:0}
+.zrow b{display:block;font-size:.88rem;margin-bottom:4px}
+.nchip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;font-size:.82rem;font-weight:700;margin:0 5px 5px 0;cursor:pointer}
+.nchip.on{background:var(--blau);border-color:var(--blau);color:#fff}
+.tvorschau{width:100%;border-radius:12px;border:1px solid var(--line);display:block;min-height:60px;background:#fff}
+.tknoepfe .opt{font-size:.95rem;padding:12px 4px;line-height:1.35}
 .stationen + .note.gross,.note + .note.gross{margin-top:4px}
 .hkopf{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 2px}
 .hkopf:first-child{margin-top:0}
@@ -379,6 +388,19 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div class="sum" id="p-sum"></div>
       <div class="plan" id="plan"></div>
       <div class="row2"><button class="ghost" id="aendern">← Angaben ändern</button><button class="bigbtn" id="mischen">🎲 Neu mischen</button></div>
+      <button class="bigbtn teilbtn" id="teilen-auf">📤 Plan fürs Team teilen</button>
+      <div id="teilen" hidden>
+        <div class="q"><p>Kopf des Plans</p>
+          <input class="search" id="t-titel" maxlength="60" placeholder="Titel, z. B. Bewegungs-AG Klasse 2">
+          <div class="grid2" style="margin-top:6px"><label class="tfeld">Datum<input class="search" id="t-datum" type="date"></label><label class="tfeld">Beginn<input class="search" id="t-beginn" type="time"></label></div></div>
+        <div class="q"><p>Wer ist heute dabei?</p>
+          <input class="search" id="t-namen" maxlength="200" placeholder="Vornamen oder Kürzel, mit Komma: Anna, Tom, Lisa">
+          <small class="hint" style="display:block;margin:6px 0 0">Nur auf diesem Handy gespeichert.</small></div>
+        <div class="q"><p>Wer macht was?</p><div id="t-zuteilung"></div></div>
+        <div class="q"><p>Vorschau</p><img id="t-vorschau" alt="Vorschau des Plans" class="tvorschau"></div>
+        <div class="grid3 tknoepfe"><button class="opt" id="t-bild">🖼<br>Bild</button><button class="opt" id="t-folge">🗂<br>Bildfolge</button><button class="opt" id="t-pdf">📄<br>PDF</button></div>
+        <p class="hint" id="t-status">Bild = eine Übersicht für WhatsApp · Bildfolge = Übersicht + eine Seite pro Block · PDF = alles zum Drucken.</p>
+      </div>
     </div>
   </main>
 
@@ -495,7 +517,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.8.4 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 1.9 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -6854,6 +6876,7 @@ function bloecke(){
 
 function neuerPlan(){
   plan.listen={}; plan.idx={}; plan.parcours = mitParcours() ? parcoursVorschlag(plan.kinder,"mix") : [];
+  if (typeof teilen !== "undefined") teilen.wer = {};
   for (const b of bloecke()){
     if (b.parcours) continue;
     if (b.ph==="warm"||b.ph==="haupt") plan.listen[b.key]=listeFuer(b.ph,b.min);
@@ -6928,6 +6951,7 @@ function renderPlan(){
   $("#plan").innerHTML = html + `<div class="note"><b>Material:</b> ${m.length ? esc(m.join(", ")) : (plan.parcours.length ? "" : "nichts nötig ✔")}${plan.parcours.length ? `${m.length?" · ":""}${esc(geraetText(pg.s))}${pg.klein.length?", "+esc(pg.klein.join(", ")):""}` : ""}</div>
     ${plan.parcours.length ? `<div class="note"><b>Parcours aufbauen:</b> ca. ${pAufbau} Min – am besten vor der AG oder gemeinsam mit den Kindern.</div>` : ""}
     <p class="hint">Tippen öffnet die Karte · ⟳ tauscht einen Block · 🎲 mischt die ganze Stunde neu.</p>`;
+  if ($("#teilen") && !$("#teilen").hidden) renderTeilen();
 }
 $("#plan").onclick = e => {
   const s = e.target.closest(".swap"); if (s){ if (s.dataset.k==="parcours"){ plan.parcours = parcoursVorschlag(plan.kinder,"mix"); plan.zusatzIdx=(plan.zusatzIdx||0)+1; } else plan.idx[s.dataset.k]++; renderPlan(); return; }
@@ -7239,6 +7263,247 @@ zahlFeld("#pz-betreuer", team, () => { renderFragen(); renderPzFragen(); }, "bet
 const betreuerAendern = d => { team.betreuer = Math.max(1, Math.min(MAX_BETREUER, team.betreuer+d)); renderFragen(); renderPzFragen(); };
 $("#bt-minus").onclick = () => betreuerAendern(-1); $("#bt-plus").onclick = () => betreuerAendern(1);
 $("#pzb-minus").onclick = () => betreuerAendern(-1); $("#pzb-plus").onclick = () => betreuerAendern(1);
+
+/* ===================== Plan teilen: Übersichtsbild, Bildfolge, PDF ===================== */
+// Betreuer-Namen, Titel und Beginn werden nur auf diesem Gerät gespeichert.
+const heuteISO = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const teilen = { titel: lies("t-titel")||"", beginn: lies("t-beginn")||"14:30", datum: heuteISO(),
+  namen: (lies("t-namen")||"").split(",").map(s=>s.trim()).filter(Boolean), wer:{} };
+const zuMin = t => { const [h,m]=String(t||"0:0").split(":").map(Number); return (h||0)*60+(m||0); };
+const zuZeit = m => `${String(Math.floor(m/60)%24).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`;
+const datumText = iso => { try { return new Date(iso+"T12:00").toLocaleDateString("de-DE",{weekday:"short",day:"2-digit",month:"2-digit",year:"numeric"}); } catch(e){ return iso; } };
+
+// Blöcke der geplanten Stunde mit Uhrzeiten
+function planBloecke(){
+  const wahl = auswahl(); let t = zuMin(teilen.beginn); const out = [];
+  for (const b of bloecke()){
+    const e = {key:b.key, ph:b.ph, min:b.min, von:t, bis:t+b.min, nr:b.nr};
+    if (b.parcours){ e.typ="parcours"; e.wahl=plan.parcours; e.z=zusatzGruppe(plan.kinder, plan.parcours, plan.zusatzIdx||0); e.titel=`Parcours · ${plan.parcours.length} Station${plan.parcours.length===1?"":"en"}`; }
+    else if (b.ph==="warm"||b.ph==="haupt"){ const x=wahl[b.key]; e.typ="spiel"; e.sp=x&&x.sp; e.titel=e.sp?e.sp.name:"–"; }
+    else if (b.ph==="ritual"){ e.typ="ritual"; e.r=RITUALE[plan.idx.ritual % RITUALE.length]; e.titel=e.r.name; }
+    else { e.typ="raeumen"; e.titel="Aufräumen"; }
+    out.push(e); t += b.min;
+  }
+  return out;
+}
+// Zuteilung: Spiele → die ersten zwei Namen, Stationen → je ein Name, Zusatzspiel → die nächsten zwei
+function standardWer(key){
+  const N = teilen.namen, n = plan.parcours.length;
+  if (key.startsWith("st")) { const i=+key.slice(2); return N[i] ? [N[i]] : []; }
+  if (key==="zusatz") return N.slice(n, n+2);
+  return N.slice(0,2);
+}
+const wer = key => (teilen.wer[key] || standardWer(key)).filter(x=>teilen.namen.includes(x));
+const werText = (key, anzahl) => { const w=wer(key); return w.length ? w.join(", ") : (teilen.namen.length ? "noch offen" : `${anzahl} Betreuer`); };
+
+function hinweiseText(){
+  const h = [];
+  if (plan.kinder > GROSS) h.push(`Große Gruppe: Spiele in 2 Gruppen parallel (je ca. ${gruppeFuerSpiel()} Kinder)`);
+  if (team.betreuer < 2) h.push("Nur 1 Betreuer: nur ruhige, einfache Spiele");
+  if (mitParcours() && plan.parcours.length){ const b=betreuerBedarf(plan.kinder, plan.parcours, plan.zusatzIdx||0); if (b.fehlen) h.push(`Parcours: es fehlen ${b.fehlen} Betreuer`); }
+  return h;
+}
+function materialText(){
+  const mat = new Set(); planBloecke().forEach(e=>{ if (e.sp) e.sp.material.forEach(m=>mat.add(m.replace(/ \(.*\)/,""))); });
+  const m=[...mat].filter(x=>!/Musik/.test(x)), pg=geraeteSumme(plan.parcours);
+  return [m.join(", "), plan.parcours.length ? geraetText(pg.s) : ""].filter(Boolean).join(" · ") || "nichts nötig";
+}
+
+/* ---------- Zeichnen als SVG (wird dann zu PNG/JPEG) ---------- */
+const TF = "Helvetica, Arial, sans-serif";
+const mctx = document.createElement("canvas").getContext("2d");
+const breite = (t, gr, fett) => { mctx.font = `${fett?700:400} ${gr}px ${TF}`; return mctx.measureText(t).width; };
+function umbrechen(t, gr, fett, max, maxZ=99){
+  const w = String(t||"").split(/\s+/).filter(Boolean), z = []; let a = "";
+  for (const x of w){ const v = a ? a+" "+x : x; if (a && breite(v,gr,fett) > max){ z.push(a); a=x; } else a=v; }
+  if (a) z.push(a);
+  if (z.length > maxZ){ z.length = maxZ; let l = z[maxZ-1]; while (l && breite(l+" …",gr,fett) > max) l = l.replace(/\s*\S+$/,""); z[maxZ-1] = l+" …"; }
+  return z;
+}
+const txt = (x, y, zeilen, gr, fett, farbe, lh=1.28, anker="start") => zeilen.map((z,i)=>`<text x="${x}" y="${(y+i*gr*lh).toFixed(1)}" font-size="${gr}" font-weight="${fett?700:400}" fill="${farbe}" text-anchor="${anker}">${esc(z)}</text>`).join("");
+const einbetten = (svg, x, y, w, h) => svg.replace(/^<svg /, `<svg x="${x}" y="${y}" width="${w}" height="${h}" `);
+const symbole = () => { const d=document.querySelector('body > svg[aria-hidden="true"] defs'); return d ? d.outerHTML : ""; };
+const rahmenSVG = (w, h, inhalt) => `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${symbole()}<style>text{font-family:${TF}}</style><rect width="${w}" height="${h}" fill="#FFF8EE"/>${inhalt}</svg>`;
+const INK="#2D3142", GRAU="#6B7080";
+
+// Übersichtsbild: alle Blöcke der Stunde auf einer Seite
+function uebersichtSVG(){
+  const W=1080, P=40, B = planBloecke(); let y=0, s="";
+  const titel = teilen.titel || "AG-Stunde";
+  const zeile2 = `${datumText(teilen.datum)} · ${zuZeit(B[0].von)}–${zuZeit(B[B.length-1].bis)} · ${ORTE[plan.ort]}`;
+  const zeile3 = `${plan.kinder} Kinder · ${teilen.namen.length ? "Team: "+teilen.namen.join(", ") : team.betreuer+" Betreuer"}`;
+  const tz = umbrechen(titel, 50, true, W-2*P, 2), z3 = umbrechen(zeile3, 30, false, W-2*P, 2);
+  const kopfH = 40 + tz.length*62 + 44 + z3.length*38 + 24;
+  s += `<rect width="${W}" height="${kopfH}" fill="${FARBEN.orange}"/>` + txt(P, 78, tz, 50, true, "#fff", 1.24)
+     + txt(P, 78+tz.length*62+2, [zeile2], 30, true, "#fff") + txt(P, 78+tz.length*62+42, z3, 30, false, "#fff");
+  y = kopfH + 26;
+  const hw = hinweiseText();
+  if (hw.length){ const zl = hw.flatMap(h=>umbrechen("⚠ "+h, 26, true, W-2*P-40)); const h = zl.length*34+26;
+    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="16" fill="#FFF1C9" stroke="#F5C542" stroke-width="3"/>` + txt(P+20, y+40, zl, 26, true, INK, 1.3); y += h+20; }
+  for (const e of B){
+    const TX = 450, TW = W-P-TX-20; let inhalt = "", th = 0;
+    const kopf = umbrechen(e.titel, 36, true, TW, 2);
+    inhalt += txt(TX, y+50, kopf, 36, true, INK); th = 50 + (kopf.length-1)*46;
+    const unter = [];
+    if (e.typ==="spiel" && e.sp){
+      unter.push([umbrechen(e.sp.kurz, 26, false, TW, 2), 26, false, GRAU]);
+      unter.push([umbrechen("👤 "+werText(e.key,2), 26, true, TW, 2), 26, true, FARBEN.blau]);
+      if (e.sp.material.length) unter.push([umbrechen("Material: "+e.sp.material.map(m=>m.replace(/ \(.*\)/,"")).join(", "), 24, false, TW, 2), 24, false, GRAU]);
+    } else if (e.typ==="parcours"){
+      e.wahl.forEach((m,i)=>unter.push([umbrechen(`${i+1} ${m.name} – ${werText("st"+i,1)}`, 25, false, TW, 1), 25, false, INK]));
+      if (e.z && !e.z.helfer) unter.push([umbrechen(`+ ${e.z.n} Kinder: ${e.z.sp?e.z.sp.name:"ruhiges Spiel"} – ${werText("zusatz",2)}`, 25, true, TW, 2), 25, true, FARBEN.lila]);
+      if (e.z && e.z.helfer) unter.push([umbrechen(`+ ${e.z.n} Stationschef${e.z.n>1?"s":""}`, 25, false, TW, 1), 25, false, GRAU]);
+    } else if (e.typ==="ritual"){
+      unter.push([umbrechen(e.r.kurz, 26, false, TW, 2), 26, false, GRAU]);
+    } else {
+      unter.push([umbrechen(plan.parcours.length ? "Parcours abbauen – alle helfen mit." : "Material wegräumen, trinken, umziehen.", 26, false, TW, 2), 26, false, GRAU]);
+    }
+    for (const [zl, gr, f, fb] of unter){ th += 10 + gr*0.3; inhalt += txt(TX, y+th+gr, zl, gr, f, fb); th += zl.length*gr*1.28; }
+    const h = Math.max(190, th + 34);
+    let bild = "";
+    if (e.typ==="spiel" && e.sp) bild = einbetten(feldSVG(e.sp,true), 225, y+20, 200, 142);
+    else if (e.typ==="parcours" && e.wahl.length) bild = einbetten(hallenplanSVG(e.wahl), 225, y+20, 200, 133);
+    else bild = `<text x="325" y="${y+h/2+26}" font-size="70" text-anchor="middle">${e.typ==="ritual"?"🤝":"🧺"}</text>`;
+    const pf = PHASE_FARBE[e.ph], dunkel = e.ph==="warm";
+    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${h}" rx="20" fill="#fff"/>`
+       + `<rect x="${P}" y="${y}" width="165" height="${h}" rx="20" fill="${pf}"/><rect x="${P+140}" y="${y}" width="25" height="${h}" fill="${pf}"/>`
+       + txt(P+82, y+h/2-8, [zuZeit(e.von)], 38, true, dunkel?INK:"#fff", 1.2, "middle")
+       + txt(P+82, y+h/2+28, [`${e.min} Min`], 24, false, dunkel?INK:"#fff", 1.2, "middle")
+       + txt(P+82, y+h/2+58, [PHASEN[e.ph]+(e.nr?" "+e.nr:"")], 20, true, dunkel?INK:"#fff", 1.2, "middle")
+       + bild + inhalt;
+    y += h + 16;
+  }
+  const mz = umbrechen("Material: "+materialText(), 26, false, W-2*P-40);
+  const pa = plan.parcours.length ? umbrechen(`Parcours vorher aufbauen: ca. ${plan.parcours.reduce((a,m)=>a+m.aufbau,0)} Min`, 26, true, W-2*P-40) : [];
+  const fh = (mz.length+pa.length)*34 + 30;
+  s += `<rect x="${P}" y="${y+4}" width="${W-2*P}" height="${fh}" rx="16" fill="#fff"/>` + txt(P+20, y+42, mz, 26, false, INK, 1.3) + txt(P+20, y+42+mz.length*34, pa, 26, true, INK, 1.3);
+  y += fh + 30;
+  s += txt(W/2, y+10, ["Details und Schrittbilder: Bewegungsspiele-App"], 22, false, GRAU, 1.2, "middle");
+  y += 40;
+  return {svg: rahmenSVG(W, y, s), w: W, h: y};
+}
+
+// Eine Seite pro Block (für die Bildfolge und das PDF)
+function blockSVG(e){
+  const W=1080, P=40; let s="", y=0;
+  const pf = PHASE_FARBE[e.ph], dunkel = e.ph==="warm", tf = dunkel ? INK : "#fff";
+  const kopf = umbrechen(e.titel, 54, true, W-2*P, 2);
+  const kh = 70 + kopf.length*64 + 20;
+  s += `<rect width="${W}" height="${kh}" fill="${pf}"/>` + txt(P, 56, [`${zuZeit(e.von)}–${zuZeit(e.bis)} · ${PHASEN[e.ph]}${e.nr?" "+e.nr:""} · ${e.min} Min`], 30, true, tf) + txt(P, 56+68, kopf, 54, true, tf, 1.18);
+  y = kh + 24;
+  const absatz = (t, gr=30, fett=false, farbe=INK, maxZ=99) => { const zl = umbrechen(t, gr, fett, W-2*P, maxZ); s += txt(P, y+gr, zl, gr, fett, farbe); y += zl.length*gr*1.3 + 14; };
+  if (e.typ==="spiel" && e.sp){
+    s += `<rect x="${P}" y="${y}" width="${W-2*P}" height="${(W-2*P)*2/3}" rx="18" fill="#fff"/>` + einbetten(feldSVG(e.sp,false), P, y, W-2*P, (W-2*P)*2/3);
+    y += (W-2*P)*2/3 + 26;
+    absatz(e.sp.kurz, 32, false, GRAU, 3);
+    absatz("👤 "+werText(e.key,2), 32, true, FARBEN.blau);
+    absatz("Material: "+(e.sp.material.length ? e.sp.material.join(", ") : "keins"), 28, false, INK, 2);
+    if (e.sp.vorbereitung) absatz("Vorbereitung: "+e.sp.vorbereitung, 28, false, INK, 3);
+    absatz("So geht's", 30, true, INK);
+    e.sp.ablauf.forEach((a,i)=>absatz(`${i+1}. ${a}`, 27, false, INK, 2));
+  } else if (e.typ==="parcours"){
+    if (e.wahl.length){ s += einbetten(hallenplanSVG(e.wahl), P, y, W-2*P, (W-2*P)*2/3); y += (W-2*P)*2/3 + 26; }
+    e.wahl.forEach((m,i)=>absatz(`${i+1}  ${m.name} (${m.kat}) – ${werText("st"+i,1)}`, 30, false, INK, 2));
+    if (e.z && !e.z.helfer) absatz(`+ ${e.z.n} Kinder: ${e.z.sp?e.z.sp.name:"ruhiges Spiel am Rand"} – ${werText("zusatz",2)}`, 30, true, FARBEN.lila, 2);
+    if (e.z && e.z.helfer) absatz(`+ ${e.z.n} Stationschef${e.z.n>1?"s":""}: helfen an einer Station mit`, 28, false, GRAU, 2);
+    absatz(`Wechsel alle 3–4 Minuten auf Signal, im Uhrzeigersinn. Höchstens ${PRO_STATION} Kinder pro Station.`, 28, false, GRAU, 3);
+    absatz(`Aufbau vorher: ca. ${e.wahl.reduce((a,m)=>a+m.aufbau,0)} Min · Geräte: ${geraetText(geraeteSumme(e.wahl).s)}`, 26, false, INK, 4);
+  } else if (e.typ==="ritual"){
+    absatz(e.r.kurz, 32, false, GRAU, 3);
+    e.r.ablauf.forEach((a,i)=>absatz(`${i+1}. ${a}`, 28, false, INK, 3));
+  }
+  y += 20;
+  return {svg: rahmenSVG(W, y, s), w: W, h: y};
+}
+
+// SVG → Bild-Datei (PNG oder JPEG)
+function svgZuBlob(bild, typ="image/png"){
+  return new Promise((ok, fehler) => {
+    const img = new Image();
+    img.onload = () => { const c = document.createElement("canvas"); c.width = bild.w; c.height = bild.h;
+      const g = c.getContext("2d"); g.fillStyle = "#FFF8EE"; g.fillRect(0,0,c.width,c.height); g.drawImage(img, 0, 0);
+      c.toBlob(b => b ? ok(b) : fehler(new Error("Bild")), typ, 0.9); };
+    img.onerror = () => fehler(new Error("SVG"));
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(bild.svg);
+  });
+}
+// Kleiner PDF-Baukasten: jede Seite = ein JPEG-Bild auf A4
+async function pdfAusBildern(bilder){
+  const enc = new TextEncoder(), teile = [], offs = []; let pos = 0;
+  const add = x => { const b = typeof x === "string" ? enc.encode(x) : x; teile.push(b); pos += b.length; };
+  const obj = (nr, f) => { offs[nr] = pos; add(`${nr} 0 obj\n`); f(); add("\nendobj\n"); };
+  const n = bilder.length, PW = 595.28, PH = 841.89, M = 24;
+  add("%PDF-1.4\n");
+  obj(1, () => add("<< /Type /Catalog /Pages 2 0 R >>"));
+  obj(2, () => add(`<< /Type /Pages /Kids [${bilder.map((_,i)=>`${3+3*i} 0 R`).join(" ")}] /Count ${n} >>`));
+  for (let i=0; i<n; i++){
+    const {w, h, bytes} = bilder[i], sk = Math.min((PW-2*M)/w, (PH-2*M)/h), dw = w*sk, dh = h*sk, x = (PW-dw)/2, y = PH-M-dh;
+    const c = `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm /Im${i} Do Q`;
+    obj(3+3*i, () => add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im${i} ${5+3*i} 0 R >> >> /Contents ${4+3*i} 0 R >>`));
+    obj(4+3*i, () => add(`<< /Length ${c.length} >>\nstream\n${c}\nendstream`));
+    obj(5+3*i, () => { add(`<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`); add(bytes); add("\nendstream"); });
+  }
+  const xref = pos, anz = 3+3*n;
+  add(`xref\n0 ${anz}\n0000000000 65535 f \n` + offs.slice(1).map(o => String(o).padStart(10,"0")+" 00000 n \n").join(""));
+  add(`trailer\n<< /Size ${anz} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  return new Blob(teile, {type:"application/pdf"});
+}
+const blockSeiten = () => planBloecke().filter(e => e.typ!=="raeumen" && (e.typ!=="spiel" || e.sp));
+const dateiName = (rest, endung) => `AG-Plan_${teilen.datum}${rest?"_"+rest:""}.${endung}`;
+async function teileDateien(files, info){
+  try { if (navigator.canShare && navigator.canShare({files})) { await navigator.share({files, title:"AG-Plan"}); return "Geteilt ✔"; } }
+  catch(e){ if (e && e.name === "AbortError") return ""; }
+  files.forEach(f => { const a=document.createElement("a"); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); a.remove(); });
+  return `${info} gespeichert (Downloads) – von dort teilen oder drucken.`;
+}
+async function teilenAktion(art){
+  const st = $("#t-status"); st.textContent = "Wird erstellt …";
+  try {
+    zaehle("/plan-geteilt-"+art, true);
+    if (art === "bild"){ const b = await svgZuBlob(uebersichtSVG());
+      st.textContent = await teileDateien([new File([b], dateiName("", "png"), {type:"image/png"})], "Bild"); }
+    else if (art === "folge"){ const seiten = [uebersichtSVG(), ...blockSeiten().map(blockSVG)];
+      const files = []; for (let i=0;i<seiten.length;i++){ const b = await svgZuBlob(seiten[i]); files.push(new File([b], dateiName(`${i+1}`, "png"), {type:"image/png"})); }
+      st.textContent = await teileDateien(files, `${files.length} Bilder`); }
+    else { const seiten = [uebersichtSVG(), ...blockSeiten().map(blockSVG)], bilder = [];
+      for (const sv of seiten){ const b = await svgZuBlob(sv, "image/jpeg"); bilder.push({w:sv.w, h:sv.h, bytes:new Uint8Array(await b.arrayBuffer())}); }
+      const pdf = await pdfAusBildern(bilder);
+      st.textContent = await teileDateien([new File([pdf], dateiName("", "pdf"), {type:"application/pdf"})], "PDF"); }
+  } catch(e){ st.textContent = "Das hat leider nicht geklappt. Bitte nochmal versuchen."; }
+}
+
+/* ---------- Oberfläche ---------- */
+let vorschauUrl = null, vorschauTimer = 0;
+function vorschauAktualisieren(){
+  clearTimeout(vorschauTimer);
+  vorschauTimer = setTimeout(async () => { try { const b = await svgZuBlob(uebersichtSVG());
+    if (vorschauUrl) URL.revokeObjectURL(vorschauUrl); vorschauUrl = URL.createObjectURL(b); $("#t-vorschau").src = vorschauUrl; } catch(e){} }, 250);
+}
+function renderTeilen(){
+  $("#t-titel").value = teilen.titel; $("#t-datum").value = teilen.datum; $("#t-beginn").value = teilen.beginn;
+  $("#t-namen").value = teilen.namen.join(", ");
+  const N = teilen.namen, B = planBloecke();
+  const chips = key => N.map(n => `<button class="nchip ${wer(key).includes(n)?"on":""}" data-k="${key}" data-n="${esc(n)}">${esc(n)}</button>`).join("");
+  let h = "";
+  if (!N.length) h = `<p class="hint" style="margin:0">Namen oben eintragen, dann kann hier jedem Block jemand zugeteilt werden.</p>`;
+  else for (const e of B){
+    if (e.typ==="spiel" && e.sp) h += `<div class="zrow"><b>${zuZeit(e.von)} ${esc(e.titel)}</b><div>${chips(e.key)}</div></div>`;
+    if (e.typ==="parcours"){ e.wahl.forEach((m,i)=>{ h += `<div class="zrow"><b>${i+1} ${esc(m.name)}</b><div>${chips("st"+i)}</div></div>`; });
+      if (e.z && !e.z.helfer) h += `<div class="zrow"><b>Zusatzspiel (${e.z.n} Kinder)</b><div>${chips("zusatz")}</div></div>`; }
+  }
+  $("#t-zuteilung").innerHTML = h;
+  vorschauAktualisieren();
+}
+$("#teilen-auf").onclick = () => { const t=$("#teilen"); t.hidden = !t.hidden; if (!t.hidden){ renderTeilen(); t.scrollIntoView({behavior:"smooth", block:"start"}); } };
+$("#t-titel").oninput = e => { teilen.titel = e.target.value; merke("t-titel", teilen.titel); vorschauAktualisieren(); };
+$("#t-datum").onchange = e => { teilen.datum = e.target.value || heuteISO(); vorschauAktualisieren(); };
+$("#t-beginn").onchange = e => { teilen.beginn = e.target.value || "14:30"; merke("t-beginn", teilen.beginn); renderTeilen(); };
+$("#t-namen").onchange = e => { teilen.namen = [...new Set(e.target.value.split(/[,;]+/).map(s=>s.trim()).filter(Boolean))].slice(0,12); teilen.wer = {}; merke("t-namen", teilen.namen.join(",")); renderTeilen(); };
+$("#t-zuteilung").onclick = e => { const b=e.target.closest(".nchip"); if(!b) return; const k=b.dataset.k, n=b.dataset.n, akt=wer(k);
+  teilen.wer[k] = akt.includes(n) ? akt.filter(x=>x!==n) : [...akt, n]; renderTeilen(); };
+$("#t-bild").onclick = () => teilenAktion("bild");
+$("#t-folge").onclick = () => teilenAktion("folge");
+$("#t-pdf").onclick = () => teilenAktion("pdf");
 
 /* ===================== Navigation ===================== */
 document.querySelectorAll(".navtabs button").forEach(b => b.onclick = () => {
