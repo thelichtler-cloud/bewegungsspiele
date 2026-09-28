@@ -295,7 +295,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 // Zugangscode wird nur als Prüfsumme gespeichert. Neuen Code setzen: Claude fragen.
 const CODE_PRUEF = "5c811ec7";
 // Anonymer Nutzungszähler (GoatCounter). Eigenen Namen eintragen, z. B. "bewegung-asgs" – leer = aus.
-const ZAEHLER = "";
+const ZAEHLER = "bewegung-asgs";
 function pruefsumme(s){ let h=0x811c9dc5; for (const b of new TextEncoder().encode(s)){ h^=b; h=Math.imul(h,0x01000193)>>>0; } return h.toString(16).padStart(8,"0"); }
 function zaehle(pfad, ereignis){
   if (!ZAEHLER || !navigator.onLine) return;
