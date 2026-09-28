@@ -1,0 +1,16 @@
+{
+  "name": "Bewegungsspiele – AG-Planer",
+  "short_name": "Bewegung",
+  "description": "Bewegungsspiele und AG-Planer für die Nachmittagsbetreuung (Klasse 1–4)",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFF8EE",
+  "theme_color": "#F28C28",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
