@@ -188,6 +188,15 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .gcard.fehlt{opacity:.55}
 .pill.lang{white-space:normal}
 .note.gross{border-left:6px solid var(--gelb);margin:0 0 10px}
+.stationen + .note.gross,.note + .note.gross{margin-top:4px}
+.hkopf{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 2px}
+.hkopf:first-child{margin-top:0}
+.hzeile span small{display:block;font-size:.7rem;color:var(--muted);font-weight:600;text-decoration:none}
+.hallekurz p{display:flex;justify-content:space-between;align-items:center}
+.hallekurz small{color:var(--muted);font-size:.8rem}
+.hok{margin-top:6px;font-weight:800;font-size:.85rem;color:var(--gruen)}.hok.leer{color:#C0392B}
+.btr{display:block;color:var(--muted);font-size:.72rem;font-weight:700;margin-top:1px}
+.hst button:disabled{opacity:.35}
 .hplan-box{margin-bottom:10px}.hplan{border-radius:12px}
 .stationen .phase .t{font-size:1.2rem}
 .breit{width:100%;margin-top:8px}
@@ -355,6 +364,9 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div id="p-fragen">
       <div class="q"><p>Wie viele Kinder sind da?</p>
         <div class="stepper"><button id="minus" aria-label="weniger">−</button><input class="zahl" id="pkinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="60" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="plus" aria-label="mehr">+</button></div></div>
+      <div class="q"><p>Wie viele Betreuer sind dabei?</p>
+        <div class="stepper"><button id="bt-minus" aria-label="weniger">−</button><input class="zahl" id="pbetreuer" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="12" value="2" aria-label="Anzahl Betreuer" enterkeyhint="done"><button id="bt-plus" aria-label="mehr">+</button></div>
+        <small class="hint" style="display:block;text-align:center;margin:6px 0 0">Pro Spiel sind 2 Betreuer vorgesehen, pro Parcours-Station 1.</small></div>
       <div class="q"><p>Wo seid ihr?</p><div class="grid2" data-p="ort"></div></div>
       <div class="q"><p>Wie ist die Stimmung?</p><div class="grid3" data-p="stimmung"></div></div>
       <div class="q"><p>Wie lange dauert die AG?</p><div class="grid3" data-p="dauer"></div></div>
@@ -376,8 +388,11 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div id="pz-fragen">
         <div class="q"><p>Wie viele Kinder sind da?</p>
           <div class="stepper"><button id="pz-minus" aria-label="weniger">−</button><input class="zahl" id="pz-kinder" type="number" inputmode="numeric" pattern="[0-9]*" min="2" max="60" value="12" aria-label="Anzahl Kinder" enterkeyhint="done"><button id="pz-plus" aria-label="mehr">+</button></div></div>
+        <div class="q"><p>Wie viele Betreuer sind dabei?</p>
+          <div class="stepper"><button id="pzb-minus" aria-label="weniger">−</button><input class="zahl" id="pz-betreuer" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="12" value="2" aria-label="Anzahl Betreuer" enterkeyhint="done"><button id="pzb-plus" aria-label="mehr">+</button></div>
+          <small class="hint" style="display:block;text-align:center;margin:6px 0 0">1 Betreuer pro Station, 2 für ein Zusatzspiel.</small></div>
         <div class="q"><p>Schwerpunkt</p><div class="grid2" id="pz-fokus"></div></div>
-        <p class="hint">Die App nimmt nur Stationen, für die eure Halle genug Geräte hat (siehe „Unsere Halle“).</p>
+        <div class="q hallekurz" id="pz-hallekurz"></div>
         <button class="bigbtn" id="pz-los">Parcours zusammenstellen →</button>
       </div>
       <div id="pz-ergebnis" hidden>
@@ -396,7 +411,8 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div id="m-liste"></div>
     </div>
     <div id="pz-halle" hidden>
-      <div class="q"><p>Welche Geräte habt ihr – und wie viele?</p><small class="hint" style="margin:0">Wird auf diesem Gerät gespeichert. 0 = nicht vorhanden. Reifen, Seile, Hütchen und Bälle gibt es immer.</small></div>
+      <div class="q"><p>Welche Geräte habt ihr – und wie viele?</p><small class="hint" style="margin:0">Die App zeigt und plant nur Stationen, die ihr damit wirklich aufbauen könnt. Wird auf diesem Gerät gespeichert. 0 = nicht vorhanden.</small>
+        <div class="row2" style="grid-template-columns:1fr 1fr;margin-top:10px"><button class="ghost" id="halle-null">Alles auf 0</button><button class="ghost" id="halle-std">Standard-Halle</button></div></div>
       <div class="q" id="halle-liste"></div>
       <p class="hint" id="halle-info"></p>
     </div>
@@ -478,7 +494,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 1.8.2 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 1.8.3 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -6787,7 +6803,8 @@ const RITUALE = [
 ];
 
 /* ===================== AG planen ===================== */
-const MAX_KINDER = 60, GROSS = 30;   // ab mehr als GROSS Kindern: in 2 Gruppen parallel spielen
+const MAX_KINDER = 60, GROSS = 30, MAX_BETREUER = 12;
+const team = {betreuer: 2};   // gilt für AG-Planer und Parcours gemeinsam   // ab mehr als GROSS Kindern: in 2 Gruppen parallel spielen
 const gruppeFuerSpiel = () => plan.kinder > GROSS ? Math.ceil(plan.kinder/2) : plan.kinder;
 const plan = {kinder:12, ort:"halle", stimmung:"normal", dauer:45, material:"ja", haupt:"spiele", listen:{}, idx:{}, parcours:[]};
 const mitParcours = () => plan.haupt==="parcours" && plan.ort==="halle";
@@ -6805,6 +6822,7 @@ const ZIEL = { austoben:{warm:4,haupt:5}, normal:{warm:3,haupt:4}, runter:{warm:
 function passtZurGruppe(sp){
   const k = gruppeFuerSpiel();
   return sp.kinder[0]<=k && sp.kinder[1]>=k
+      && (team.betreuer >= 2 || sp.energie <= 2)   // nur 1 Betreuer: nur ruhige, einfache Spiele
       && sp.orte.includes(plan.ort)
       && (plan.material==="ja" || ohneMaterial(sp));
 }
@@ -6857,7 +6875,7 @@ function auswahl(){
 }
 
 function renderFragen(){
-  $("#pkinder").value = plan.kinder;
+  $("#pkinder").value = plan.kinder; $("#pbetreuer").value = team.betreuer;
   optGruppe("ort", Object.entries(ORTE)); optGruppe("stimmung", STIMMUNG);
   optGruppe("dauer", [[30,"30 Min"],[45,"45 Min"],[60,"60 Min"]]);
   optGruppe("material", [["ja","Ja"],["nein","Nein, ohne"]]);
@@ -6875,8 +6893,10 @@ const zeitKachel = b => `<div class="t" style="background:${PHASE_FARBE[b.ph]};$
 function renderPlan(){
   const wahl = auswahl(), mat = new Set();
   const st = STIMMUNG.find(s=>s[0]===plan.stimmung)[1].replace("­","");
-  $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}`;
-  let html = plan.kinder > GROSS ? `<div class="note gross"><b>Große Gruppe:</b> Bei ${plan.kinder} Kindern die Spiele in 2 Gruppen parallel spielen (je ca. ${gruppeFuerSpiel()} Kinder) – ${plan.ort==="halle"?"die Halle":"den Hof"} in zwei Hälften teilen.${mitParcours()?" Der Parcours läuft mit allen gemeinsam.":""}</div>` : "";
+  $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}`;
+  let html = plan.kinder > GROSS ? `<div class="note gross"><b>Große Gruppe:</b> Bei ${plan.kinder} Kindern die Spiele in 2 Gruppen parallel spielen (je ca. ${gruppeFuerSpiel()} Kinder) – ${plan.ort==="halle"?"die Halle":"den Hof"} in zwei Hälften teilen.${mitParcours()?" Der Parcours läuft mit allen gemeinsam.":""}${team.betreuer<4 ? ` <b>Dafür sind 4 Betreuer vorgesehen (2 pro Spiel) – es fehlen ${4-team.betreuer}.</b>` : ""}</div>` : "";
+  if (team.betreuer < 2) html += `<div class="note gross"><b>Nur 1 Betreuer:</b> Für ein Spiel sind 2 Betreuer vorgesehen. Deshalb schlägt die App nur ruhige, einfache Spiele vor.</div>`;
+  if (mitParcours() && plan.parcours.length) html += betreuerHinweis(plan.kinder, plan.parcours, plan.zusatzIdx||0);
   const pg = geraeteSumme(plan.parcours);
   for (const b of bloecke()){
     if (b.parcours){
@@ -6937,10 +6957,17 @@ const PKAT = {"Balancieren":"blau","Klettern":"lila","Springen":"rot","Hangeln &
 const GERAETE = [
   ["bank","Bänke","Bank",8], ["kasten","Kästen","Kasten",5], ["matte","Turnmatten","Turnmatte",12], ["weich","Weichböden","Weichboden",2],
   ["sprossen","Sprossenwand-Felder","Sprossenwand-Feld",4], ["barren","Barren","Barren",1], ["reck","Reck","Reck",1], ["ringe","Ringe (Paar)","Ringe (Paar)",1],
-  ["taue","Taue","Tau",4], ["minitramp","Minitrampoline","Minitrampolin",1], ["balken","Schwebebalken","Schwebebalken",1], ["leiter","Turnleitern","Turnleiter",1]
+  ["taue","Taue","Tau",4], ["minitramp","Minitrampoline","Minitrampolin",1], ["balken","Schwebebalken","Schwebebalken",1], ["leiter","Turnleitern","Turnleiter",1],
+  // Kleinmaterial (5. Wert = klein)
+  ["reifen","Reifen","Reifen",20,1], ["huetchen","Hütchen","Hütchen",30,1], ["seile","Seile","Seil",15,1], ["baelle","Bälle","Ball",20,1]
 ];
 const GNAME = Object.fromEntries(GERAETE.map(g=>[g[0],g]));
-MODULE.forEach(m => { m.modul = true; m.farbe = PKAT[m.kat] || "tuerkis"; m.kategorie = m.kat; });
+MODULE.forEach(m => { m.modul = true; m.farbe = PKAT[m.kat] || "tuerkis"; m.kategorie = m.kat;
+  // Kleinmaterial-Texte („Reifen (10)“, „Bälle“) in zählbare Geräte umwandeln – ohne Zahl: 1 pro Kind an der Station
+  const KL = [[/Reifen/,"reifen"],[/Hütchen/,"huetchen"],[/Seil/,"seile"],[/Bäll|Ball/,"baelle"]];
+  (m.klein||[]).forEach(x => { const r=/\((\d+)\)/.exec(x), k=(KL.find(([re])=>re.test(x))||[])[1]; if (k) m.geraete[k]=(m.geraete[k]||0)+(r?+r[1]:m.kinder); });
+  m.klein = [];
+});
 
 const lies = k => { try { return localStorage.getItem(k); } catch(e){ return null; } };
 const merke = (k,v) => { try { localStorage.setItem(k,v); } catch(e){} };
@@ -7011,17 +7038,47 @@ $("#m-halle").onclick = () => { mfilter.nurHalle=!mfilter.nurHalle; renderModule
 $("#m-liste").onclick = e => { const b=e.target.closest(".gcard"); if(b) zeige(b.dataset.id); };
 
 /* ---------- Unsere Halle (Geräte zählen) ---------- */
+// Wie oft wird ein Gerät in den Modulen gebraucht (für die Anzeige „in X Modulen“)
+const gebrauchtIn = k => MODULE.filter(m=>m.geraete[k]).length;
 function renderHalle(){
-  $("#halle-liste").innerHTML = GERAETE.map(([k,n]) => `<div class="hzeile ${halle[k]?"":"null"}"><span>${n}</span>
-    <span class="hst"><button data-k="${k}" data-d="-1" aria-label="${n} weniger">−</button><b>${halle[k]}</b><button data-k="${k}" data-d="1" aria-label="${n} mehr">+</button></span></div>`).join("");
-  const fehlt = GERAETE.filter(g=>!halle[g[0]]).length;
-  $("#halle-info").textContent = fehlt ? `${fehlt} Geräte nicht vorhanden` : "alle Geräte vorhanden";
+  const zeile = ([k,n]) => `<div class="hzeile ${halle[k]?"":"null"}"><span>${n}<small>in ${gebrauchtIn(k)} Modulen</small></span>
+    <span class="hst"><button data-k="${k}" data-d="-1" aria-label="${n} weniger">−</button><b>${halle[k]}</b><button data-k="${k}" data-d="1" aria-label="${n} mehr">+</button></span></div>`;
+  $("#halle-liste").innerHTML = `<div class="hkopf">Große Geräte</div>` + GERAETE.filter(g=>!g[4]).map(zeile).join("")
+    + `<div class="hkopf">Kleinmaterial</div>` + GERAETE.filter(g=>g[4]).map(zeile).join("");
+  const ok = MODULE.filter(m=>modulPasst(m)).length;
+  $("#halle-info").textContent = `Damit könnt ihr ${ok} von ${MODULE.length} Modulen aufbauen.`;
+  renderHalleKurz();
 }
+// Kurzübersicht auf der Planen-Seite
+function renderHalleKurz(){
+  const da = GERAETE.filter(g=>!g[4] && halle[g[0]]).map(([k,n,e])=>`${halle[k]} ${halle[k]===1?e:n}`);
+  const ok = MODULE.filter(m=>modulPasst(m)).length;
+  $("#pz-hallekurz").innerHTML = `<p>Eure Halle <button class="linkbtn" id="pz-halle-edit">Geräte ändern ✎</button></p>
+    <small>${da.length ? esc(da.join(" · ")) : "Keine großen Geräte eingetragen"}</small>
+    <div class="hok ${ok?"":"leer"}">${ok} von ${MODULE.length} Modulen möglich</div>`;
+}
+$("#pz-hallekurz").onclick = e => { if (e.target.closest("#pz-halle-edit")) $('#pz-tabs button[data-t="halle"]').click(); };
 $("#halle-liste").onclick = e => { const b=e.target.closest("button"); if(!b) return;
-  const k=b.dataset.k; halle[k]=Math.max(0,Math.min(30,(halle[k]||0)+ +b.dataset.d)); halleMerken(); renderHalle(); renderModule(); };
+  const k=b.dataset.k; halle[k]=Math.max(0,Math.min(60,(halle[k]||0)+ +b.dataset.d)); halleMerken(); renderHalle(); renderModule(); };
+$("#halle-null").onclick = () => { GERAETE.forEach(g=>halle[g[0]]=0); halleMerken(); renderHalle(); renderModule(); };
+$("#halle-std").onclick = () => { GERAETE.forEach(g=>halle[g[0]]=g[3]); halleMerken(); renderHalle(); renderModule(); };
 
 /* ---------- Parcours zusammenstellen ---------- */
 const pz = {kinder:12, fokus:"mix", stationen:0, wahl:[], zusatzIdx:0};
+const maxStationen = () => Math.max(1, Math.min(8, team.betreuer));
+// Betreuer-Bedarf eines Parcours: 1 pro Station, 2 fürs Zusatzspiel; „ideal“ = so viele, dass alle Kinder betreut sind
+function betreuerBedarf(kinder, wahl, idx=0){
+  const z = zusatzGruppe(kinder, wahl, idx), noetig = wahl.length + (z && !z.helfer ? 2 : 0);
+  const s = Math.min(8, Math.ceil(kinder/PRO_STATION)), rest = kinder - s*PRO_STATION, ideal = s + (rest>=3 ? 2 : 0);
+  return {noetig, fehlen: Math.max(0, noetig-team.betreuer), ideal, z};
+}
+function betreuerHinweis(kinder, wahl, idx){
+  const b = betreuerBedarf(kinder, wahl, idx);
+  const teil = `${wahl.length} an ${wahl.length===1?"der Station":"den Stationen"}${b.z && !b.z.helfer ? " + 2 beim Zusatzspiel" : ""}`;
+  return b.fehlen
+    ? `<div class="note gross"><b>Es fehlen ${b.fehlen} Betreuer:</b> Eingeplant sind ${teil} = ${b.noetig}, da sind ${team.betreuer}.${b.z && !b.z.helfer && team.betreuer < wahl.length+2 ? " Das Zusatzspiel hat so keine eigenen Betreuer." : ""}${b.ideal>team.betreuer ? ` Für diese Gruppe wären ${b.ideal} Betreuer ideal.` : ""}</div>`
+    : `<div class="note"><b>Betreuer:</b> ${teil} = ${b.noetig} von ${team.betreuer}.${b.ideal>team.betreuer && b.ideal>b.noetig ? ` Mit ${b.ideal} Betreuern wären mehr Stationen möglich.` : ""}</div>`;
+}
 const PRO_STATION = 6;
 // Kinder, die nicht an die Stationen passen, spielen parallel ein ruhiges Spiel, das wenig Platz braucht
 function zusatzGruppe(kinder, wahl, idx=0){
@@ -7035,7 +7092,7 @@ const stationenFuer = k => Math.max(3, Math.min(8, Math.ceil(k/4)));
 function restGeraete(ohne){ const r={...halle}; pz.wahl.forEach((m,i)=>{ if(i!==ohne) Object.entries(m.geraete).forEach(([k,n])=>r[k]-=n); }); return r; }
 // Vorschlag: möglichst verschiedene Bewegungsarten, Schwerpunkt bevorzugt, Geräte dürfen nicht ausgehen
 function parcoursVorschlag(kinder, fokus, anzahl){
-  const n = anzahl || stationenFuer(kinder), rest = {...halle}, wahl = [], kats = {};
+  const n = Math.min(anzahl || stationenFuer(kinder), maxStationen()), rest = {...halle}, wahl = [], kats = {};
   const pool = mischen(MODULE);
   for (let i=0;i<n;i++){
     const wert = m => (fokus!=="mix" && m.kat===fokus ? -2 : 0) + (kats[m.kat]||0)*(fokus!=="mix"&&m.kat===fokus?0.9:1.5) + (m.wand && wahl.filter(x=>x.wand).length>=2 ? 3 : 0);
@@ -7102,24 +7159,26 @@ function parcoursHTML(wahl, kinder, fuerDruck, zIdx=0){
     <div class="hplan-box">${hallenplanSVG(wahl)}</div>
     <div class="stationen">${wahl.map((m,i)=>`<div class="phase"><div class="t" style="background:${FARBEN[m.farbe]}">${i+1}<small>Station</small></div>
       <div class="body"><button class="open" data-id="${m.id}"><span class="mini">${feldSVG(m,true)}</span>
-      <span><h4>${esc(m.name)}</h4><small>${esc(m.kat)} · ${esc(geraetText(m.geraete,true))}</small></span></button>
+      <span><h4>${esc(m.name)}</h4><small>${esc(m.kat)} · ${esc(geraetText(m.geraete,true))}</small><small class="btr">👤 1 Betreuer</small></span></button>
       ${fuerDruck?"":`<button class="swap" data-i="${i}" aria-label="andere Station">⟳</button>`}</div></div>`).join("")}
       ${z ? `<div class="phase"><div class="t" style="background:${FARBEN.lila}">+${z.n}<small>Kinder</small></div><div class="body">${z.sp
-        ? `<button class="open" data-id="${z.sp.id}"><span class="mini">${feldSVG(z.sp,true)}</span><span><h4>${esc(z.sp.name)}</h4><small>Spielen parallel am Rand – braucht wenig Platz</small></span></button>${fuerDruck||z.anzahl<2?"":`<button class="swap" data-z="1" aria-label="anderes Spiel">⟳</button>`}`
+        ? `<button class="open" data-id="${z.sp.id}"><span class="mini">${feldSVG(z.sp,true)}</span><span><h4>${esc(z.sp.name)}</h4><small>Spielen parallel am Rand – braucht wenig Platz</small><small class="btr">👥 2 Betreuer</small></span></button>${fuerDruck||z.anzahl<2?"":`<button class="swap" data-z="1" aria-label="anderes Spiel">⟳</button>`}`
         : z.helfer ? `<span class="ico">🦺</span><span><h4>Stationschef${z.n>1?"s":""}</h4><small>${z.n===1?"Ein Kind hilft":"Zwei Kinder helfen"} an einer Station (Bälle zurückholen, Matten gerade ziehen) und wechsel${z.n===1?"t":"n"} jede Runde mit.</small></span>`
         : `<span><h4>Ruhiges Spiel am Rand</h4><small>Für diese Gruppengröße bitte ein Spiel aus „Alle Spiele“ wählen.</small></span>`}</div></div>` : ""}</div>
     <div class="note"><b>Geräte:</b> ${esc(geraetText(s))}${klein.length?` · ${esc(klein.join(", "))}`:""}</div>
+    ${betreuerHinweis(kinder, wahl, zIdx)}
     <div class="note"><b>Aufbau:</b> ca. ${aufbau} Min – mit Kinderhilfe geht's schneller. Jede Station vor dem Start selbst prüfen.</div>
     <div class="note"><b>So läuft's:</b> ${esc(ablauf)}</div>`;
 }
 function renderParcours(){
-  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${pz.wahl.length} Stationen${(()=>{ const z=zusatzGruppe(pz.kinder,pz.wahl); return z ? (z.helfer ? ` + ${z.n} Stationschef${z.n>1?"s":""}` : ` + ${z.n} im Zusatzspiel`) : ""; })()}${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}`;
+  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${pz.wahl.length} Station${pz.wahl.length===1?"":"en"}${(()=>{ const z=zusatzGruppe(pz.kinder,pz.wahl); return z ? (z.helfer ? ` + ${z.n} Stationschef${z.n>1?"s":""}` : ` + ${z.n} im Zusatzspiel`) : ""; })()}${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}`;
   $("#pz-anz").textContent = pz.wahl.length;
+  $("#pz-mehr").disabled = pz.wahl.length >= maxStationen(); $("#pz-weniger").disabled = pz.wahl.length <= 1;
   $("#pz-plan").innerHTML = pz.wahl.length ? parcoursHTML(pz.wahl, pz.kinder, false, pz.zusatzIdx)
     : `<div class="empty">Mit den Geräten eurer Halle passt leider kein Modul.<br>Bitte bei „Unsere Halle“ nachsehen.</div>`;
 }
 function renderPzFragen(){
-  $("#pz-kinder").value = pz.kinder;
+  $("#pz-kinder").value = pz.kinder; $("#pz-betreuer").value = team.betreuer; renderHalleKurz();
   const f = [["mix","Bunt gemischt"], ...Object.keys(PKAT).map(k=>[k,k])];
   $("#pz-fokus").innerHTML = f.map(([v,l]) => `<button class="opt ${pz.fokus===v?"on":""}" data-v="${esc(v)}">${esc(l)}</button>`).join("");
 }
@@ -7129,8 +7188,8 @@ $("#pz-plus").onclick = () => { pz.kinder=Math.min(MAX_KINDER,pz.kinder+1); rend
 $("#pz-los").onclick = () => { zaehle("/parcours-geplant",true); pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus); renderParcours(); $("#pz-fragen").hidden=true; $("#pz-ergebnis").hidden=false; window.scrollTo(0,0); };
 $("#pz-mischen").onclick = () => { pz.zusatzIdx++; pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length); renderParcours(); };
 $("#pz-aendern").onclick = () => { $("#pz-ergebnis").hidden=true; $("#pz-fragen").hidden=false; window.scrollTo(0,0); };
-$("#pz-weniger").onclick = () => { if (pz.wahl.length>2){ pz.wahl.pop(); pz.wahl=ordneWand(pz.wahl); renderParcours(); } };
-$("#pz-mehr").onclick = () => { const w=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length+1); if (w.length>pz.wahl.length){ const neu=w.find(m=>!pz.wahl.includes(m)&&modulPasst(m,restGeraete(-1))); if(neu){ pz.wahl.push(neu); pz.wahl=ordneWand(pz.wahl); } renderParcours(); } };
+$("#pz-weniger").onclick = () => { if (pz.wahl.length>1){ pz.wahl.pop(); pz.wahl=ordneWand(pz.wahl); renderParcours(); } };
+$("#pz-mehr").onclick = () => { if (pz.wahl.length >= maxStationen()) return; const w=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length+1); if (w.length>pz.wahl.length){ const neu=w.find(m=>!pz.wahl.includes(m)&&modulPasst(m,restGeraete(-1))); if(neu){ pz.wahl.push(neu); pz.wahl=ordneWand(pz.wahl); } renderParcours(); } };
 $("#pz-plan").onclick = e => {
   const s=e.target.closest(".swap"); if (s){ if (s.dataset.z) pz.zusatzIdx++; else stationTauschen(+s.dataset.i); renderParcours(); return; }
   const o=e.target.closest(".open"); if (o) zeige(o.dataset.id);
@@ -7157,16 +7216,21 @@ $("#pz-tabs").onclick = e => { const b=e.target.closest("button"); if(!b) return
 renderPzFragen(); renderModule(); renderHalle();
 
 /* Kinderzahl direkt eintippen: beim Tippen übernehmen, beim Verlassen auf 2–40 begrenzen */
-function zahlFeld(id, obj, render){
+function zahlFeld(id, obj, render, key="kinder", min=2, max=MAX_KINDER){
   const el = $(id);
   el.addEventListener("focus", () => el.select());
-  el.addEventListener("input", () => { const v = parseInt(el.value,10); if (v>=2 && v<=MAX_KINDER) obj.kinder = v; });
-  const fertig = () => { const v = parseInt(el.value,10); obj.kinder = isNaN(v) ? obj.kinder : Math.max(2, Math.min(MAX_KINDER, v)); render(); };
+  el.addEventListener("input", () => { const v = parseInt(el.value,10); if (v>=min && v<=max) obj[key] = v; });
+  const fertig = () => { const v = parseInt(el.value,10); obj[key] = isNaN(v) ? obj[key] : Math.max(min, Math.min(max, v)); render(); };
   el.addEventListener("change", fertig); el.addEventListener("blur", fertig);
   el.addEventListener("keydown", e => { if (e.key==="Enter") el.blur(); });
 }
 zahlFeld("#pkinder", plan, () => renderFragen());
 zahlFeld("#pz-kinder", pz, () => renderPzFragen());
+zahlFeld("#pbetreuer", team, () => { renderFragen(); renderPzFragen(); }, "betreuer", 1, MAX_BETREUER);
+zahlFeld("#pz-betreuer", team, () => { renderFragen(); renderPzFragen(); }, "betreuer", 1, MAX_BETREUER);
+const betreuerAendern = d => { team.betreuer = Math.max(1, Math.min(MAX_BETREUER, team.betreuer+d)); renderFragen(); renderPzFragen(); };
+$("#bt-minus").onclick = () => betreuerAendern(-1); $("#bt-plus").onclick = () => betreuerAendern(1);
+$("#pzb-minus").onclick = () => betreuerAendern(-1); $("#pzb-plus").onclick = () => betreuerAendern(1);
 
 /* ===================== Navigation ===================== */
 document.querySelectorAll(".navtabs button").forEach(b => b.onclick = () => {
