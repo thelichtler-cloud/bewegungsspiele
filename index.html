@@ -264,6 +264,16 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .hzeile span small{display:block;font-size:.7rem;color:var(--muted);font-weight:600;text-decoration:none}
 .hallekurz p{display:flex;justify-content:space-between;align-items:center}
 .hallekurz small{color:var(--muted);font-size:.8rem}
+.risk{display:inline-block;margin-left:6px;background:#FDEBD0;color:#9C5700;font-size:.62rem;font-weight:800;padding:1px 6px;border-radius:999px;vertical-align:1px}
+.risk.aus{background:#F5B7B1;color:#922B21}
+.risikopill{background:#FDEBD0!important;color:#9C5700;font-weight:800}
+.box.risiko{border-style:dashed}
+.fzeile{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--soft);font-weight:700}
+.fzeile:last-child{border-bottom:0}.fzeile span small{display:block;font-size:.7rem;color:var(--muted);font-weight:600}
+.fzeile.aus span:first-child{color:var(--muted)}
+.fschalter{min-width:86px;padding:9px 10px;border-radius:999px;border:2px solid #C0392B;background:#FDEDEC;color:#922B21;font-weight:800;font-size:.8rem;cursor:pointer}
+.fschalter.on{border-color:var(--gruen);background:#E9F7EF;color:#1E8449}
+#freigabe-liste{margin-top:8px}
 .hok{margin-top:6px;font-weight:800;font-size:.85rem;color:var(--gruen)}.hok.leer{color:#C0392B}
 .btr{display:block;color:var(--muted);font-size:.72rem;font-weight:700;margin-top:1px}
 .hst button:disabled{opacity:.35}
@@ -521,6 +531,9 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
         <div class="row2" style="grid-template-columns:1fr 1fr;margin-top:10px"><button class="ghost" id="halle-null">Alles auf 0</button><button class="ghost" id="halle-std">Standard-Halle</button></div></div>
       <div class="q" id="halle-liste"></div>
       <p class="hint" id="halle-info"></p>
+      <div class="q" id="freigabe-box"><p>⚠ Freigabe durch die Schule</p><small class="hint" style="margin:0">Diese Übungen bitte vorher mit der Schulleitung klären. Was hier „gesperrt“ ist, schlägt die App nicht mehr vor – weder im Parcours noch im AG-Planer. Wird auf diesem Gerät gespeichert.</small>
+        <div class="row2" style="grid-template-columns:1fr 1fr;margin-top:10px"><button class="ghost" id="freigabe-keine">Alle sperren</button><button class="ghost" id="freigabe-alle">Alle erlauben</button></div>
+        <div id="freigabe-liste"></div></div>
     </div>
   </main>
 
@@ -623,7 +636,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 2.2 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 2.3 · Stand 29.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -6813,6 +6826,33 @@ const ohneMaterial = sp => sp.material.every(m => /optional/i.test(m));
 const filter = {kinder:"alle", ort:"alle", energie:"alle", zeit:"alle", material:"alle", suche:""};
 const ORT_GR = [["alle","Alle"], ...Object.entries(ORTE)];
 
+/* ===================== Risiko-Stationen & Freigabe durch die Schule ===================== */
+// Geräte/Übungen, die die Schule ausdrücklich freigeben sollte. Standard: erlaubt, aber mit Warnhinweis.
+const RISIKO = [
+  ["minitramp","Minitrampolin","Strecksprung vom Minitramp auf den Weichboden"],
+  ["ringe","Ringe","Schaukeln und Abspringen an den Ringen"],
+  ["taue","Taue","Klettern und Schwingen am Tau"],
+  ["reck","Reck","Hängen und Hangeln am Reck (Kniehang)"],
+  ["barren","Barren","Hangeln und Klettern am Barren"],
+  ["rolle","Rolle vorwärts","Purzelbaum auf der Matte oder schräg bergab"],
+  ["hoehe","Sprünge aus der Höhe","Abspringen von Kästen ab 3 Teilen, Hangeln an der hohen Leiter"]
+];
+const RISIKO_ZU = {
+  "minitramp-sprung":["minitramp"], "ringe-schaukel":["ringe"], "tarzan-tau":["taue"], "tau-aufstieg":["taue"],
+  "faultier-reck":["reck"], "barren-hangeln":["barren"], "barren-tunnel":["barren"],
+  "rollberg":["rolle"], "purzelbaumland":["rolle"],
+  "kastentreppe":["hoehe"], "aufhocken-absprung":["hoehe"], "bank-bruecke":["hoehe"], "wandbruecke":["hoehe"], "hangel-leiter":["hoehe"]
+};
+const RNAME = Object.fromEntries(RISIKO.map(r=>[r[0],r[1]]));
+[...SPIELE, ...MODULE].forEach(x => { if (RISIKO_ZU[x.id]) x.risiko = RISIKO_ZU[x.id]; });
+// Freigabe je Gruppe: true = erlaubt (Standard), false = gesperrt. Wird auf dem Gerät gemerkt.
+const freigabe = Object.fromEntries(RISIKO.map(r=>[r[0],true]));
+try { Object.assign(freigabe, JSON.parse(localStorage.getItem("freigabe")||"{}")); } catch(e){}
+const freigabeMerken = () => { try { localStorage.setItem("freigabe", JSON.stringify(freigabe)); } catch(e){} };
+const erlaubt = x => !(x.risiko||[]).some(r => freigabe[r]===false);
+const risikoNamen = x => (x.risiko||[]).map(r=>RNAME[r]).join(", ");
+const risikoBox = x => x.risiko ? `<div class="box r risiko"><b>⚠ Nur nach Freigabe durch die Schule</b>Diese Übung gehört zur Gruppe „${esc(risikoNamen(x))}“. Bitte vorher mit der Schulleitung klären, ob und von wem sie angeleitet werden darf. ${erlaubt(x)?"Auf diesem Handy ist sie freigegeben.":"Auf diesem Handy ist sie gesperrt und wird nicht vorgeschlagen."} Einstellen unter Parcours → „Unsere Halle“.</div>` : "";
+
 function chipGruppe(key, liste){
   const el = document.querySelector(`[data-f="${key}"]`);
   el.innerHTML = liste.map(([v,l]) => `<button class="chip ${filter[key]===v?"on":""}" data-v="${v}">${l}</button>`).join("");
@@ -6835,7 +6875,7 @@ function passt(sp){
 function karteKlein(sp){
   return `<button class="gcard" style="--c:${FARBEN[sp.farbe]}" data-id="${sp.id}">
     <span class="mini">${feldSVG(sp,true)}</span>
-    <span><span class="kat">${esc(sp.kategorie)}</span>${sp.neu?`<span class="neu">Neu</span>`:""}${sp.schritte?`<span class="anim">▶ Schritt für Schritt</span>`:""}<h3>${esc(sp.name)}</h3>
+    <span><span class="kat">${esc(sp.kategorie)}</span>${sp.neu?`<span class="neu">Neu</span>`:""}${sp.risiko?`<span class="risk ${erlaubt(sp)?"":"aus"}">⚠ ${erlaubt(sp)?"Freigabe":"gesperrt"}</span>`:""}${sp.schritte?`<span class="anim">▶ Schritt für Schritt</span>`:""}<h3>${esc(sp.name)}</h3>
     <span class="m"><span class="pill">${sp.kinder[0]}–${sp.kinder[1]} Kinder</span><span class="pill">${sp.dauer} Min</span><span class="pill">${energieHTML(sp.energie)}</span></span></span>
   </button>`;
 }
@@ -6855,7 +6895,7 @@ $("#liste").onclick = e => { const b=e.target.closest(".gcard"); if(b) zeige(b.d
 $("#suche").oninput = e => { filter.suche = e.target.value.trim(); renderListe(); };
 $("#reset").onclick = () => { Object.assign(filter,{kinder:"alle",ort:"alle",energie:"alle",zeit:"alle",material:"alle",suche:""}); $("#suche").value=""; renderListe(); };
 $("#zufall").onclick = () => {
-  const pool = SPIELE.filter(passt); const liste = pool.length ? pool : SPIELE;
+  const pool = SPIELE.filter(sp=>passt(sp) && erlaubt(sp)); const liste = pool.length ? pool : SPIELE.filter(erlaubt);
   zeige(liste[Math.floor(Math.random()*liste.length)].id);
 };
 
@@ -6897,6 +6937,7 @@ function zeige(id){
       ${box("b","Tipp für Klasse 1/2",sp.klasse1)}
       ${box("l","Varianten",sp.varianten)}
       ${box("r","Achtung",sp.sicherheit)}
+      ${risikoBox(sp)}
     </div>
     <div class="pagefoot"><span>Bewegungsspiele · Nachmittagsbetreuung</span><span>Karte ${String(nr).padStart(2,"0")}</span></div>
   </article>`;
@@ -6961,7 +7002,8 @@ function passtZurGruppe(sp){
   return sp.kinder[0]<=k && sp.kinder[1]>=k
       && (team.betreuer >= 2 || sp.energie <= 2)   // nur 1 Betreuer: nur ruhige, einfache Spiele
       && sp.orte.includes(plan.ort)
-      && (plan.material==="ja" || ohneMaterial(sp));
+      && (plan.material==="ja" || ohneMaterial(sp))
+      && erlaubt(sp);   // Risiko-Übungen nur, wenn freigegeben
 }
 function mischen(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
@@ -7118,7 +7160,8 @@ try { Object.assign(halle, JSON.parse(lies("halle")||"{}")); } catch(e){}
 const halleMerken = () => merke("halle", JSON.stringify(halle));
 
 const geraetText = (g, kurz) => Object.entries(g).map(([k,n]) => `${n} ${n===1?GNAME[k][2]:GNAME[k][1]}`).join(kurz?", ":" · ") || "nur Kleinmaterial";
-const modulPasst = (m, rest=halle) => Object.entries(m.geraete).every(([k,n]) => (rest[k]||0) >= n);
+const geraetePassen = (m, rest=halle) => Object.entries(m.geraete).every(([k,n]) => (rest[k]||0) >= n);
+const modulPasst = (m, rest=halle) => erlaubt(m) && geraetePassen(m, rest);
 
 /* ---------- Detailkarte eines Moduls ---------- */
 function modulHTML(m){
@@ -7134,6 +7177,7 @@ function modulHTML(m){
       <span class="pill">⏱ Aufbau ca. ${m.aufbau} Min</span>
       <span class="pill"><i style="background:var(--blau)"></i>${m.kinder} Kinder gleichzeitig</span>
       <span class="pill"><i style="background:var(--gelb)"></i>Klasse ${m.klassen}</span>
+      ${m.risiko?`<span class="pill risikopill">⚠ Freigabe nötig: ${esc(risikoNamen(m))}</span>`:""}
       <span class="pill">📐 ca. ${m.platz[0]} × ${m.platz[1]} m${m.wand?" · an der Wand":""}</span>
     </div>
     <div class="sgrid mit-schritten">
@@ -7146,6 +7190,7 @@ function modulHTML(m){
       ${box("g","Fördert",esc(m.foerdert))}
       ${box("b","Aufbauen mit Kindern","Die Kinder helfen gerne: Bänke tragen immer 4 Kinder, Kastenteile 2 Kinder, Weichböden 6–8 Kinder. Die Betreuerin prüft jede Station, bevor es losgeht.")}
       ${box("r","Achtung",esc(m.sicherheit))}
+      ${risikoBox(m)}
     </div>
     <div class="pagefoot"><span>Bewegungsspiele · Parcours-Module</span><span>Modul ${String(nr).padStart(2,"0")}</span></div>
   </article>`;
@@ -7157,9 +7202,9 @@ function modulKarte(m){
   const ok = modulPasst(m);
   return `<button class="gcard ${ok?"":"fehlt"}" style="--c:${FARBEN[m.farbe]}" data-id="${m.id}">
     <span class="mini">${feldSVG(m,true)}</span>
-    <span><span class="kat">${esc(m.kat)}</span><span class="anim">▶ Aufbau</span><h3>${esc(m.name)}</h3>
+    <span><span class="kat">${esc(m.kat)}</span>${m.risiko?`<span class="risk ${erlaubt(m)?"":"aus"}">⚠ ${erlaubt(m)?"Freigabe":"gesperrt"}</span>`:""}<span class="anim">▶ Aufbau</span><h3>${esc(m.name)}</h3>
     <span class="m"><span class="pill lang">${esc(geraetText(m.geraete,true)||"nur Kleinmaterial")}</span><span class="pill">⏱ ${m.aufbau} Min</span></span>
-    ${ok?"":`<small class="warn">Nicht genug Geräte in eurer Halle</small>`}</span>
+    ${ok?"":`<small class="warn">${erlaubt(m)?"Nicht genug Geräte in eurer Halle":"Gesperrt – nicht von der Schule freigegeben"}</small>`}</span>
   </button>`;
 }
 function renderModule(){
@@ -7172,7 +7217,7 @@ function renderModule(){
   const gr = {}; tr.forEach(m => (gr[m.kat] ||= []).push(m));
   $("#m-liste").innerHTML = tr.length ? Object.keys(PKAT).filter(k=>gr[k]).map(k =>
     `<section class="grp" style="--c:${FARBEN[PKAT[k]]}"><h2>${esc(k)} · ${gr[k].length}</h2><div class="list">${gr[k].sort((a,b)=>a.name.localeCompare(b.name,"de")).map(modulKarte).join("")}</div></section>`).join("")
-    : `<div class="empty">Kein Modul passt.<br>Vielleicht bei „Unsere Halle“ Geräte ergänzen?</div>`;
+    : `<div class="empty">Kein Modul passt.<br>Vielleicht bei „Unsere Halle“ Geräte ergänzen oder freigeben?</div>`;
 }
 $("#m-kat").onclick = e => { const b=e.target.closest("button"); if(!b) return; mfilter.kat=b.dataset.v; renderModule(); };
 $("#m-halle").onclick = () => { mfilter.nurHalle=!mfilter.nurHalle; renderModule(); };
@@ -7188,6 +7233,7 @@ function renderHalle(){
     + `<div class="hkopf">Kleinmaterial</div>` + GERAETE.filter(g=>g[4]).map(zeile).join("");
   const ok = MODULE.filter(m=>modulPasst(m)).length;
   $("#halle-info").textContent = `Damit könnt ihr ${ok} von ${MODULE.length} Modulen aufbauen.`;
+  renderFreigabe();
   renderHalleKurz();
 }
 // Kurzübersicht auf der Planen-Seite
@@ -7210,6 +7256,18 @@ hl.addEventListener("change", e => { const el=e.target; if (!el.matches("input.z
   halleMerken(); renderHalle(); renderModule(); });
 $("#halle-null").onclick = () => { GERAETE.forEach(g=>halle[g[0]]=0); halleMerken(); renderHalle(); renderModule(); };
 $("#halle-std").onclick = () => { GERAETE.forEach(g=>halle[g[0]]=g[3]); halleMerken(); renderHalle(); renderModule(); };
+
+/* ---------- Freigabe durch die Schule ---------- */
+function renderFreigabe(){
+  const anz = r => [...MODULE, ...SPIELE].filter(x=>(x.risiko||[]).includes(r)).map(x=>x.name);
+  $("#freigabe-liste").innerHTML = RISIKO.map(([k,n,t]) => { const l = anz(k), an = freigabe[k]!==false;
+    return `<div class="fzeile ${an?"":"aus"}"><span>${esc(n)}<small>${esc(t)} · ${esc(l.join(", "))}</small></span>
+      <button class="fschalter ${an?"on":""}" data-r="${k}" role="switch" aria-checked="${an}" aria-label="${esc(n)} ${an?"freigegeben":"gesperrt"}">${an?"erlaubt":"gesperrt"}</button></div>`; }).join("");
+}
+$("#freigabe-liste").onclick = e => { const b=e.target.closest("button[data-r]"); if(!b) return;
+  freigabe[b.dataset.r] = freigabe[b.dataset.r]===false; freigabeMerken(); renderHalle(); renderModule(); renderListe(); };
+$("#freigabe-alle").onclick = () => { RISIKO.forEach(r=>freigabe[r[0]]=true); freigabeMerken(); renderHalle(); renderModule(); renderListe(); };
+$("#freigabe-keine").onclick = () => { RISIKO.forEach(r=>freigabe[r[0]]=false); freigabeMerken(); renderHalle(); renderModule(); renderListe(); };
 
 /* ---------- Parcours zusammenstellen ---------- */
 const pz = {kinder:12, fokus:"mix", stationen:0, wahl:[], zusatzIdx:0};
@@ -7307,7 +7365,7 @@ function parcoursHTML(wahl, kinder, fuerDruck, zIdx=0){
     <div class="hplan-box">${hallenplanSVG(wahl)}</div>
     <div class="stationen">${wahl.map((m,i)=>`<div class="phase"><div class="t" style="background:${FARBEN[m.farbe]}">${i+1}<small>Station</small></div>
       <div class="body"><button class="open" data-id="${m.id}"><span class="mini">${feldSVG(m,true)}</span>
-      <span><h4>${esc(m.name)}</h4><small>${esc(m.kat)} · ${esc(geraetText(m.geraete,true))}</small><small class="btr">👤 1 Betreuer</small></span></button>
+      <span><h4>${esc(m.name)}</h4><small>${esc(m.kat)} · ${esc(geraetText(m.geraete,true))}</small>${m.risiko?`<small class="warn">⚠ Nur nach Freigabe durch die Schule</small>`:""}<small class="btr">👤 1 Betreuer</small></span></button>
       ${fuerDruck?"":`<button class="swap" data-i="${i}" aria-label="andere Station">⟳</button>`}</div></div>`).join("")}
       ${z ? `<div class="phase"><div class="t" style="background:${FARBEN.lila}">+${z.n}<small>Kinder</small></div><div class="body">${z.sp
         ? `<button class="open" data-id="${z.sp.id}"><span class="mini">${feldSVG(z.sp,true)}</span><span><h4>${esc(z.sp.name)}</h4><small>Spielen parallel am Rand – braucht wenig Platz</small><small class="btr">👥 2 Betreuer</small></span></button>${fuerDruck||z.anzahl<2?"":`<button class="swap" data-z="1" aria-label="anderes Spiel">⟳</button>`}`
@@ -7540,7 +7598,8 @@ function einheitSeiten(E){
         a.bild(feldSVG(m,false)); a.absatz(m.kurz, 30, false, GRAU, 3); a.absatz("Geräte: "+geraetText(m.geraete), 28, true, INK, 2);
         a.absatz("Aufbau & Ablauf", 30, true); m.ablauf.forEach((t,j)=>a.absatz(`${j+1}. ${t}`, 26, false, INK, 3));
         a.absatz("Aufgaben", 30, true); ["Leicht","Mittel","Schwer"].forEach((l,j)=>a.absatz(`${l}: ${m.stufen[j]}`, 26, false, INK, 2));
-        a.absatz("Achtung: "+m.sicherheit, 26, true, "#B03A2E", 4); })));
+        a.absatz("Achtung: "+m.sicherheit, 26, true, "#B03A2E", 4);
+        if (m.risiko) a.absatz(`⚠ Nur nach Freigabe durch die Schule (${risikoNamen(m)}).`, 26, true, "#9C5700", 4); })));
     } else if (b.typ==="ritual"){ const r = RI(b.ritual);
       seiten.push(seiteSVG(pf, dk, zeit, r.name, a => { a.absatz(r.kurz, 32, false, GRAU, 3); r.ablauf.forEach((t,i)=>a.absatz(`${i+1}. ${t}`, 28, false, INK, 3)); }));
     }
@@ -7927,7 +7986,8 @@ const HILFE = [
      T("#halle-liste .hzeile", "Jede Zeile ist ein Gerät. „in 15 Modulen“ heißt: So viele Stationen brauchen es."),
      T("#halle-liste .hst", "Mit + wird die Zahl größer, mit − kleiner. Oder auf die Zahl tippen, eintippen und auf „Fertig“ tippen."),
      T(()=>document.querySelectorAll("#halle-liste .hkopf")[1], "Weiter unten kommen die kleinen Sachen: Reifen, Hütchen, Seile, Bälle."),
-     T("#halle-info", "Hier steht, wie viele Stationen ihr damit aufbauen könnt. Das Handy merkt sich alles – fertig!") ]},
+     T("#halle-info", "Hier steht, wie viele Stationen ihr damit aufbauen könnt. Das Handy merkt sich alles."),
+     T("#freigabe-box", "Ganz unten: Freigabe durch die Schule. Was die Schule nicht erlaubt, auf „gesperrt“ tippen – dann schlägt die App es nicht mehr vor. Fertig!") ]},
  { id:"teilen", icon:"📤", titel:"Plan ans Team schicken", kurz:"Als Bild per WhatsApp oder als PDF zum Drucken.",
    lesen:["Erst eine AG-Stunde oder einen Parcours planen.", `Unter dem Plan auf ${D.gruen("📤 Teilen")} tippen.`,
      "Einen Titel eintippen, zum Beispiel „Bewegungs-AG Klasse 2“. Datum und Uhrzeit prüfen.",
