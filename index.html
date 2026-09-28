@@ -198,7 +198,10 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .tagkarte.parcours{border-left-color:var(--tuerkis)}
 .tk-kopf{display:flex;align-items:center;gap:10px}.tk-zeit{width:150px;font-weight:800;font-size:1.1rem;padding:6px 8px}
 .tk-bis{font-weight:700;color:var(--muted);flex:1}.tk-weg{border:0;background:var(--soft);width:40px;height:40px;border-radius:50%;font-size:1.05rem;cursor:pointer}
-.tagkarte h4{margin:8px 0 0;font-size:1.05rem}.tagkarte small{color:var(--muted)}.tagkarte ul{margin:6px 0 0;padding-left:18px;font-size:.9rem}
+.tagkarte h4{margin:8px 0 0;font-size:1.05rem}
+.tk-wer-kurz{color:var(--blau);font-weight:700;font-size:.85rem;white-space:nowrap}
+.tk-werknopf{display:block;width:100%;margin-top:10px;border:2px solid var(--blau);background:#EAF3FD;color:var(--blau);border-radius:12px;padding:11px 10px;font-weight:800;font-size:.95rem;cursor:pointer;text-align:left}
+.tk-wer{margin-top:6px}.tagkarte small{color:var(--muted)}.tagkarte ul{margin:6px 0 0;padding-left:18px;font-size:.9rem}
 .leerbox{background:#fff;border-radius:16px;padding:16px;text-align:left;margin-bottom:10px}.leerbox .gross{font-size:2.6rem;text-align:center}
 .leerbox ol{padding-left:20px;line-height:1.9}
 /* Hilfe */
@@ -225,9 +228,14 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
 .demo.weiss{background:#fff;border:2px solid var(--ink)}.demo.rund{background:var(--soft);border-radius:50%;padding:1px 8px}
 .demo.play{background:#1b1f27;color:#fff;border-radius:50%;padding:1px 9px}
 /* Tour */
-#tour{position:fixed;inset:0;z-index:500}
+#tour{position:fixed;inset:0;z-index:500;pointer-events:none}
+.tsperre{position:fixed;pointer-events:auto;background:transparent}
+.tblase{pointer-events:auto}
+.tring{pointer-events:auto}#tour.tippen .tring{pointer-events:none}
+.thinweis{background:#FFF1C9;border-radius:12px;padding:10px 12px;margin:-4px 0 12px;font-size:1.05rem}
+.tselbst{background:var(--soft);margin-left:auto;font-size:.9rem!important;white-space:normal!important}
 #tour[hidden]{display:none}
-.tring{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(20,22,30,.62);border:4px solid #FFD84D;pointer-events:none;transition:all .25s;animation:puls 1.4s ease-in-out infinite}
+.tring{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(20,22,30,.62);border:4px solid #FFD84D;transition:all .25s;animation:puls 1.4s ease-in-out infinite}
 @keyframes puls{50%{border-color:#fff}}
 .tblase{position:fixed;background:#fff;border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:1.18rem;line-height:1.45}
 .ttext{font-weight:700;margin-bottom:14px}
@@ -571,9 +579,10 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
   <div class="dbar"><button id="hilfe-zu">← Zurück</button></div>
   <div id="hilfe-inhalt"></div>
 </div>
-<div id="tour" hidden><div class="tring"></div>
+<div id="tour" hidden><div class="tsperre"></div><div class="tsperre"></div><div class="tsperre"></div><div class="tsperre"></div><div class="tring"></div>
   <div class="tblase" role="dialog" aria-live="polite"><div class="tnr"></div><div class="ttext"></div>
-    <div class="tknopfreihe"><button class="tzu">Beenden</button><button class="tzurueck" aria-label="Schritt zurück">◀</button><button class="tweiter">Weiter ▶</button></div></div>
+    <div class="thinweis" hidden>👆 Tippe jetzt selbst auf den <b>gelb umrandeten</b> Knopf.</div>
+    <div class="tknopfreihe"><button class="tzu">Beenden</button><button class="tzurueck" aria-label="Schritt zurück">◀</button><button class="tweiter">Weiter ▶</button><button class="tselbst" hidden>Mach du das für mich</button></div></div>
 </div>
 <div id="meldung" role="status" hidden></div>
 <div id="detail" role="dialog" aria-modal="true">
@@ -614,7 +623,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 2.1 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 2.2 · Stand 28.09.2026 · 100 Spiele · 36 Parcours-Module";
 
 const SPIELE = [
 {
@@ -7634,13 +7643,17 @@ async function seitenTeilen(seiten, name, art, statusEl){
   try {
     zaehle(`/geteilt-${name.split("_")[0].toLowerCase()}-${art}`, true);
     let files = [];
+    if (art !== "bild" && seiten.length > 1) seiten = seiten.map((sv,i) => ({...sv, svg: sv.svg.replace(/<\/svg>$/,
+      `<rect x="${sv.w-210}" y="16" width="190" height="46" rx="23" fill="#fff" opacity=".92"/><text x="${sv.w-115}" y="48" font-size="26" font-weight="700" fill="${INK}" text-anchor="middle">Seite ${i+1}/${seiten.length}</text></svg>`)}));
     if (art === "pdf"){ const bilder = [];
       const pf = seiten.length > 8 ? 2 : 2.5;   // viele Seiten → etwas kleiner, damit das PDF handlich bleibt
       for (const sv of seiten){ const b = await svgZuBlob(sv, "image/jpeg", pf, 0.88); bilder.push({w:b.pw, h:b.ph, bytes:new Uint8Array(await b.arrayBuffer())}); }
       files = [new File([await pdfAusBildern(bilder)], `${name}.pdf`, {type:"application/pdf"})]; }
     else { const liste = art === "bild" ? seiten.slice(0,1) : seiten;
-      for (let i=0;i<liste.length;i++){ const b = await svgZuBlob(liste[i]); files.push(new File([b], liste.length>1 ? `${name}_${i+1}.png` : `${name}.png`, {type:"image/png"})); } }
-    statusEl.textContent = await teileDateien(files);
+      for (let i=0;i<liste.length;i++){ const b = await svgZuBlob(liste[i]); files.push(new File([b], liste.length>1 ? `${name}_${String(i+1).padStart(2,"0")}.png` : `${name}.png`, {type:"image/png"})); } }
+    // WhatsApp dreht mehrere geteilte Bilder um, im Download-Ordner steht das neueste oben →
+    // umgekehrt übergeben, damit die Übersicht beim Empfänger zuerst kommt
+    statusEl.textContent = await teileDateien(files.length > 1 ? [...files].reverse() : files);
   } catch(e){ statusEl.textContent = "Das hat leider nicht geklappt. Bitte nochmal versuchen."; }
 }
 
@@ -7717,6 +7730,19 @@ $("#ag-zumtag").onclick = () => zumTag("ag");
 $("#pz-zumtag").onclick = () => zumTag("pz");
 
 /* ---------- Reiter „Tag“ ---------- */
+const tagOffen = new Set();   // bei welchen Einheiten „Wer macht was?“ aufgeklappt ist
+function tagZuteilung(e){
+  const N = teilen.namen; if (!N.length) return `<p class="hint" style="margin:6px 0 0">Oben bei „Wer ist heute dabei?“ die Namen eintragen – dann kann man hier zuteilen.</p>`;
+  const chips = key => N.map(n => `<button class="nchip ${werAus(e.wer,key,e.nSt).includes(n)?"on":""}" data-e="${e.id}" data-k="${key}" data-n="${esc(n)}">${esc(n)}</button>`).join("");
+  let h = ""; const Z = zeitenVon(e);
+  e.bloecke.forEach((b,bi) => {
+    if (b.typ==="spiel" && b.spiel) h += `<div class="zrow"><b>${zuZeit(Z[bi].von)} ${esc(blockTitel(b))}</b><div>${chips(b.key)}</div></div>`;
+    if (b.typ==="parcours"){ b.module.forEach((id,i)=>{ h += `<div class="zrow"><b>Station ${i+1}: ${esc(MO(id).name)}</b><div>${chips("st"+i)}</div></div>`; });
+      if (b.zusatz && !b.zusatz.helfer) h += `<div class="zrow"><b>Zusatzspiel (${b.zusatz.n} Kinder)</b><div>${chips("zusatz")}</div></div>`; }
+  });
+  return h;
+}
+const werKurz = (e, b) => b.typ==="spiel" ? werText(e, b.key, 2) : b.typ==="parcours" ? b.module.map((_,i)=>werAus(e.wer,"st"+i,e.nSt)).flat().filter((x,i,a)=>a.indexOf(x)===i).join(", ") || (teilen.namen.length?"noch offen":"") : "";
 function renderTag(){
   const E = tagSortiert();
   $("#tag-datum").value = tag.datum; $("#tag-namen").value = teilen.namen.join(", ");
@@ -7729,8 +7755,10 @@ function renderTag(){
     h += `<div class="tagkarte ${e.art}"><div class="tk-kopf"><input type="time" class="search tk-zeit" data-id="${e.id}" value="${zuZeit(e.beginn)}" aria-label="Beginn">
       <span class="tk-bis">bis ${zuZeit(ende)}</span><button class="tk-weg" data-weg="${e.id}" aria-label="Entfernen">✕</button></div>
       <h4>${e.art==="ag"?"⚽":"🧗"} ${esc(e.titel)}</h4><small>${e.kinder} Kinder · ${ORTE[e.ort]}${e.aufbau?` · Aufbau vorher ca. ${e.aufbau} Min`:""}</small>
-      <ul>${e.bloecke.map(b=>`<li>${esc(PHASEN[b.ph])}: ${esc(blockTitel(b))}</li>`).join("")}</ul>
-      ${ueber ? `<p class="warn">⚠ Überschneidet sich mit der Einheit davor.</p>` : ""}</div>`;
+      <ul>${e.bloecke.map(b=>{ const w = werKurz(e,b); return `<li>${esc(PHASEN[b.ph])}: <b>${esc(blockTitel(b))}</b>${w?` <span class="tk-wer-kurz">👤 ${esc(w)}</span>`:""}</li>`; }).join("")}</ul>
+      ${ueber ? `<p class="warn">⚠ Überschneidet sich mit der Einheit davor.</p>` : ""}
+      ${e.bloecke.some(b=>b.typ==="spiel"||b.typ==="parcours") ? `<button class="tk-werknopf" data-auf="${e.id}">👤 Wer macht was? ${tagOffen.has(e.id)?"▲ zuklappen":"▼ antippen zum Ändern"}</button>
+      <div class="tk-wer" ${tagOffen.has(e.id)?"":"hidden"}>${tagZuteilung(e)}</div>` : ""}</div>`;
   });
   $("#tag-liste").innerHTML = h;
   $("#tag-teilen").hidden = !E.length;
@@ -7739,6 +7767,10 @@ function renderTag(){
 $("#tag-liste").onclick = e => {
   const w = e.target.closest("[data-weg]"); if (w){ if (confirm("Diese Einheit aus dem Tagesplan nehmen?")){ tag.einheiten = tag.einheiten.filter(x=>x.id!==w.dataset.weg); tagMerken(); renderTag(); } return; }
   const g = e.target.closest("[data-geh]"); if (g) geheZuReiter(g.dataset.geh);
+  const a = e.target.closest("[data-auf]"); if (a){ const id = a.dataset.auf; tagOffen.has(id) ? tagOffen.delete(id) : tagOffen.add(id); renderTag(); return; }
+  const c = e.target.closest(".nchip[data-e]"); if (c){ const u = tag.einheiten.find(x=>x.id===c.dataset.e); if (!u) return;
+    const k = c.dataset.k, n = c.dataset.n, akt = werAus(u.wer, k, u.nSt); u.wer = u.wer || {};
+    u.wer[k] = akt.includes(n) ? akt.filter(x=>x!==n) : [...akt, n]; tagMerken(); renderTag(); }
 };
 $("#tag-liste").onchange = e => { const t = e.target.closest(".tk-zeit"); if (!t) return; const x = tag.einheiten.find(y=>y.id===t.dataset.id); if (x && t.value){ x.beginn = zuMin(t.value); tagMerken(); renderTag(); } };
 $("#tag-datum").onchange = e => { tag.datum = e.target.value || heuteISO(); tagMerken(); renderTag(); };
@@ -7758,6 +7790,7 @@ function meldung(text, knopf, aktion){
 renderTag();
 
 /* ===================== Hilfe: einfache Anleitungen + „Zeig es mir“ ===================== */
+// Für Kolleginnen, die sich mit dem Handy schwertun: ein Satz pro Schritt, wichtige Knöpfe tippt man selbst.
 const geheZuReiter = v => { const b = document.querySelector(`.navtabs button[data-view="${v}"]`); if (b) b.click(); };
 const warte = ms => new Promise(r => setTimeout(r, ms));
 // kleine Nachbauten der Knöpfe, damit man sie wiedererkennt
@@ -7765,91 +7798,203 @@ const D = {
   tab: t => `<span class="demo tab">${t}</span>`, blau: t => `<span class="demo blau">${t}</span>`, gruen: t => `<span class="demo gruen">${t}</span>`,
   rund: t => `<span class="demo rund">${t}</span>`, weiss: t => `<span class="demo weiss">${t}</span>`, play: `<span class="demo play">▶</span>`
 };
+function agFragen(){ geheZuReiter("plan"); $("#p-ergebnis").hidden = true; $("#p-fragen").hidden = false; window.scrollTo(0,0); }
 function agBereit(){ geheZuReiter("plan"); if ($("#p-ergebnis").hidden) $("#los").click(); }
-function agFragen(){ geheZuReiter("plan"); $("#p-ergebnis").hidden = true; $("#p-fragen").hidden = false; }
 function pzReiter(t){ geheZuReiter("parcours"); const b = $(`#pz-tabs button[data-t="${t}"]`); if (b) b.click(); }
-function pzFragen(){ pzReiter("planen"); $("#pz-ergebnis").hidden = true; $("#pz-fragen").hidden = false; }
+function pzFragen(){ pzReiter("planen"); $("#pz-ergebnis").hidden = true; $("#pz-fragen").hidden = false; window.scrollTo(0,0); }
 function pzBereit(){ pzReiter("planen"); if ($("#pz-ergebnis").hidden) $("#pz-los").click(); }
-const erstesSpiel = () => { const b = $("#liste .gcard"); return b ? b.dataset.id : SPIELE[0].id; };
+const detailZu = () => { if ($("#detail").classList.contains("on")) schliessen(); };
+const T = (sel, text, extra={}) => ({sel, text, ...extra});           // Schritt mit „Weiter“
+const TIPP = (sel, text, extra={}) => ({sel, text, tippen:true, ...extra}); // Schritt: selbst antippen
 
 const HILFE = [
+ { id:"basis", icon:"👋", titel:"So funktioniert die App", kurz:"Das Wichtigste zuerst: Reiter, Wischen, Hilfe.",
+   lesen:["Die App funktioniert wie ein Ordner mit Seiten. Die Seiten heißen <b>Reiter</b> und sind oben in Orange.",
+     `${D.tab("AG planen")} stellt eine ganze Stunde zusammen. ${D.tab("Alle Spiele")} zeigt alle Spiele. ${D.tab("Parcours")} plant Stationen mit Turngeräten. ${D.tab("📅 Tag")} sammelt alles für einen Tag. ${D.tab("＋ Idee")} schickt eine neue Spielidee.`,
+     "Mit dem Finger antippen = einen Knopf drücken. Kurz antippen reicht – nicht drücken und halten.",
+     "Mit dem Finger von unten nach oben wischen = weiter nach unten schauen.",
+     `Kommt eine große Karte (zum Beispiel ein Spiel), geht es oben links mit ${D.weiss("← Zurück")} wieder zurück.`,
+     `Nicht weiter? Oben rechts auf ${D.weiss("❓ Hilfe")} tippen.`],
+   tour:[ T(".navtabs", "Ganz oben in Orange sind die Reiter. Ein Reiter ist wie eine Seite in einem Ordner. Man tippt drauf, dann kommt diese Seite.", {vorher:agFragen}),
+     T('.navtabs [data-view="plan"]', "„AG planen“: Die App stellt eine ganze Stunde für die AG zusammen."),
+     T('.navtabs [data-view="spiele"]', "„Alle Spiele“: Hier sind alle 100 Spiele mit Anleitung."),
+     T('.navtabs [data-view="parcours"]', "„Parcours“: Stationen mit Bänken, Kästen und Matten planen."),
+     T('.navtabs [data-view="tag"]', "„Tag“: Hier sammelt man alles, was heute ansteht."),
+     T('.navtabs [data-view="idee"]', "„＋ Idee“: Hier kann man eine eigene Spielidee schicken."),
+     T(null, "Antippen heißt: kurz mit dem Finger auf den Knopf tippen. Nicht lange drücken."),
+     T(null, "Ist die Seite länger als der Bildschirm, mit dem Finger von unten nach oben wischen. Dann sieht man den Rest."),
+     T("#hilfe-auf", "Und wenn du nicht weiterweißt: Hier oben rechts auf „Hilfe“ tippen. Das geht immer.") ]},
  { id:"ag", icon:"📋", titel:"Eine AG-Stunde planen", kurz:"Die App stellt eine ganze Stunde zusammen.",
-   lesen:[`Oben auf ${D.tab("AG planen")} tippen.`, "Die Fragen beantworten: Wie viele Kinder? Wie viele Betreuer? Wo? Wie lange?", `Auf ${D.blau("Stunde zusammenstellen →")} tippen.`,
-     `Fertig! Gefällt ein Spiel nicht, auf ${D.rund("⟳")} tippen. Ein Spiel antippen zeigt die Anleitung.`],
-   tour:[ {vorher:agFragen, sel:'.navtabs [data-view="plan"]', text:"Hier oben ist „AG planen“. Da fängt alles an."},
-     {sel:"#pkinder", text:"Wie viele Kinder sind da? Mit − und + ändern. Oder auf die Zahl tippen und eintippen."},
-     {sel:"#pbetreuer", text:"Wie viele Erwachsene sind dabei?"},
-     {sel:'[data-p="ort"]', text:"Turnhalle oder Schulhof? Einfach antippen."},
-     {sel:'[data-p="stimmung"]', text:"Wie sind die Kinder heute drauf?"},
-     {sel:'[data-p="dauer"]', text:"Wie lange dauert die AG?"},
-     {sel:"#los", text:"Zum Schluss auf diesen blauen Knopf tippen."},
-     {vorher:()=>$("#los").click(), sel:"#plan .phase", text:"Fertig! Das ist die Stunde – von oben nach unten: Aufwärmen, Hauptteil, Abschluss, Aufräumen."},
-     {sel:"#plan .swap", text:"Gefällt ein Spiel nicht? Auf diesen Kreis-Pfeil tippen – dann kommt ein anderes."},
-     {sel:"#plan .open", text:"Ein Spiel antippen – dann kommt die ganze Anleitung mit Bildern."},
-     {sel:"#mischen", text:"Mit dem Würfel wird die ganze Stunde neu gemischt."} ]},
- { id:"spiel", icon:"🎬", titel:"Ein Spiel anschauen", kurz:"Anleitung lesen und den kleinen Film abspielen.",
-   lesen:[`Oben auf ${D.tab("Alle Spiele")} tippen.`, "Ein Spiel antippen.", `Auf ${D.play} tippen: Die Kinder im Bild zeigen, wie es geht.`,
-     "Darunter stehen die Schritte. Einen Schritt antippen zeigt das Bild dazu.", `Zurück geht es oben mit ${D.weiss("← Zurück")}.`],
-   tour:[ {vorher:()=>geheZuReiter("spiele"), sel:'.navtabs [data-view="spiele"]', text:"Unter „Alle Spiele“ sind alle 100 Spiele."},
-     {sel:"#suche", text:"Hier kann man nach einem Namen suchen, zum Beispiel „Fangen“."},
-     {sel:'[data-f="kinder"]', text:"Oder mit diesen Knöpfen aussuchen: zum Beispiel wie viele Kinder da sind."},
-     {sel:"#liste .gcard", text:"Ein Spiel antippen …"},
-     {vorher:()=>zeige(erstesSpiel()), sel:"#bs", text:"… dann kommt oben ein kleiner Film."},
-     {sel:()=>$("#pb-gross:not([hidden])")||$("#pb-play"), text:"Auf ▶ tippen: Die Kinder im Bild zeigen Schritt für Schritt, wie es geht."},
-     {sel:"#sheet .steps", text:"Hier stehen die Schritte. Einen Schritt antippen zeigt das Bild dazu."},
-     {sel:"#pb-tempo", text:"Zu schnell? Hier langsamer stellen."},
-     {sel:"#pb-voll", text:"Großes Bild – gut zum Zeigen für die Kinder."},
-     {sel:"#drucken", text:"Die Karte kann man auch ausdrucken."},
-     {sel:"#zurueck", text:"Mit „Zurück“ geht es wieder zur Liste.", nachher:()=>schliessen()} ]},
- { id:"parcours", icon:"🧗", titel:"Einen Parcours planen", kurz:"Stationen aus Turngeräten, mit Hallenplan.",
-   lesen:[`Oben auf ${D.tab("Parcours")} tippen.`, "Kinder und Betreuer eintragen, einen Schwerpunkt wählen.", `Auf ${D.blau("Parcours zusammenstellen →")} tippen.`,
-     "Oben ist der Plan für die Halle, darunter die Stationen. Eine Station antippen zeigt, wie man sie aufbaut."],
-   tour:[ {vorher:pzFragen, sel:'.navtabs [data-view="parcours"]', text:"Hier ist der Parcours."},
-     {sel:"#pz-kinder", text:"Wie viele Kinder sind da?"},
-     {sel:"#pz-betreuer", text:"Wie viele Erwachsene? Pro Station braucht es einen."},
-     {sel:"#pz-fokus", text:"Was sollen die Kinder vor allem machen? Oder einfach „Bunt gemischt“."},
-     {sel:"#pz-hallekurz", text:"Hier steht, welche Geräte eure Halle hat. Die App nimmt nur Stationen, die ihr aufbauen könnt."},
-     {sel:"#pz-los", text:"Dann auf diesen Knopf tippen."},
-     {vorher:()=>$("#pz-los").click(), sel:".hplan-box", text:"So stellt ihr die Stationen in der Halle auf. Die Kinder gehen im Kreis von Station zu Station."},
-     {sel:"#pz-plan .stationen .open", text:"Eine Station antippen – dann kommt ein kleiner Film, wie man sie aufbaut."},
-     {sel:"#pz-plan .swap", text:"Diese Station gefällt nicht? Kreis-Pfeil antippen."},
-     {sel:".anzst", text:"Hier kann man Stationen dazunehmen oder weglassen."} ]},
+   lesen:[`Oben auf ${D.tab("AG planen")} tippen.`,
+     "Wie viele Kinder? Mit − und + ändern. Oder auf die Zahl tippen, dann kommt die Tastatur, und die Zahl eintippen.",
+     "Genauso: Wie viele Betreuer sind dabei?",
+     "Bei den weiteren Fragen jeweils eine Antwort antippen: Wo seid ihr? Wie ist die Stimmung? Wie lange dauert die AG? Habt ihr Material? Die gewählte Antwort hat einen blauen Rahmen.",
+     "In der Turnhalle kommt noch: Spiele oder Parcours im Hauptteil?",
+     `Ganz unten auf ${D.blau("Stunde zusammenstellen →")} tippen.`,
+     "Jetzt steht die Stunde da, von oben nach unten: Aufwärmen, Hauptteil, Abschluss, Aufräumen. Links steht, wie viele Minuten.",
+     `Gefällt ein Spiel nicht? Rechts daneben auf ${D.rund("⟳")} tippen – dann kommt ein anderes.`,
+     `Auf ein Spiel tippen zeigt die ganze Anleitung. Mit ${D.weiss("← Zurück")} geht es zur Stunde zurück.`,
+     `${D.blau("🎲 Neu mischen")} würfelt die ganze Stunde neu. ${D.weiss("← Angaben ändern")} geht zu den Fragen zurück.`],
+   tour:[ TIPP('.navtabs [data-view="plan"]', "Tippe oben auf „AG planen“.", {vorher:()=>{ geheZuReiter("spiele"); }}),
+     T("#pkinder", "Erste Frage: Wie viele Kinder sind da? Mit − wird es weniger, mit + mehr.", {vorher:agFragen}),
+     T("#pkinder", "Du kannst auch auf die Zahl tippen. Dann kommt unten die Tastatur. Zahl eintippen, dann auf „Fertig“ oder „OK“ tippen."),
+     T("#pbetreuer", "Zweite Frage: Wie viele Erwachsene sind dabei? Das geht genauso."),
+     T('[data-p="ort"]', "Wo seid ihr – Turnhalle oder Schulhof? Einfach antippen. Die gewählte Antwort hat einen blauen Rahmen."),
+     T('[data-p="stimmung"]', "Wie sind die Kinder heute drauf? Wild – normal – sollen ruhiger werden. Eins antippen."),
+     T('[data-p="dauer"]', "Wie lange dauert die AG? 30, 45 oder 60 Minuten."),
+     T('[data-p="material"]', "Habt ihr Material wie Bälle und Hütchen? Bei „Nein“ kommen nur Spiele ohne Material."),
+     T("#q-haupt", "Nur in der Turnhalle: Sollen im Hauptteil Spiele sein oder ein Parcours mit Turngeräten?", {vorher:()=>{ if (plan.ort!=="halle"){ plan.ort="halle"; renderFragen(); } }}),
+     TIPP("#los", "Alles beantwortet? Dann tippe jetzt auf den blauen Knopf „Stunde zusammenstellen“."),
+     T("#p-sum", "Fertig! Hier oben steht noch einmal, was du ausgewählt hast.", {vorher:agBereit}),
+     T("#plan .phase", "Darunter ist die Stunde. Das erste Kästchen ist das Aufwärmen. Links steht, wie viele Minuten."),
+     T("#plan .phase .mini", "Das kleine Bild zeigt, wie das Spiel ungefähr aussieht."),
+     TIPP("#plan .swap", "Gefällt dir das Spiel nicht? Tippe auf den Kreis-Pfeil – dann kommt ein anderes Spiel. Probier es aus!"),
+     TIPP("#plan .open", "Jetzt tippe auf den Namen vom Spiel. Dann kommt die ganze Anleitung."),
+     T("#sheet h2", "Das ist die Spielkarte mit der ganzen Anleitung. Mit dem Finger nach oben wischen, um alles zu lesen."),
+     TIPP("#zurueck", "Zurück zur Stunde geht es hier oben links. Tippe auf „Zurück“."),
+     T("#plan .note", "Ganz unten steht, welches Material du für die Stunde brauchst.", {vorher:detailZu}),
+     T("#mischen", "Mit dem Würfel wird die ganze Stunde neu gemischt."),
+     T("#aendern", "Mit „Angaben ändern“ kommst du zu den Fragen zurück."),
+     T("#ag-teilen-auf", "Mit „Teilen“ schickst du die Stunde ans Team. Das erklärt die Hilfe „Plan ans Team schicken“.") ]},
+ { id:"spiel", icon:"🎬", titel:"Ein Spiel anschauen", kurz:"Spiel suchen, Anleitung lesen, den kleinen Film abspielen.",
+   lesen:[`Oben auf ${D.tab("Alle Spiele")} tippen.`,
+     "Ins weiße Suchfeld tippen und einen Namen eintippen, zum Beispiel „Fangen“. Oder mit den Knöpfen darunter aussuchen: wie viele Kinder, wo, wie wild.",
+     "Die ausgewählten Knöpfe sind dunkel. „Filter zurücksetzen“ zeigt wieder alle Spiele.",
+     "Nach unten wischen und ein Spiel antippen.",
+     `Oben ist ein kleiner Film. Auf ${D.play} tippen: Die Kinder im Bild zeigen Schritt für Schritt, wie es geht.`,
+     "Die schwarze Leiste im Bild verschwindet beim Abspielen. Einmal aufs Bild tippen holt sie zurück.",
+     "Zu schnell? In der Leiste auf „1×“ tippen und langsamer stellen. Das Viereck rechts macht das Bild groß.",
+     "Darunter stehen die Schritte. Einen Schritt antippen zeigt das Bild dazu. Noch weiter unten: Vorbereitung, Tipps und Achtung.",
+     `Mit ${D.weiss("← Zurück")} oben links geht es zur Liste zurück.`],
+   tour:[ TIPP('.navtabs [data-view="spiele"]', "Tippe oben auf „Alle Spiele“.", {vorher:()=>{ detailZu(); geheZuReiter("plan"); }}),
+     T("#suche", "Hier kann man nach einem Namen suchen. Ins Feld tippen – dann kommt die Tastatur – und zum Beispiel „Fangen“ eintippen."),
+     T('[data-f="kinder"]', "Oder mit diesen Knöpfen aussuchen. Zum Beispiel: wie viele Kinder heute da sind. Ausgewählt ist, was dunkel ist."),
+     T("#anzahl", "Hier steht, wie viele Spiele passen."),
+     T("#reset", "„Filter zurücksetzen“ zeigt wieder alle Spiele."),
+     T("#zufall", "Keine Idee? Dieser Knopf unten schlägt ein zufälliges Spiel vor."),
+     TIPP("#liste .gcard", "Jetzt tippe auf ein Spiel."),
+     T("#sheet .meta", "Oben steht das Wichtigste: für wie viele Kinder, wo, welche Klasse, welches Material, wie lange."),
+     T("#bs", "Das ist ein kleiner Film. Er zeigt das Spiel Schritt für Schritt."),
+     TIPP(()=>$("#pb-gross:not([hidden])")||$("#pb-play"), "Tippe auf das Dreieck ▶ – dann bewegen sich die Kinder im Bild."),
+     T("#bs", "Schau kurz zu. Die schwarze Leiste unten verschwindet beim Abspielen. Einmal aufs Bild tippen holt sie zurück.", {vorher:()=>zeigeSteuer()}),
+     T("#pb-tempo", "Zu schnell? Hier auf „1×“ tippen. Dann kann man langsamer stellen, zum Beispiel auf 0,5.", {vorher:()=>zeigeSteuer()}),
+     T("#pb-voll", "Dieses Viereck macht das Bild groß – gut zum Zeigen für die Kinder. Nochmal tippen macht es wieder klein.", {vorher:()=>zeigeSteuer()}),
+     T("#sheet .steps", "Hier stehen die Schritte zum Lesen. Einen Schritt antippen zeigt das passende Bild oben."),
+     T("#sheet .boxes", "Weiter unten: Vorbereitung, Tipps für wenige oder viele Kinder, für Klasse 1/2 – und rot: Achtung."),
+     T("#drucken", "Die Karte kann man auch ausdrucken."),
+     TIPP("#zurueck", "Fertig gelesen? Tippe oben links auf „Zurück“.") ]},
+ { id:"parcours", icon:"🧗", titel:"Einen Parcours planen", kurz:"Stationen aus Turngeräten, mit Plan für die Halle.",
+   lesen:[`Oben auf ${D.tab("Parcours")} tippen. Darunter muss ${D.weiss("Planen")} dunkel sein.`,
+     "Wie viele Kinder? Wie viele Betreuer? Pro Station braucht es einen Erwachsenen.",
+     "Einen Schwerpunkt antippen – oder einfach „Bunt gemischt“.",
+     "Im Kasten „Eure Halle“ steht, welche Geräte ihr habt. Die App nimmt nur Stationen, die ihr damit aufbauen könnt.",
+     `Auf ${D.blau("Parcours zusammenstellen →")} tippen.`,
+     "Oben ist der Plan für die Halle von oben: Jede Zahl ist eine Station, die Pfeile zeigen den Weg der Kinder. Der braune Strich ist die Wand.",
+     `Darunter die Stationen. ${D.rund("⟳")} tauscht eine Station. Mit − und + gibt es weniger oder mehr Stationen.`,
+     "Eine Station antippen zeigt einen kleinen Film, wie man sie aufbaut, dazu Aufgaben (leicht, mittel, schwer) und Sicherheit.",
+     "Ganz unten: welche Geräte gebraucht werden, wie lange der Aufbau dauert und wie der Wechsel läuft."],
+   tour:[ TIPP('.navtabs [data-view="parcours"]', "Tippe oben auf „Parcours“.", {vorher:()=>{ detailZu(); geheZuReiter("plan"); }}),
+     T("#pz-tabs", "Der Parcours hat drei Teile: Planen, Alle Module und Unsere Halle. Jetzt sind wir bei „Planen“.", {vorher:pzFragen}),
+     T("#pz-kinder", "Wie viele Kinder sind da? Mit − und + ändern oder auf die Zahl tippen."),
+     T("#pz-betreuer", "Wie viele Erwachsene? Pro Station braucht es einen Erwachsenen."),
+     T("#pz-fokus", "Was sollen die Kinder vor allem üben? Eins antippen. Oder „Bunt gemischt“."),
+     T("#pz-hallekurz", "Hier steht, welche Geräte eure Halle hat. Die App nimmt nur Stationen, die ihr damit aufbauen könnt. Ändern: auf „Geräte ändern“ tippen."),
+     TIPP("#pz-los", "Tippe jetzt auf „Parcours zusammenstellen“."),
+     T("#pz-sum", "Oben steht noch einmal: wie viele Kinder, Betreuer und Stationen.", {vorher:pzBereit}),
+     T(".hplan-box", "Das ist die Halle von oben. Jede Zahl ist eine Station. Die Pfeile zeigen, wie die Kinder weitergehen. Der braune Strich ist die Wand."),
+     T(".anzst", "Mit − und + gibt es weniger oder mehr Stationen."),
+     T("#pz-plan .stationen .phase", "Hier ist die erste Station: Name und welche Geräte man braucht."),
+     T("#pz-plan .swap", "Diese Station passt nicht? Auf den Kreis-Pfeil tippen – dann kommt eine andere."),
+     TIPP("#pz-plan .stationen .open", "Tippe jetzt auf den Namen der Station."),
+     T("#bs", "Der kleine Film zeigt, wie man die Station aufbaut. Auf ▶ tippen zum Abspielen."),
+     T("#sheet .steps", "Hier steht der Aufbau Schritt für Schritt zum Lesen."),
+     T("#sheet .boxes", "Darunter: Aufgaben in leicht, mittel und schwer – und rot, worauf man achten muss."),
+     TIPP("#zurueck", "Tippe oben links auf „Zurück“."),
+     T("#pz-plan .note", "Unten steht: welche Geräte ihr braucht, wie viele Betreuer und wie lange der Aufbau dauert.", {vorher:detailZu}),
+     T("#pz-druck", "Den ganzen Parcours kann man hier als Karte ansehen oder ausdrucken."),
+     T("#pz-teilen-auf", "Mit „Teilen“ geht er ans Team, mit „Zum Tagesplan“ in den Tagesplan.") ]},
  { id:"halle", icon:"🏟", titel:"Geräte der Halle eintragen", kurz:"Einmal eintragen, was es in eurer Halle gibt.",
-   lesen:[`Oben auf ${D.tab("Parcours")} tippen, dann auf ${D.weiss("Unsere Halle")}.`, `Tipp: erst ${D.weiss("Alles auf 0")} tippen.`,
-     "Dann bei jedem Gerät die Zahl eintippen oder mit + hochzählen.", "Das Handy merkt es sich. Das macht man nur einmal."],
-   tour:[ {vorher:()=>pzReiter("halle"), sel:'#pz-tabs [data-t="halle"]', text:"Unter „Unsere Halle“ stehen alle Geräte."},
-     {sel:"#halle-null", text:"Tipp: Erst hier alles auf 0 setzen …"},
-     {sel:"#halle-liste .hzeile", text:"… dann bei jedem Gerät die Zahl eintippen oder mit + hochzählen."},
-     {sel:"#halle-info", text:"Hier steht, wie viele Stationen ihr damit aufbauen könnt. Fertig – das Handy merkt es sich."} ]},
+   lesen:[`Oben auf ${D.tab("Parcours")} tippen, dann darunter auf ${D.weiss("Unsere Halle")}.`,
+     `Am einfachsten: erst ${D.weiss("Alles auf 0")} tippen.`,
+     "Dann bei jedem Gerät, das ihr habt, die Zahl ändern: mit + hochzählen, oder auf die Zahl tippen und eintippen.",
+     "„in 5 Modulen“ heißt: So viele Stationen brauchen dieses Gerät.",
+     "Unten stehen die kleinen Sachen: Reifen, Hütchen, Seile, Bälle.",
+     "Ganz unten steht, wie viele Stationen ihr aufbauen könnt. Das Handy merkt sich alles – man macht das nur einmal."],
+   tour:[ TIPP('.navtabs [data-view="parcours"]', "Tippe oben auf „Parcours“.", {vorher:()=>{ detailZu(); geheZuReiter("plan"); }}),
+     TIPP('#pz-tabs [data-t="halle"]', "Tippe jetzt auf „Unsere Halle“."),
+     T("#halle-null", "Tipp: Erst hier auf „Alles auf 0“ tippen. Dann zählt man nur, was wirklich da ist.", {vorher:()=>pzReiter("halle")}),
+     T("#halle-std", "Zurück zu einer ganz normalen Turnhalle geht es mit „Standard-Halle“."),
+     T("#halle-liste .hzeile", "Jede Zeile ist ein Gerät. „in 15 Modulen“ heißt: So viele Stationen brauchen es."),
+     T("#halle-liste .hst", "Mit + wird die Zahl größer, mit − kleiner. Oder auf die Zahl tippen, eintippen und auf „Fertig“ tippen."),
+     T(()=>document.querySelectorAll("#halle-liste .hkopf")[1], "Weiter unten kommen die kleinen Sachen: Reifen, Hütchen, Seile, Bälle."),
+     T("#halle-info", "Hier steht, wie viele Stationen ihr damit aufbauen könnt. Das Handy merkt sich alles – fertig!") ]},
  { id:"teilen", icon:"📤", titel:"Plan ans Team schicken", kurz:"Als Bild per WhatsApp oder als PDF zum Drucken.",
-   lesen:["Erst eine AG-Stunde oder einen Parcours planen.", `Darunter auf ${D.gruen("📤 Teilen")} tippen.`, "Namen vom Team eintragen – mit Komma dazwischen.",
-     `Auf ${D.weiss("🖼 Bild")} tippen. Dann WhatsApp auswählen und die Gruppe antippen.`],
-   tour:[ {vorher:agBereit, sel:"#ag-teilen-auf", text:"Unter der fertigen Stunde ist dieser grüne Knopf. Antippen …"},
-     {vorher:()=>{ if ($("#teilen-ag").hidden) panelUmschalten("ag"); }, sel:'#teilen-ag [data-f="titel"]', text:"Oben kann man einen Titel eintragen, zum Beispiel „Bewegungs-AG Klasse 2“."},
-     {sel:'#teilen-ag [data-f="namen"]', text:"Hier die Namen vom Team eintragen, mit Komma dazwischen: Anna, Tom, Lisa."},
-     {sel:"#teilen-ag .t-zuteilung", text:"Die App verteilt die Namen selbst. Ändern: einfach die Namen antippen."},
-     {sel:"#teilen-ag .tvorschau", text:"So sieht das Bild aus, das die Kolleginnen bekommen."},
-     {sel:'#teilen-ag [data-art="bild"]', text:"Auf „Bild“ tippen. Dann WhatsApp auswählen und die Gruppe antippen. Fertig!"} ]},
+   lesen:["Erst eine AG-Stunde oder einen Parcours planen.", `Unter dem Plan auf ${D.gruen("📤 Teilen")} tippen.`,
+     "Einen Titel eintippen, zum Beispiel „Bewegungs-AG Klasse 2“. Datum und Uhrzeit prüfen.",
+     "Die Namen vom Team eintippen, mit Komma dazwischen: Anna, Tom, Lisa.",
+     "Bei „Wer macht was?“ sind die Namen schon verteilt. Blau heißt: zuständig. Antippen ändert es.",
+     "Darunter sieht man, wie das Bild aussieht.",
+     `${D.weiss("🖼 Bild")} = eine Seite mit allem auf einen Blick. ${D.weiss("🗂 Bildfolge")} = mehrere Bilder mit allen Anleitungen. ${D.weiss("📄 PDF")} = zum Drucken.`,
+     "Nach dem Tippen zeigt das Handy eine Liste mit Apps. WhatsApp antippen, die Gruppe oder Kollegin antippen, dann auf Senden (Pfeil) tippen.",
+     "Kommt keine Liste, liegt die Datei im Ordner „Downloads“."],
+   tour:[ T("#ag-teilen-auf", "Unter jeder fertigen Stunde (und jedem Parcours) gibt es den grünen Knopf „Teilen“.", {vorher:()=>{ detailZu(); agBereit(); }}),
+     TIPP("#ag-teilen-auf", "Tippe jetzt auf „Teilen“.", {vorher:()=>{ const el=$("#teilen-ag"); if (!el.hidden) el.hidden = true; }}),
+     T('#teilen-ag [data-f="titel"]', "Hier kann man einen Titel eintippen, zum Beispiel „Bewegungs-AG Klasse 2“. Das ist freiwillig.", {vorher:()=>{ if ($("#teilen-ag").hidden) panelUmschalten("ag"); }}),
+     T('#teilen-ag [data-f="datum"]', "Hier steht das Datum. Heute ist schon eingetragen. Antippen zum Ändern."),
+     T('#teilen-ag [data-f="beginn"]', "Hier die Uhrzeit, wann es losgeht. Antippen zum Ändern."),
+     T('#teilen-ag [data-f="namen"]', "Hier die Namen vom Team eintippen. Mit Komma dazwischen: Anna, Tom, Lisa. Die App merkt sich die Namen."),
+     T("#teilen-ag .t-zuteilung", "Hier steht, wer was macht. Die App verteilt die Namen selbst. Blau heißt: zuständig. Einen Namen antippen ändert es."),
+     T("#teilen-ag .tvorschau", "So sieht das Bild aus, das die Kolleginnen bekommen."),
+     T('#teilen-ag [data-art="bild"]', "„Bild“: Eine Seite mit allem auf einen Blick. Das ist das Richtige für WhatsApp."),
+     T('#teilen-ag [data-art="folge"]', "„Bildfolge“: Mehrere Bilder – dazu jedes Spiel mit Bild und Anleitung."),
+     T('#teilen-ag [data-art="pdf"]', "„PDF“: Alles in einer Datei, gut zum Ausdrucken."),
+     T(null, "Nach dem Tippen auf „Bild“ zeigt das Handy eine Liste mit Apps. Dort WhatsApp antippen."),
+     T(null, "Dann die Gruppe oder die Kollegin antippen und unten rechts auf den Pfeil (Senden) tippen. Fertig!"),
+     T(null, "Kommt keine Liste mit Apps? Dann liegt die Datei im Ordner „Downloads“ auf dem Handy. Von dort kann man sie verschicken.") ]},
  { id:"tag", icon:"📅", titel:"Den ganzen Tag planen", kurz:"Mehrere Stunden zu einem Tagesplan zusammenfassen.",
-   lesen:["Eine AG-Stunde oder einen Parcours planen.", `Darunter auf ${D.gruen("📅 Zum Tagesplan")} tippen.`, "Das mit weiteren Stunden wiederholen.",
-     `Oben auf ${D.tab("Tag")} tippen: Da steht alles mit Uhrzeit. Unten kann man den Tag verschicken.`],
-   tour:[ {vorher:agBereit, sel:"#ag-zumtag", text:"Mit diesem Knopf kommt die Stunde in den Tagesplan."},
-     {vorher:()=>geheZuReiter("tag"), sel:'.navtabs [data-view="tag"]', text:"Unter „Tag“ steht dann alles, was heute ansteht."},
-     {sel:"#tag-liste", text:"Jede Stunde mit Uhrzeit. Die Uhrzeit kann man hier ändern, mit ✕ nimmt man eine Stunde wieder raus."},
-     {sel:()=>$("#tag-teilen:not([hidden])")||$("#tag-liste"), text:"Unten den ganzen Tag als Bild oder PDF verschicken."} ]},
+   lesen:["Eine AG-Stunde oder einen Parcours planen.", `Darunter auf ${D.gruen("📅 Zum Tagesplan")} tippen. Unten kommt kurz eine schwarze Meldung.`,
+     "Das mit weiteren Stunden wiederholen.",
+     `Oben auf ${D.tab("📅 Tag")} tippen: Da steht alles, was heute ansteht.`,
+     "Die Uhrzeit antippen, um sie zu ändern. Mit ✕ nimmt man eine Stunde wieder raus.",
+     `Wer macht was? Bei jeder Stunde auf ${D.weiss("👤 Wer macht was?")} tippen. Dann bei jedem Spiel und jeder Station die Namen antippen. Blau = zuständig.`,
+     `Ganz unten den Tag verschicken: ${D.weiss("🖼 Bild")} = alles auf einen Blick, ${D.weiss("🗂 Bildfolge")} oder ${D.weiss("📄 PDF")} = mit allen Anleitungen.`,
+     `Am nächsten Tag: ${D.weiss("🗑 Tagesplan leeren")} und neu anfangen.`],
+   tour:[ TIPP("#ag-zumtag", "Tippe unter der fertigen Stunde auf „Zum Tagesplan“.", {vorher:()=>{ detailZu(); agBereit(); }}),
+     T("#meldung", "Unten kommt diese schwarze Meldung: Die Stunde ist jetzt im Tagesplan. Das kann man mit mehreren Stunden machen.", {vorher:()=>{ const m=$("#meldung"); clearTimeout(m._t); }}),
+     TIPP('.navtabs [data-view="tag"]', "Jetzt tippe oben auf „Tag“.", {vorher:()=>{ $("#meldung").hidden = true; }}),
+     T("#tag-datum", "Oben steht der Tag. Heute ist schon eingetragen."),
+     T("#tag-namen", "Hier die Namen vom Team – mit Komma dazwischen."),
+     T(".tagkarte", "Jede Stunde hat so eine Karte: wann, was und alle Spiele."),
+     T(".tagkarte .tk-zeit", "Uhrzeit ändern: hier antippen, neue Zeit einstellen."),
+     T(".tagkarte .tk-weg", "Mit dem ✕ nimmt man die Stunde wieder aus dem Tagesplan."),
+     T(".tagkarte ul", "Bei jedem Spiel steht in Blau, wer dafür zuständig ist."),
+     TIPP(".tagkarte .tk-werknopf", "Zum Ändern: Tippe auf „Wer macht was?“."),
+     T(".tagkarte .tk-wer", "Hier steht jedes Spiel und jede Station. Blau heißt: zuständig. Einen Namen antippen, um ihn dazuzunehmen oder wegzunehmen."),
+     T("#tag-vorschau", "Weiter unten sieht man, wie der ganze Tag als Bild aussieht."),
+     T("#tag-teilen .tknoepfe", "Hier den Tag verschicken: „Bild“ für WhatsApp, „Bildfolge“ oder „PDF“ mit allen Anleitungen. Danach wie beim Teilen: WhatsApp antippen, Gruppe antippen, senden."),
+     T("#tag-leeren", "Am nächsten Tag: hier den Tagesplan leeren und neu anfangen.") ]},
  { id:"idee", icon:"💡", titel:"Eine Spielidee schicken", kurz:"Eigene Spiele für die Sammlung vorschlagen.",
-   lesen:[`Oben auf ${D.tab("＋ Idee")} tippen.`, "Name und Ablauf eintragen.", `Auf ${D.blau("Idee teilen")} tippen und in WhatsApp verschicken.`],
-   tour:[ {vorher:()=>geheZuReiter("idee"), sel:'.navtabs [data-view="idee"]', text:"Unter „＋ Idee“ kann man eigene Spiele vorschlagen."},
-     {sel:"#i-name", text:"Hier den Namen vom Spiel eintragen …"}, {sel:"#i-ablauf", text:"… und kurz erklären, wie es geht."},
-     {sel:"#i-teilen", text:"Dann hier antippen und per WhatsApp verschicken."} ]},
+   lesen:[`Oben auf ${D.tab("＋ Idee")} tippen.`, "Ins Feld „Name des Spiels“ tippen und den Namen eintippen.",
+     "Darunter kurz erklären, wie das Spiel geht.", "Die anderen Fragen antippen (Wo? Wie viele Kinder? Wie lange? Wie wild?). Das ist freiwillig.",
+     `Auf ${D.blau("Idee teilen")} tippen, WhatsApp antippen und verschicken.`],
+   tour:[ TIPP('.navtabs [data-view="idee"]', "Tippe oben auf „＋ Idee“.", {vorher:()=>{ detailZu(); geheZuReiter("plan"); }}),
+     T("#i-name", "Hier den Namen vom Spiel eintippen. Erst ins Feld tippen, dann kommt die Tastatur."),
+     T("#i-ablauf", "Hier kurz erklären, wie das Spiel geht."),
+     T("#i-ort", "Wo spielt man es? Antippen. Blau = ausgewählt."),
+     T("#i-von", "Für wie viele Kinder? Von … bis … eintippen."),
+     T("#i-material", "Welches Material braucht man? Oder leer lassen."),
+     T("#i-dauer", "Wie lange dauert es?"),
+     T("#i-energie", "Wie wild ist das Spiel?"),
+     T("#i-teilen", "Zum Schluss hier antippen. Dann WhatsApp antippen und verschicken. Danke!") ]},
  { id:"handy", icon:"📱", titel:"App aufs Handy holen", kurz:"Damit sie wie eine richtige App auf dem Startbildschirm liegt.",
-   lesen:["<b>iPhone:</b> Den Link in <b>Safari</b> öffnen. Unten auf das Teilen-Zeichen tippen (Viereck mit Pfeil nach oben). Nach unten wischen und „Zum Home-Bildschirm“ antippen.",
-     "<b>Android:</b> Den Link in <b>Chrome</b> öffnen. Oben rechts auf die drei Punkte ⋮ tippen. „App installieren“ oder „Zum Startbildschirm hinzufügen“ antippen.",
-     "Danach geht die App auch ohne Internet."], tour:null }
+   lesen:["<b>iPhone:</b> Den Link in <b>Safari</b> öffnen (der blaue Kompass). Unten in der Mitte auf das Teilen-Zeichen tippen (Viereck mit Pfeil nach oben). Nach oben wischen und „Zum Home-Bildschirm“ antippen. Oben rechts „Hinzufügen“ tippen.",
+     "<b>Android:</b> Den Link in <b>Chrome</b> öffnen (der bunte Kreis). Oben rechts auf die drei Punkte ⋮ tippen. „App installieren“ oder „Zum Startbildschirm hinzufügen“ antippen. Dann „Installieren“ tippen.",
+     "Jetzt liegt auf dem Startbildschirm ein oranges Symbol „Bewegungsspiele“. Das antippen öffnet die App.",
+     "Einmal mit Internet geöffnet, geht die App danach auch ohne Internet."], tour:null }
 ];
 
 function renderHilfe(){
-  $("#hilfe-inhalt").innerHTML = `<div class="hilfe-kopf"><h2>Hilfe</h2><p>Was möchtest du machen? Tippe auf <b>Zeig es mir</b> – die App zeigt dir jeden Schritt.</p></div>`
+  $("#hilfe-inhalt").innerHTML = `<div class="hilfe-kopf"><h2>Hilfe</h2><p>Was möchtest du machen? Tippe auf <b>▶ Zeig es mir</b> – die App zeigt dir jeden Schritt. Neu hier? Fang mit der ersten Kachel an.</p></div>`
     + HILFE.map(h => `<section class="hkachel" id="hk-${h.id}"><div class="hk-oben"><span class="hk-icon">${h.icon}</span><div><h3>${h.titel}</h3><p>${h.kurz}</p></div></div>
       <div class="hk-knoepfe">${h.tour ? `<button class="hk-zeig" data-tour="${h.id}">▶ Zeig es mir</button>` : ""}<button class="hk-lies" data-lies="${h.id}">📖 Anleitung lesen</button></div>
       <ol class="hk-schritte" hidden>${h.lesen.map(s=>`<li>${s}</li>`).join("")}</ol></section>`).join("")
@@ -7864,22 +8009,34 @@ $("#hilfe-inhalt").onclick = e => {
   const t = e.target.closest("[data-tour]"); if (t){ const h = HILFE.find(x=>x.id===t.dataset.tour); hilfeZu(); zaehle("/tour-"+h.id); tourStart(h.tour); }
 };
 
-/* ---------- „Zeig es mir“: Stelle einrahmen und erklären ---------- */
-const tour = {schritte:[], i:0, el:null};
+/* ---------- „Zeig es mir“: Stelle einrahmen, erklären, bei wichtigen Knöpfen selbst tippen lassen ---------- */
+const tour = {schritte:[], i:0, el:null, warter:null};
 function tourStart(liste){ tour.schritte = liste; tour.i = 0; $("#tour").hidden = false; tourZeige(); }
-function tourEnde(){ const s = tour.schritte[tour.i]; $("#tour").hidden = true; tour.el = null; if (s && s.nachher) try { s.nachher(); } catch(e){} }
+function tourAufraeumen(){ if (tour.warter){ document.removeEventListener("click", tour.warter, true); tour.warter = null; } }
+function tourEnde(){ tourAufraeumen(); const s = tour.schritte[tour.i]; $("#tour").hidden = true; tour.el = null; if (s && s.nachher) try { s.nachher(); } catch(e){} }
+function tourWeiter(){ tourAufraeumen(); const s = tour.schritte[tour.i]; if (s && s.nachher) try { s.nachher(); } catch(e){} tour.i++; if (tour.i >= tour.schritte.length) return tourEnde(); tourZeige(); }
 async function tourZeige(){
+  tourAufraeumen();
   const s = tour.schritte[tour.i]; if (!s) return tourEnde();
   $("#tour .tblase").style.visibility = "hidden";
-  if (s.vorher){ try { s.vorher(); } catch(e){} await warte(400); }
-  let el = typeof s.sel === "function" ? s.sel() : document.querySelector(s.sel);
+  if (s.vorher){ try { s.vorher(); } catch(e){} await warte(450); }
+  let el = !s.sel ? null : typeof s.sel === "function" ? s.sel() : document.querySelector(s.sel);
   if (el && !el.getClientRects().length) el = null;
   tour.el = el;
-  if (el){ el.scrollIntoView({block:"center", inline:"nearest"}); await warte(120); }
+  if (el){ el.scrollIntoView({block:"center", inline:"nearest"}); await warte(150); }
+  const tippen = !!(s.tippen && el);
   $("#tour .ttext").textContent = s.text;
-  $("#tour .tnr").textContent = `${tour.i+1} von ${tour.schritte.length}`;
+  $("#tour .tnr").textContent = `Schritt ${tour.i+1} von ${tour.schritte.length}`;
+  $("#tour .thinweis").hidden = !tippen;
+  $("#tour .tweiter").hidden = tippen; $("#tour .tselbst").hidden = !tippen;
   $("#tour .tweiter").textContent = tour.i === tour.schritte.length-1 ? "Fertig ✔" : "Weiter ▶";
   $("#tour .tzurueck").disabled = tour.i === 0;
+  $("#tour").classList.toggle("tippen", tippen);
+  if (tippen){
+    // Nur der eingerahmte Knopf reagiert – danach geht es von selbst weiter
+    tour.warter = e => { if (tour.el && tour.el.contains(e.target)){ tourAufraeumen(); setTimeout(tourWeiter, 600); } };
+    document.addEventListener("click", tour.warter, true);
+  }
   tourPosition();
   $("#tour .tblase").style.visibility = "visible";
 }
@@ -7887,20 +8044,23 @@ function tourPosition(){
   if ($("#tour").hidden) return;
   const ring = $("#tour .tring"), blase = $("#tour .tblase"), vw = window.innerWidth, vh = window.innerHeight;
   let r = tour.el ? tour.el.getBoundingClientRect() : null;
-  if (r){ const p = 8, x = Math.max(4, r.left-p), y = Math.max(4, r.top-p), w = Math.min(vw-8, r.width+2*p), h = Math.min(vh-8, r.height+2*p);
-    Object.assign(ring.style, {left:x+"px", top:y+"px", width:w+"px", height:h+"px", display:"block"}); r = {top:y, bottom:y+h, left:x, width:w}; }
-  else ring.style.display = "none";
-  const bh = blase.offsetHeight, bw = Math.min(420, vw-24);
-  blase.style.width = bw+"px"; blase.style.left = Math.round((vw-bw)/2)+"px";
-  let top;
+  const sperre = document.querySelectorAll("#tour .tsperre");
+  if (r){ const p = 8, x = Math.max(4, r.left-p), y = Math.max(4, r.top-p), w = Math.min(vw-8-x+4, r.width+2*p), h = Math.min(vh-8-y+4, r.height+2*p);
+    Object.assign(ring.style, {left:x+"px", top:y+"px", width:w+"px", height:h+"px", display:"block"}); r = {top:y, bottom:y+h, left:x, right:x+w};
+    // Sperrflächen rund um den Rahmen (im Tipp-Schritt ist nur der Rahmen frei)
+    const f = [[0,0,vw,r.top],[0,r.bottom,vw,vh-r.bottom],[0,r.top,r.left,r.bottom-r.top],[r.right,r.top,vw-r.right,r.bottom-r.top]];
+    sperre.forEach((d,i)=>Object.assign(d.style,{left:f[i][0]+"px",top:f[i][1]+"px",width:Math.max(0,f[i][2])+"px",height:Math.max(0,f[i][3])+"px"}));
+  } else { ring.style.display = "none"; sperre.forEach((d,i)=>Object.assign(d.style, i===0 ? {left:"0",top:"0",width:vw+"px",height:vh+"px"} : {width:"0",height:"0"})); }
+  const bw = Math.min(440, vw-24); blase.style.width = bw+"px"; blase.style.left = Math.round((vw-bw)/2)+"px";
+  const bh = blase.offsetHeight; let top;
   if (!r) top = (vh-bh)/2;
   else if (vh - r.bottom > bh + 24) top = r.bottom + 14;
   else if (r.top > bh + 24) top = r.top - bh - 14;
   else top = vh - bh - 12;
   blase.style.top = Math.max(8, Math.round(top))+"px";
-  blase.classList.toggle("unten", !!r && top > r.top);
 }
-$("#tour .tweiter").onclick = () => { const s = tour.schritte[tour.i]; if (tour.i >= tour.schritte.length-1) return tourEnde(); if (s.nachher) try { s.nachher(); } catch(e){} tour.i++; tourZeige(); };
+$("#tour .tweiter").onclick = () => tourWeiter();
+$("#tour .tselbst").onclick = () => { const el = tour.el; tourAufraeumen(); if (el) el.click(); setTimeout(tourWeiter, 600); };
 $("#tour .tzurueck").onclick = () => { if (tour.i > 0){ tour.i--; tourZeige(); } };
 $("#tour .tzu").onclick = tourEnde;
 window.addEventListener("resize", tourPosition);
