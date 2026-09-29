@@ -1,6 +1,6 @@
 /* Offline-Speicher für die Bewegungsspiele-App.
    WICHTIG: Bei jedem Update die Versionsnummer unten erhöhen (gleiche Nummer wie in index.html). */
-const VERSION = "bewegung-v2.5";
+const VERSION = "bewegung-v3.2";
 const PFLICHT = ["./", "./index.html"];   // ohne diese geht offline nichts
 const EXTRA = ["./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];   // fehlt eine, geht es trotzdem
 
