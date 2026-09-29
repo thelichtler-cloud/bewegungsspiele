@@ -479,11 +479,14 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div class="q"><p>Wie viele Betreuer sind dabei?</p>
         <div class="stepper"><button id="bt-minus" aria-label="weniger">−</button><input class="zahl" id="pbetreuer" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="12" value="2" aria-label="Anzahl Betreuer" enterkeyhint="done"><button id="bt-plus" aria-label="mehr">+</button></div>
         <small class="hint" style="display:block;text-align:center;margin:6px 0 0">Pro Spiel sind 2 Betreuer vorgesehen, pro Parcours-Station 1.</small></div>
+      <div class="q"><p>Sind Kinder aus Klasse 1 dabei?</p><div class="grid2 k1wahl" id="p-klasse"></div>
+        <small class="hint" style="display:block;text-align:center;margin:6px 0 0">Bei „Ja“ lässt die App Spiele und Stationen weg, die erst ab Klasse 2 passen.</small></div>
       <div class="q"><p>Wo seid ihr?</p><div class="grid2" data-p="ort"></div></div>
       <div class="q"><p>Wie ist die Stimmung?</p><div class="grid3" data-p="stimmung"></div></div>
       <div class="q"><p>Wie lange dauert die AG?</p><div class="grid3" data-p="dauer"></div></div>
       <div class="q"><p>Habt ihr Material (Hütchen, Bälle …)?</p><div class="grid2" data-p="material"></div></div>
       <div class="q" id="q-haupt"><p>Was soll im Hauptteil passieren?</p><div class="grid2" data-p="haupt"></div></div>
+      <p class="hint" id="q-haupt-hof" hidden>Auf dem Schulhof gibt es Spiele. Einen Parcours mit Turngeräten gibt es nur in der Turnhalle.</p>
       <button class="bigbtn" id="los">Stunde zusammenstellen →</button>
     </div>
     <div id="p-ergebnis" hidden>
@@ -505,6 +508,7 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
         <div class="q"><p>Wie viele Betreuer sind dabei?</p>
           <div class="stepper"><button id="pzb-minus" aria-label="weniger">−</button><input class="zahl" id="pz-betreuer" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="12" value="2" aria-label="Anzahl Betreuer" enterkeyhint="done"><button id="pzb-plus" aria-label="mehr">+</button></div>
           <small class="hint" style="display:block;text-align:center;margin:6px 0 0">1 Betreuer pro Station, 2 für ein Zusatzspiel.</small></div>
+        <div class="q"><p>Sind Kinder aus Klasse 1 dabei?</p><div class="grid2 k1wahl" id="pz-klasse"></div></div>
         <div class="q"><p>Schwerpunkt</p><div class="grid2" id="pz-fokus"></div></div>
         <div class="q hallekurz" id="pz-hallekurz"></div>
         <button class="bigbtn" id="pz-los">Parcours zusammenstellen →</button>
@@ -534,6 +538,12 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
       <div class="q" id="freigabe-box"><p>⚠ Freigabe durch die Schule</p><small class="hint" style="margin:0">Diese Übungen bitte vorher mit der Schulleitung klären. Was hier „gesperrt“ ist, schlägt die App nicht mehr vor – weder im Parcours noch im AG-Planer. Wird auf diesem Gerät gespeichert.</small>
         <div class="row2" style="grid-template-columns:1fr 1fr;margin-top:10px"><button class="ghost" id="freigabe-keine">Alle sperren</button><button class="ghost" id="freigabe-alle">Alle erlauben</button></div>
         <div id="freigabe-liste"></div></div>
+      <div class="q" id="einst-box"><p>📤 Einstellungen weitergeben</p><small class="hint" style="margin:0">Einmal eintragen, dann an die Kolleginnen schicken: Geräte der Halle und Freigaben kommen so auf ihr Handy.</small>
+        <div id="einst-import" class="note gross" hidden></div>
+        <button class="bigbtn breit" id="einst-teilen" style="margin-top:10px">📤 An Kolleginnen schicken</button>
+        <p id="einst-status" class="hint" style="margin:6px 0 0"></p>
+        <p style="margin:12px 0 4px;font-weight:700">Code von einer Kollegin bekommen?</p>
+        <div class="row2" style="grid-template-columns:1fr auto"><input class="search" id="einst-code" placeholder="Code hier einfügen" autocomplete="off" autocapitalize="characters"><button class="ghost" id="einst-los">Übernehmen</button></div></div>
     </div>
   </main>
 
@@ -579,6 +589,8 @@ textarea.search{resize:vertical;font:inherit;line-height:1.4}
     <div class="chips" data-f="zeit"></div>
     <div class="flabel">Material</div>
     <div class="chips" data-f="material"></div>
+    <div class="flabel">Klasse</div>
+    <div class="chips" data-f="klasse"></div>
     <div class="count"><span id="anzahl"></span><button class="linkbtn" id="reset">Filter zurücksetzen</button></div>
     <div id="liste"></div>
     <p class="foot" id="version"></p>
@@ -636,7 +648,7 @@ function zaehle(pfad, ereignis){
    SPIELE-DATEN  –  Hier werden neue Spiele ergänzt.
    Jede Spielfeld-Grafik zeigt immer genau 6 Kinder.
    ===================================================================== */
-const VERSION = "Version 2.3 · Stand 29.09.2026 · 100 Spiele · 36 Parcours-Module";
+const VERSION = "Version 2.5 · Stand 29.09.2026";   // bei jedem Update erhöhen – und VERSION in sw.js
 
 const SPIELE = [
 {
@@ -644,7 +656,7 @@ const SPIELE = [
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["haupt"],
   kurz:"Wer gefangen wird, hält sich an der Kette fest – die Kette wird immer länger.",
   foerdert:"Ausdauer, Zusammenarbeit, Orientierung im Raum",
-  vorbereitung:"Spielfeld klar abgrenzen (Hallenlinien, Hütchen oder Kreidestriche).",
+  vorbereitung:"Spielfeld klar abgrenzen (Hallenlinien oder Hütchen).",
   ablauf:[
     "Zwei Kinder fassen sich an den Händen – sie sind die Fänger-Kette.",
     "Die Kette versucht, andere Kinder abzuschlagen, ohne loszulassen.",
@@ -767,7 +779,7 @@ const SPIELE = [
   wenige:"Jeder gegen die Uhr: Wie viele Hütchen schaffst du in 30 Sekunden umzudrehen?",
   viele:"Mehr Hütchen und größeres Feld. Runden kurz halten (ca. 45 Sekunden).",
   klasse1:"Nur gehen statt rennen, weniger Hütchen. Das Zählen gemeinsam machen.",
-  varianten:["Mit Tellern, Bechern oder Bierdeckeln statt Hütchen.","Nur hüpfend oder im Krebsgang zum nächsten Hütchen."],
+  varianten:["Kurze Runden: Nach 1 Minute ruft die Betreuerin „Stopp!“ – alle frieren ein, dann wird gezählt.","Nur hüpfend oder im Krebsgang zum nächsten Hütchen."],
   sicherheit:"Nicht über Hütchen springen, andere nicht festhalten. Beim Bücken auf die Köpfe achten.",
   feld:{ boden:"halle",
     kinder:[
@@ -1640,7 +1652,7 @@ const SPIELE = [
 }
 ,
 {
-  id:"paarfangen", name:"Paarfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"paarfangen", name:"Paarfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[8,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Fänger und Läufer sind immer zu zweit unterwegs – Hand in Hand.",
   foerdert:"Absprache, Rücksicht, Ausdauer",
@@ -1667,7 +1679,7 @@ const SPIELE = [
   legende:[["blau","Fänger-Paar"],["orange","Läufer-Paare"]]
 },
 {
-  id:"zauberer-fangen", name:"Zauberer-Fangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"zauberer-fangen", name:"Zauberer-Fangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Der Zauberer verwandelt Kinder in Tiere oder Statuen – nur die gute Fee kann sie erlösen.",
   foerdert:"Schnelligkeit, Fantasie, Körperspannung",
@@ -1693,7 +1705,7 @@ const SPIELE = [
   legende:[["blau","Zauberer"],["lila","Fee"],["orange","Kinder (Arme hoch = verzaubert)"]]
 },
 {
-  id:"linienfangen", name:"Linienfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"linienfangen", name:"Linienfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[5,25], klassen:"1–4", orte:["halle"], material:[], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Alle – auch der Fänger – dürfen sich nur auf den Linien der Halle bewegen.",
   foerdert:"Orientierung, Gleichgewicht, Überblick",
@@ -1721,7 +1733,7 @@ const SPIELE = [
   legende:[["blau","Fänger"],["orange","Läufer (nur auf Linien)"]]
 },
 {
-  id:"schwaenzchenfangen", name:"Schwänzchenfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"schwaenzchenfangen", name:"Schwänzchenfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[6,25], klassen:"1–4", orte:["halle","draussen"], material:["Seile (1 pro Kind)"], dauer:"10–15", energie:5, phasen:["haupt"],
   kurz:"Jedes Kind hat ein Seil als Schwänzchen hinten im Hosenbund – wer schnappt die meisten?",
   foerdert:"Schnelligkeit, Wendigkeit, Reaktion",
@@ -1749,7 +1761,7 @@ const SPIELE = [
   legende:[["blau","greift nach Schwänzchen"],["orange","läuft weg"]]
 },
 {
-  id:"kreuzfangen", name:"Kreuzfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"kreuzfangen", name:"Kreuzfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[6,20], klassen:"2–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["haupt"],
   kurz:"Der Fänger jagt immer nur ein Kind – wer zwischen beiden durchläuft, wird selbst gejagt.",
   foerdert:"Hilfsbereitschaft, Überblick, Schnelligkeit",
@@ -1775,7 +1787,7 @@ const SPIELE = [
   legende:[["blau","Fänger"],["rot","gejagtes Kind"],["orange","Mitspieler (kreuzen)"]]
 },
 {
-  id:"pinguinfangen", name:"Pinguinfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"pinguinfangen", name:"Pinguinfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[5,25], klassen:"1–4", orte:["halle"], material:["Matten (3–5 Stück)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Alle watscheln wie Pinguine – auf den Eisschollen (Matten) ist man kurz sicher.",
   foerdert:"Körperkoordination, Gleichgewicht, Spaß",
@@ -1802,7 +1814,7 @@ const SPIELE = [
   legende:[["blau","Fänger (Robbe)"],["orange","Pinguine"]]
 },
 {
-  id:"tierfangen", name:"Tierfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"tierfangen", name:"Tierfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Der Fänger ruft ein Tier – und alle, auch er selbst, bewegen sich sofort so.",
   foerdert:"Bewegungsvielfalt, Reaktion, Fantasie",
@@ -1828,7 +1840,7 @@ const SPIELE = [
   legende:[["blau","Fänger (ruft das Tier)"],["orange","Kinder (hüpfen wie Hasen)"]]
 },
 {
-  id:"bananenfangen", name:"Bananenfangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"bananenfangen", name:"Bananenfangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Wer gefangen wird, wird zur Banane – zwei Kinder müssen sie schälen, um sie zu befreien.",
   foerdert:"Zusammenarbeit, Hilfsbereitschaft, Ausdauer",
@@ -1855,7 +1867,7 @@ const SPIELE = [
   legende:[["blau","Fänger"],["gelb","Banane (gefangen)"],["orange","Läufer (schälen)"]]
 },
 {
-  id:"fuchs-huehner", name:"Fuchs und Hühner", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"fuchs-huehner", name:"Fuchs und Hühner", kategorie:"Fangspiel", farbe:"orange",
   kinder:[6,25], klassen:"1–4", orte:["halle","draussen"], material:["Matte oder Reifen für den Hühnerstall"], dauer:"10–15", energie:4, phasen:["haupt"],
   kurz:"Die Hühner picken auf dem Hof – kommt der Fuchs, flüchten sie in den Hühnerstall.",
   foerdert:"Reaktion, Schnelligkeit, Mut",
@@ -1883,7 +1895,7 @@ const SPIELE = [
   legende:[["rot","Fuchs"],["orange","Hühner"],["lila","Bauer/in (ruft)"]]
 },
 {
-  id:"rettungsball-fangen", name:"Rettungsball-Fangen", kategorie:"Fangspiel", farbe:"orange", neu:true,
+  id:"rettungsball-fangen", name:"Rettungsball-Fangen", kategorie:"Fangspiel", farbe:"orange",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro 4–5 Kinder)"], dauer:"10–15", energie:4, phasen:["haupt"],
   kurz:"Wer einen Ball in der Hand hält, ist sicher – aber der Ball muss schnell weitergegeben werden.",
   foerdert:"Passen und Fangen, Hilfsbereitschaft, Überblick",
@@ -1910,7 +1922,7 @@ const SPIELE = [
   legende:[["blau","Fänger"],["orange","Läufer (mit Ball = sicher)"]]
 },
 {
-  id:"kommando", name:"Kommando", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"kommando", name:"Kommando", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm"],
   kurz:"Nur wenn vor der Anweisung „Kommando“ gesagt wird, führen alle sie aus.",
   foerdert:"Zuhören, Konzentration, Körperwahrnehmung",
@@ -1937,7 +1949,7 @@ const SPIELE = [
   legende:[["lila","Betreuerin (gibt Kommandos)"],["gruen","Kinder"]]
 },
 {
-  id:"vier-ecken", name:"Vier Ecken", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"vier-ecken", name:"Vier Ecken", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (4 Stück)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Alle laufen in eine von vier Ecken – der Ansager ruft blind eine Zahl, und diese Ecke bekommt eine Zusatzaufgabe.",
   foerdert:"Entscheidungen treffen, Ausdauer, Zahlen",
@@ -1966,7 +1978,7 @@ const SPIELE = [
   legende:[["lila","Ansager (Augen zu)"],["gruen","Kinder in den Ecken"]]
 },
 {
-  id:"schiff-ahoi", name:"Schiff ahoi", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"schiff-ahoi", name:"Schiff ahoi", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Die Halle ist ein Schiff – auf Kommando laufen alle zu Bug, Heck, Backbord oder Steuerbord.",
   foerdert:"Orientierung, Reaktion, Gruppen bilden",
@@ -1995,7 +2007,7 @@ const SPIELE = [
   legende:[["lila","Kapitän"],["gruen","Matrosen"]]
 },
 {
-  id:"stopptanz", name:"Stopptanz", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"stopptanz", name:"Stopptanz", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Musik (optional)"], dauer:"10–15", energie:3, phasen:["warm"],
   kurz:"Alle tanzen zur Musik – hört sie auf, frieren alle sofort ein.",
   foerdert:"Rhythmus, Körperbeherrschung, Reaktion",
@@ -2021,7 +2033,7 @@ const SPIELE = [
   legende:[["gruen","Tänzer (eingefroren)"],["lila","Betreuerin"]]
 },
 {
-  id:"farben-rennen", name:"Farben-Rennen", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"farben-rennen", name:"Farben-Rennen", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen in verschiedenen Farben"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Eine Farbe wird gerufen – alle rennen zu einem Hütchen in dieser Farbe.",
   foerdert:"Farben erkennen, Reaktion, Schnelligkeit",
@@ -2049,7 +2061,7 @@ const SPIELE = [
   legende:[["gruen","Kinder"],["lila","Rufer/in"]]
 },
 {
-  id:"klatsch-kommandos", name:"Klatsch-Kommandos", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"klatsch-kommandos", name:"Klatsch-Kommandos", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:3, phasen:["warm"],
   kurz:"Die Betreuerin klatscht – und die Zahl der Klatscher bestimmt, was alle tun.",
   foerdert:"Zuhören, Zählen, Reaktion",
@@ -2077,7 +2089,7 @@ const SPIELE = [
   legende:[["lila","Betreuerin (klatscht)"],["gruen","Kinder (1× = sitzen)"]]
 },
 {
-  id:"reifen-reise", name:"Reifen-Reise", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"reifen-reise", name:"Reifen-Reise", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[5,20], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (etwa 1 pro 2 Kinder)","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Wie Reise nach Jerusalem – aber es scheidet niemand aus: Alle müssen irgendwie in die übrigen Reifen passen.",
   foerdert:"Zusammenarbeit, Kreativität, Rücksicht",
@@ -2105,7 +2117,7 @@ const SPIELE = [
   legende:[["gruen","Kinder (zu zweit im Reifen)"]]
 },
 {
-  id:"ruecken-an-ruecken", name:"Rücken an Rücken", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"ruecken-an-ruecken", name:"Rücken an Rücken", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm"],
   kurz:"Paare verbinden auf Zuruf Körperteile – bei „Wechsel!“ suchen alle schnell einen neuen Partner.",
   foerdert:"Körperteile benennen, Kontakt, Reaktion",
@@ -2132,7 +2144,7 @@ const SPIELE = [
   legende:[["gruen","Partner A"],["blau","Partner B"],["lila","Ansager"]]
 },
 {
-  id:"huetchen-schnapp", name:"Hütchen-Schnapp", kategorie:"Reaktionsspiel", farbe:"gruen", neu:true,
+  id:"huetchen-schnapp", name:"Hütchen-Schnapp", kategorie:"Reaktionsspiel", farbe:"gruen",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (1 pro Paar)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Zwei Kinder, ein Hütchen dazwischen – bei „Hütchen!“ schnappt, wer schneller ist.",
   foerdert:"Reaktion, Zuhören, Körperteile benennen",
@@ -2160,7 +2172,7 @@ const SPIELE = [
   legende:[["gruen","Kind A"],["blau","Kind B"]]
 },
 {
-  id:"nummernwettlauf", name:"Nummernwettlauf", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"nummernwettlauf", name:"Nummernwettlauf", kategorie:"Teamspiel", farbe:"blau",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (optional)"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Zwei Teams, jedes Kind hat eine Nummer – wird sie gerufen, rennen die beiden um die Teams herum zurück.",
   foerdert:"Zuhören, Schnelligkeit, Teamgeist",
@@ -2189,7 +2201,7 @@ const SPIELE = [
 }
 ,
 {
-  id:"tic-tac-toe-staffel", name:"Tic-Tac-Toe-Staffel", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"tic-tac-toe-staffel", name:"Tic-Tac-Toe-Staffel", kategorie:"Teamspiel", farbe:"blau",
   kinder:[6,24], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (9 pro Spielfeld)","Hütchen (3 pro Team)"], dauer:"15–20", energie:4, phasen:["haupt"],
   kurz:"Drei in einer Reihe – aber jedes Hütchen muss erst ins Spielfeld gerannt werden.",
   foerdert:"Schnelligkeit, Taktik, Absprache im Team",
@@ -2218,7 +2230,7 @@ const SPIELE = [
   legende:[["orange","Team 1 (Hütchen stehend)"],["blau","Team 2 (Hütchen umgedreht)"]]
 },
 {
-  id:"umzugsstaffel", name:"Umzugsstaffel", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"umzugsstaffel", name:"Umzugsstaffel", kategorie:"Teamspiel", farbe:"blau",
   kinder:[4,24], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (2 pro Team)","Bälle","Hütchen"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Das Team zieht um: Alles muss aus dem alten Reifen in den neuen – ein Teil pro Lauf.",
   foerdert:"Schnelligkeit, Teamgeist, Zählen",
@@ -2246,7 +2258,7 @@ const SPIELE = [
   legende:[["orange","Team 1"],["blau","Team 2"]]
 },
 {
-  id:"reifen-staffel", name:"Reifen-Staffel", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"reifen-staffel", name:"Reifen-Staffel", kategorie:"Teamspiel", farbe:"blau",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (1 pro Team)","Hütchen"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Auf halbem Weg liegt ein Reifen – hineinsteigen, über den Kopf ziehen, weiter!",
   foerdert:"Schnelligkeit, Beweglichkeit, Teamgeist",
@@ -2272,7 +2284,7 @@ const SPIELE = [
   legende:[["orange","Team 1"],["blau","Team 2"]]
 },
 {
-  id:"raupe", name:"Raupe", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"raupe", name:"Raupe", kategorie:"Teamspiel", farbe:"blau",
   kinder:[4,25], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Die Gruppe wird zur Raupe und schlängelt sich durch den Hütchen-Slalom – ohne zu reißen.",
   foerdert:"Zusammenarbeit, Rücksicht, Rhythmus",
@@ -2298,7 +2310,7 @@ const SPIELE = [
   legende:[["orange","Raupe 1"],["blau","Raupe 2"]]
 },
 {
-  id:"transportkette", name:"Transportkette", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"transportkette", name:"Transportkette", kategorie:"Teamspiel", farbe:"blau",
   kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (5–10)","Reifen (2)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Alle Bälle wandern von Hand zu Hand durch die Kette – wie schnell schafft ihr es?",
   foerdert:"Zusammenarbeit, Fangen, Konzentration",
@@ -2324,7 +2336,7 @@ const SPIELE = [
   legende:[["blau","Kette"]]
 },
 {
-  id:"zauberteppich", name:"Zauberteppich", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"zauberteppich", name:"Zauberteppich", kategorie:"Teamspiel", farbe:"blau",
   kinder:[4,24], klassen:"1–4", orte:["halle"], material:["Matten (1 pro 4–6 Kinder)"], dauer:"10–15", energie:2, phasen:["haupt"],
   kurz:"Die Gruppe steht auf dem Zauberteppich und muss ihn umdrehen – ohne den Boden zu berühren.",
   foerdert:"Zusammenarbeit, Absprache, Gleichgewicht",
@@ -2349,7 +2361,7 @@ const SPIELE = [
   legende:[["blau","Gruppe auf der Matte"]]
 },
 {
-  id:"gordischer-knoten", name:"Gordischer Knoten", kategorie:"Teamspiel", farbe:"blau", neu:true,
+  id:"gordischer-knoten", name:"Gordischer Knoten", kategorie:"Teamspiel", farbe:"blau",
   kinder:[5,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["haupt"],
   kurz:"Alle Hände sind verknotet – gemeinsam wird der Knoten gelöst, ohne loszulassen.",
   foerdert:"Zusammenarbeit, Geduld, Absprache",
@@ -2374,7 +2386,7 @@ const SPIELE = [
   legende:[["blau","Knoten-Kinder"],["lila","Knoten-Berater (freiwillig)"]]
 },
 {
-  id:"kreisjaegerball", name:"Kreisjägerball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"kreisjaegerball", name:"Kreisjägerball", kategorie:"Ballspiel", farbe:"rot",
   kinder:[8,30], klassen:"1–4", orte:["halle","draussen"], material:["weicher Ball (Softball)"], dauer:"15–20", energie:4, phasen:["haupt"],
   kurz:"Außen stehen die Jäger im Kreis, innen weichen die Hasen dem Ball aus.",
   foerdert:"Werfen, Ausweichen, Reaktion",
@@ -2399,7 +2411,7 @@ const SPIELE = [
   legende:[["orange","Jäger außen"],["blau","Hasen in der Mitte"]]
 },
 {
-  id:"huetchenball", name:"Hütchenball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"huetchenball", name:"Hütchenball", kategorie:"Ballspiel", farbe:"rot",
   kinder:[6,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (2–3 weiche)","Hütchen (etwa 1 pro Kind)"], dauer:"15–20", energie:4, phasen:["haupt"],
   kurz:"Jedes Team schützt seine Hütchen – und versucht, die Hütchen der anderen umzuwerfen.",
   foerdert:"Zielen, Werfen, Abwehren, Teamgeist",
@@ -2426,7 +2438,7 @@ const SPIELE = [
   legende:[["orange","Team 1"],["blau","Team 2"]]
 },
 {
-  id:"zehnerball", name:"Zehnerball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"zehnerball", name:"Zehnerball", kategorie:"Ballspiel", farbe:"rot",
   kinder:[6,24], klassen:"1–4", orte:["halle","draussen"], material:["Ball (weich)","Hütchen (optional, Feld markieren)"], dauer:"15–20", energie:4, phasen:["warm","haupt"],
   kurz:"Zehn Pässe hintereinander, ohne dass die anderen den Ball abfangen – alle zählen laut mit!",
   foerdert:"Passen, Fangen, Freilaufen, Zählen",
@@ -2451,7 +2463,7 @@ const SPIELE = [
   legende:[["orange","Team mit Ball"],["blau","Abfänger"]]
 },
 {
-  id:"heisse-kartoffel", name:"Heiße Kartoffel", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"heisse-kartoffel", name:"Heiße Kartoffel", kategorie:"Ballspiel", farbe:"rot",
   kinder:[4,25], klassen:"1–4", orte:["halle","draussen"], material:["Ball","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Der Ball ist eine heiße Kartoffel – schnell weitergeben, bevor die Musik stoppt!",
   foerdert:"Reaktion, Geschicklichkeit, Aufmerksamkeit",
@@ -2476,7 +2488,7 @@ const SPIELE = [
   legende:[["rot","Kinder im Kreis"],["gelb","hält die Kartoffel"]]
 },
 {
-  id:"burgwaechter", name:"Burgwächter", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"burgwaechter", name:"Burgwächter", kategorie:"Ballspiel", farbe:"rot",
   kinder:[5,20], klassen:"1–4", orte:["halle","draussen"], material:["weicher Ball","Reifen","Hütchen"], dauer:"15–20", energie:3, phasen:["haupt"],
   kurz:"In der Mitte steht die Burg – der Wächter verteidigt sie gegen die Werfer im Kreis.",
   foerdert:"Zielen, Passen, Reaktion",
@@ -2501,7 +2513,7 @@ const SPIELE = [
   legende:[["orange","Werfer"],["blau","Burgwächter"]]
 },
 {
-  id:"bankball", name:"Bankball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"bankball", name:"Bankball", kategorie:"Ballspiel", farbe:"rot",
   kinder:[4,24], klassen:"1–4", orte:["halle"], material:["Bänke (1–2)","weicher Ball"], dauer:"15–20", energie:3, phasen:["haupt"],
   kurz:"Wie Mini-Volleyball mit Fangen: Der Ball muss über die Bank ins andere Feld.",
   foerdert:"Werfen, Fangen, Raumgefühl",
@@ -2526,7 +2538,7 @@ const SPIELE = [
   legende:[["orange","Team 1"],["blau","Team 2"]]
 },
 {
-  id:"mattenball", name:"Mattenball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"mattenball", name:"Mattenball", kategorie:"Ballspiel", farbe:"rot",
   kinder:[8,24], klassen:"2–4", orte:["halle"], material:["Matten (2)","weicher Ball"], dauer:"20–30", energie:4, phasen:["haupt"],
   kurz:"Das Team passt sich den Ball zu und legt ihn auf der gegnerischen Matte ab.",
   foerdert:"Passen, Freilaufen, Zusammenspiel",
@@ -2551,7 +2563,7 @@ const SPIELE = [
   legende:[["orange","Team 1 (spielt nach rechts)"],["blau","Team 2"]]
 },
 {
-  id:"prellstaffel", name:"Prellstaffel", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"prellstaffel", name:"Prellstaffel", kategorie:"Ballspiel", farbe:"rot",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro Team)","Hütchen"], dauer:"10–15", energie:4, phasen:["warm","haupt"],
   kurz:"Den Ball prellen, um das Hütchen laufen und zurück – ohne dass er wegspringt.",
   foerdert:"Ballgefühl, Koordination, Schnelligkeit",
@@ -2576,7 +2588,7 @@ const SPIELE = [
   legende:[["orange","Team 1"],["blau","Team 2"]]
 },
 {
-  id:"huetchentor-rollen", name:"Hütchentor-Rollen", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"huetchentor-rollen", name:"Hütchentor-Rollen", kategorie:"Ballspiel", farbe:"rot",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro Paar)","Hütchen (2 pro Paar)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Zu zweit rollen sich die Kinder den Ball durch ein kleines Hütchentor zu.",
   foerdert:"Zielen, Ballgefühl, Konzentration",
@@ -2603,7 +2615,7 @@ const SPIELE = [
   legende:[["orange","Kind A"],["blau","Kind B"]]
 },
 {
-  id:"krebsfussball", name:"Krebsfußball", kategorie:"Ballspiel", farbe:"rot", neu:true,
+  id:"krebsfussball", name:"Krebsfußball", kategorie:"Ballspiel", farbe:"rot",
   kinder:[6,24], klassen:"1–4", orte:["halle"], material:["großer weicher Ball","Hütchen (4)"], dauer:"15–20", energie:4, phasen:["haupt"],
   kurz:"Fußball im Krebsgang: Bauch nach oben, auf Händen und Füßen – und den Ball nur mit den Füßen spielen.",
   foerdert:"Kraft, Körperspannung, Koordination",
@@ -2628,7 +2640,7 @@ const SPIELE = [
   legende:[["orange","Team 1 (spielt nach rechts)"],["blau","Team 2"]]
 },
 {
-  id:"ball-zirkus", name:"Ball-Zirkus", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"ball-zirkus", name:"Ball-Zirkus", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Bälle (1 pro Kind)","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Manege frei: Jedes Kind übt mit seinem Ball kleine Kunststücke.",
   foerdert:"Ballgefühl, Koordination, Mut zum Ausprobieren",
@@ -2653,7 +2665,7 @@ const SPIELE = [
   legende:[["tuerkis","Artisten"],["lila","macht ein Kunststück vor"]]
 },
 {
-  id:"kellner-lauf", name:"Kellner-Lauf", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"kellner-lauf", name:"Kellner-Lauf", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen","Bälle"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Ein umgedrehtes Hütchen ist das Tablett – der Ball darf beim Slalom nicht herunterfallen.",
   foerdert:"Gleichgewicht, Körperbeherrschung, Konzentration",
@@ -2681,7 +2693,7 @@ const SPIELE = [
   legende:[["orange","Team 1"],["blau","Team 2"]]
 },
 {
-  id:"reifen-kunststuecke", name:"Reifen-Kunststücke", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"reifen-kunststuecke", name:"Reifen-Kunststücke", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (1 pro Kind)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Rollen, drehen, kreisen lassen: Jedes Kind probiert mit seinem Reifen Kunststücke aus.",
   foerdert:"Koordination, Geschicklichkeit, Ausdauer",
@@ -2708,7 +2720,7 @@ const SPIELE = [
 }
 ,
 {
-  id:"reifen-huepfstrasse", name:"Reifen-Hüpfstraße", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"reifen-huepfstrasse", name:"Reifen-Hüpfstraße", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,20], klassen:"1–4", orte:["halle","draussen"], material:["Reifen (etwa 8–10 pro Hüpfstraße)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Reifen liegen als Hüpfmuster – einbeinig in die einzelnen, beidbeinig in die doppelten, wie bei Himmel und Hölle.",
   foerdert:"Sprungkraft, Koordination, Rhythmus",
@@ -2734,7 +2746,7 @@ const SPIELE = [
   legende:[["tuerkis","hüpft gerade"],["orange","wartet am Start"]]
 },
 {
-  id:"seilspringen", name:"Seilspringen", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"seilspringen", name:"Seilspringen", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,25], klassen:"1–4", orte:["halle","draussen"], material:["Seile (Springseile und 1–2 lange Seile)"], dauer:"15–20", energie:3, phasen:["warm","haupt"],
   kurz:"Drei Stationen vom liegenden Seil bis zum großen Schwungseil – jedes Kind wählt seine Stufe.",
   foerdert:"Sprungkraft, Rhythmus, Ausdauer",
@@ -2762,7 +2774,7 @@ const SPIELE = [
   legende:[["tuerkis","Springer"],["lila","schwingen das lange Seil"]]
 },
 {
-  id:"bank-kunststuecke", name:"Bank-Kunststücke", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"bank-kunststuecke", name:"Bank-Kunststücke", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,20], klassen:"1–4", orte:["halle"], material:["Bänke","Matten"], dauer:"15–20", energie:2, phasen:["haupt"],
   kurz:"Katzengang, Bauchrutschen, seitwärts gehen, drüberspringen – die Bank wird zur Zirkusbühne.",
   foerdert:"Gleichgewicht, Kraft, Körperspannung",
@@ -2788,7 +2800,7 @@ const SPIELE = [
   legende:[["tuerkis","macht ein Kunststück"],["orange","wartet"]]
 },
 {
-  id:"purzelbaumland", name:"Purzelbaumland", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"purzelbaumland", name:"Purzelbaumland", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,20], klassen:"1–4", orte:["halle"], material:["Matten"], dauer:"15–20", energie:2, phasen:["haupt"],
   kurz:"Eine Mattenbahn mit drei Stationen: Baumstammrollen, Purzelbaum, Krokodilkriechen.",
   foerdert:"Körpergefühl, Mut, Koordination",
@@ -2814,7 +2826,7 @@ const SPIELE = [
   legende:[["tuerkis","auf der Mattenbahn"],["orange","wartet"],["lila","Betreuerin gibt Hilfestellung"]]
 },
 {
-  id:"flussspringen", name:"Flussspringen", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"flussspringen", name:"Flussspringen", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[3,25], klassen:"1–4", orte:["halle","draussen"], material:["2 lange Seile (pro Fluss)"], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Zwei Seile bilden einen Fluss, der immer breiter wird – jedes Kind springt da, wo es sich traut.",
   foerdert:"Sprungkraft, Selbsteinschätzung, Mut",
@@ -2840,7 +2852,7 @@ const SPIELE = [
   legende:[["tuerkis","Springer"]]
 },
 {
-  id:"seilbilder", name:"Seilbilder", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"seilbilder", name:"Seilbilder", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[6,25], klassen:"1–4", orte:["halle","draussen"], material:["Seile (etwa 3–4 pro Gruppe)"], dauer:"15–20", energie:1, phasen:["warm","haupt"],
   kurz:"Gruppen legen mit Seilen Formen, Buchstaben oder Tiere – die anderen raten und balancieren dann darüber.",
   foerdert:"Kreativität, Zusammenarbeit, Gleichgewicht",
@@ -2867,7 +2879,7 @@ const SPIELE = [
   legende:[["blau","hat das Bild gelegt"],["orange","rät und balanciert"]]
 },
 {
-  id:"seil-limbo", name:"Seil-Limbo", kategorie:"Geschicklichkeit", farbe:"tuerkis", neu:true,
+  id:"seil-limbo", name:"Seil-Limbo", kategorie:"Geschicklichkeit", farbe:"tuerkis",
   kinder:[4,25], klassen:"1–4", orte:["halle","draussen"], material:["1 langes Seil","Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm"],
   kurz:"Zwei Kinder halten ein Seil, alle gehen darunter durch – und das Seil wird immer tiefer.",
   foerdert:"Beweglichkeit, Körpergefühl, Spaß",
@@ -2892,7 +2904,7 @@ const SPIELE = [
   legende:[["lila","halten das Seil"],["tuerkis","gehen unten durch"]]
 },
 {
-  id:"wer-ist-der-anfuehrer", name:"Wer ist der Anführer?", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"wer-ist-der-anfuehrer", name:"Wer ist der Anführer?", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[7,25], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Der Kreis macht die Bewegungen eines geheimen Anführers nach – der Detektiv in der Mitte muss ihn finden.",
   foerdert:"Beobachten, Konzentration, Unauffälligkeit",
@@ -2917,7 +2929,7 @@ const SPIELE = [
   legende:[["orange","geheimer Anführer"],["lila","machen nach"],["blau","Detektiv"]]
 },
 {
-  id:"menschen-memory", name:"Menschen-Memory", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"menschen-memory", name:"Menschen-Memory", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[7,25], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Die Kinder sind die Memory-Karten: Paare haben dieselbe Bewegung, der Rater deckt durch Antippen auf.",
   foerdert:"Merkfähigkeit, Beobachten, Absprache",
@@ -2942,7 +2954,7 @@ const SPIELE = [
   legende:[["lila","Rater"],["orange","aufgedecktes Paar"],["tuerkis","noch verdeckt"]]
 },
 {
-  id:"schlangen-fuehrung", name:"Schlangen-Führung", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"schlangen-fuehrung", name:"Schlangen-Führung", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,24], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen (optional, als Hindernisse)"], dauer:"10–15", energie:1, phasen:["warm","haupt"],
   kurz:"Eine Schlange mit Händen auf den Schultern – nur der Kopf hat die Augen offen und führt ganz langsam.",
   foerdert:"Vertrauen, Verantwortung, Körpergefühl",
@@ -2966,7 +2978,7 @@ const SPIELE = [
   legende:[["orange","Kopf (Augen offen)"],["lila","Augen zu"]]
 },
 {
-  id:"tier-yoga", name:"Tier-Yoga", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"tier-yoga", name:"Tier-Yoga", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[3,25], klassen:"1–4", orte:["halle","draussen"], material:["Matten (optional)","Musik (optional)"], dauer:"10–15", energie:1, phasen:["warm","haupt"],
   kurz:"Baum, Katze, Hund, Kobra und Schmetterling – ruhige Yoga-Figuren mit tiefer Atmung.",
   foerdert:"Beweglichkeit, Gleichgewicht, Zur-Ruhe-Kommen",
@@ -2992,7 +3004,7 @@ const SPIELE = [
   legende:[["orange","macht die Figur vor"],["lila","machen mit"]]
 },
 {
-  id:"was-hat-sich-veraendert", name:"Was hat sich verändert?", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"was-hat-sich-veraendert", name:"Was hat sich verändert?", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["warm","haupt"],
   kurz:"Ein Kind verändert heimlich 1–3 Dinge an seiner Haltung oder Kleidung – der Partner muss sie finden.",
   foerdert:"Genaues Hinsehen, Merkfähigkeit, Konzentration",
@@ -3018,7 +3030,7 @@ const SPIELE = [
   legende:[["orange","verändert sich"],["blau","dreht sich weg und rät"]]
 },
 {
-  id:"bewegungs-kofferpacken", name:"Bewegungs-Kofferpacken", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"bewegungs-kofferpacken", name:"Bewegungs-Kofferpacken", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,15], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"„Ich packe in meinen Koffer …“ – mit Bewegungen, die immer mehr werden.",
   foerdert:"Merkfähigkeit, Konzentration, Kreativität",
@@ -3042,7 +3054,7 @@ const SPIELE = [
   legende:[["orange","ist dran"],["lila","machen mit"]]
 },
 {
-  id:"zauberwald", name:"Zauberwald-Geschichte", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"zauberwald", name:"Zauberwald-Geschichte", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:["Musik (optional)"], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Die Betreuerin erzählt eine Geschichte aus dem Zauberwald – die Kinder spielen sie mit ihrem Körper nach.",
   foerdert:"Fantasie, Zuhören, Körperausdruck",
@@ -3067,7 +3079,7 @@ const SPIELE = [
   legende:[["lila","Betreuerin erzählt"],["gruen","Kinder im Zauberwald"]]
 },
 {
-  id:"klanglauf", name:"Klanglauf", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"klanglauf", name:"Klanglauf", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,20], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["warm","haupt"],
   kurz:"Mit geschlossenen Augen hören, woher der Klang kommt – und ihm dann ganz langsam folgen.",
   foerdert:"Hören, Konzentration, Vertrauen",
@@ -3093,7 +3105,7 @@ const SPIELE = [
   legende:[["orange","macht den Klang"],["lila","Augen zu, folgt"],["blau","Partner sichert"]]
 },
 {
-  id:"baum-im-wind", name:"Baum im Wind", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"baum-im-wind", name:"Baum im Wind", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[3,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:1, phasen:["warm","haupt"],
   kurz:"Die Kinder sind Bäume auf einem Bein – und der Wind wird immer stärker.",
   foerdert:"Gleichgewicht, Körperspannung, Konzentration",
@@ -3119,7 +3131,7 @@ const SPIELE = [
   legende:[["lila","Wind (Betreuerin)"],["gruen","Bäume auf einem Bein"]]
 },
 {
-  id:"fotograf", name:"Fotograf", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"fotograf", name:"Fotograf", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["Hütchen, Bälle, Reifen (optional, als Motive)"], dauer:"10–15", energie:1, phasen:["warm","haupt"],
   kurz:"Ein Kind ist die Kamera mit geschlossenen Augen – der Fotograf führt es zu einem Motiv und drückt ab.",
   foerdert:"Vertrauen, Wahrnehmung, Verantwortung",
@@ -3145,7 +3157,7 @@ const SPIELE = [
   legende:[["lila","Kamera (Augen zu)"],["orange","Fotograf"]]
 },
 {
-  id:"herr-wolf", name:"Wie spät ist es, Herr Wolf?", kategorie:"Schleichspiel", farbe:"gelb", neu:true,
+  id:"herr-wolf", name:"Wie spät ist es, Herr Wolf?", kategorie:"Schleichspiel", farbe:"gelb",
   kinder:[5,25], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:3, phasen:["warm","haupt"],
   kurz:"Die Kinder fragen nach der Uhrzeit und kommen Schritt für Schritt näher – bis der Wolf „Essenszeit!“ ruft.",
   foerdert:"Zählen, Mut, Reaktion",
@@ -3171,7 +3183,7 @@ const SPIELE = [
   legende:[["rot","Herr Wolf"],["gelb","Kinder"]]
 },
 {
-  id:"bildhauer", name:"Bildhauer", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"bildhauer", name:"Bildhauer", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:["ruhige Musik (optional)"], dauer:"15–20", energie:1, phasen:["warm","haupt"],
   kurz:"Ein Kind ist der Bildhauer und formt seinen Partner zu einer Statue – danach gibt es einen Museumsrundgang.",
   foerdert:"Körpergefühl, Kreativität, Rücksicht",
@@ -3197,7 +3209,7 @@ const SPIELE = [
   legende:[["blau","Statue"],["orange","Bildhauer"]]
 },
 {
-  id:"pantomime-raten", name:"Pantomime-Raten", kategorie:"Ruhiges Spiel", farbe:"lila", neu:true,
+  id:"pantomime-raten", name:"Pantomime-Raten", kategorie:"Ruhiges Spiel", farbe:"lila",
   kinder:[4,30], klassen:"1–4", orte:["halle","draussen"], material:[], dauer:"10–15", energie:2, phasen:["warm","haupt"],
   kurz:"Ein Kind stellt ein Tier, einen Beruf oder eine Sportart ohne Worte dar – die anderen raten.",
   foerdert:"Körperausdruck, Fantasie, Beobachten",
@@ -3221,6 +3233,12 @@ const SPIELE = [
     pfeile:[]},
   legende:[["orange","stellt dar"],["lila","raten"]]
 }
+,
+{"id": "leuchtturm", "name": "Leuchtturm", "kategorie": "Schleichspiel", "farbe": "gelb", "neu": true, "kinder": [5, 25], "klassen": "1–4", "orte": ["halle", "draussen"], "material": [], "dauer": "10–15", "energie": 2, "phasen": ["warm", "haupt"], "kurz": "Der Leuchtturm dreht sich langsam und leuchtet mit dem Arm – wen das Licht erwischt, der muss erstarren.", "foerdert": "Körperbeherrschung, Geduld, Reaktion", "vorbereitung": "Ein Kind ist der Leuchtturm und steht in der Mitte. Die anderen verteilen sich am Rand des Feldes.", "ablauf": ["Der Leuchtturm streckt einen Arm aus – das ist der Lichtstrahl – und dreht sich ganz langsam im Kreis.", "Die anderen schleichen von allen Seiten auf den Leuchtturm zu.", "Zeigt der Lichtstrahl auf ein Kind, muss es sofort erstarren. Wackelt es, geht es zurück an den Rand.", "Wer den Leuchtturm antippt, ohne erwischt zu werden, ist der nächste Leuchtturm."], "wenige": "Kleineres Feld, der Leuchtturm dreht sich etwas schneller.", "viele": "Zwei Leuchttürme mit viel Abstand – oder in zwei Gruppen spielen.", "klasse1": "Die Betreuerin ist zuerst der Leuchtturm und dreht sich sehr langsam.", "varianten": ["Der Leuchtturm summt beim Drehen – hört er auf, frieren alle ein.", "Nebel: Der Leuchtturm hat die Augen zu und zeigt nur dorthin, wo er etwas hört."], "sicherheit": "Nur schleichen, nicht rennen. Beim Antippen nicht schubsen.", "feld": {"boden": "halle", "kinder": [{"x": 135, "y": 76, "c": "rot", "p": "ruf"}, {"x": 40, "y": 22, "c": "gelb", "p": "lauf"}, {"x": 222, "y": 26, "c": "gelb", "p": "lauf", "flip": 1}, {"x": 48, "y": 124, "c": "gelb", "p": "lauf"}, {"x": 214, "y": 118, "c": "gelb", "p": "arme", "flip": 1}, {"x": 78, "y": 72, "c": "gelb", "p": "lauf"}], "dinge": [{"typ": "kreis", "cx": 150, "cy": 100, "r": 34}, {"typ": "text", "x": 150, "y": 70, "text": "Leuchtturm", "gr": 9}], "pfeile": [{"von": [170, 104], "nach": [212, 132], "c": "rot"}, {"von": [66, 50], "nach": [100, 70], "dash": 1}]}, "legende": [["rot", "Leuchtturm"], ["gelb", "Schleicher"]]},
+{"id": "nachtschmuggler", "name": "Nachtschmuggler", "kategorie": "Schleichspiel", "farbe": "gelb", "neu": true, "kinder": [6, 30], "klassen": "1–4", "orte": ["halle", "draussen"], "material": ["Bälle (viele)", "Reifen (2)"], "dauer": "15–20", "energie": 2, "phasen": ["haupt"], "kurz": "Leise Bälle über die Grenze bringen – aber der Zöllner hört alles!", "foerdert": "Leise sein, Körperbeherrschung, Hören, Teamgeist", "vorbereitung": "Auf einer Seite liegen viele Bälle in einem Reifen (Lager), auf der anderen Seite liegt ein leerer Reifen (Versteck). Der Zöllner sitzt mit geschlossenen Augen in der Mitte.", "ablauf": ["Die Schmuggler stehen beim Lager. Jeder nimmt einen Ball.", "Ganz leise schleichen sie mit dem Ball am Zöllner vorbei zum Versteck.", "Hört der Zöllner etwas, zeigt er in die Richtung und ruft „Halt!“. Wer gemeint ist, bringt seinen Ball zurück ins Lager.", "Wer es schafft, legt den Ball ins Versteck und schleicht außen zurück zum Lager.", "Nach etwa 3 Minuten wird gezählt – dann ist ein anderes Kind der Zöllner."], "wenige": "Nur ein Schmuggler geht zur Zeit los, der Zöllner darf öfter zeigen.", "viele": "Zwei Zöllner sitzen Rücken an Rücken, oder in zwei Gruppen spielen.", "klasse1": "Der Zöllner darf pro Runde nur dreimal zeigen. Die Betreuerin hilft beim Zählen.", "varianten": ["Die Bälle müssen auf der flachen Hand liegen.", "Zwei Teams schmuggeln abwechselnd: Wer bringt mehr Bälle rüber?"], "sicherheit": "Nur schleichen, nicht rennen. Der Zöllner bleibt sitzen und hat die Augen zu.", "feld": {"boden": "halle", "kinder": [{"x": 135, "y": 76, "c": "blau", "p": "sitz"}, {"x": 66, "y": 30, "c": "gelb", "p": "lauf"}, {"x": 186, "y": 28, "c": "gelb", "p": "lauf"}, {"x": 84, "y": 124, "c": "gelb", "p": "lauf"}, {"x": 192, "y": 120, "c": "gelb", "p": "lauf"}, {"x": 8, "y": 24, "c": "gelb", "p": "steh"}], "dinge": [{"typ": "reifen", "x": 36, "y": 100, "r": 16, "c": "tuerkis"}, {"typ": "ball", "x": 30, "y": 96}, {"typ": "ball", "x": 42, "y": 104}, {"typ": "ball", "x": 34, "y": 108}, {"typ": "reifen", "x": 266, "y": 100, "r": 16, "c": "tuerkis"}, {"typ": "text", "x": 36, "y": 130, "text": "Lager", "gr": 9}, {"typ": "text", "x": 266, "y": 130, "text": "Versteck", "gr": 9}, {"typ": "ball", "x": 92, "y": 56}, {"typ": "ball", "x": 212, "y": 54}, {"typ": "ball", "x": 110, "y": 150}, {"typ": "text", "x": 150, "y": 70, "text": "Augen zu", "gr": 9}], "pfeile": [{"von": [100, 46], "nach": [176, 46], "dash": 1, "bogen": -8}, {"von": [120, 150], "nach": [186, 150], "dash": 1, "bogen": 8}]}, "legende": [["blau", "Zöllner (Augen zu)"], ["gelb", "Schmuggler"]]},
+{"id": "geheimagenten", "name": "Geheimagenten", "kategorie": "Schleichspiel", "farbe": "gelb", "neu": true, "kinder": [3, 20], "klassen": "1–4", "orte": ["halle", "draussen"], "material": ["Seile (6–10)", "Hütchen (1)"], "dauer": "10–15", "energie": 1, "phasen": ["warm", "haupt"], "kurz": "Seile auf dem Boden sind Laserstrahlen – wer schleicht zum Tresor, ohne einen zu berühren?", "foerdert": "Körperwahrnehmung, Gleichgewicht, Konzentration, Leise sein", "vorbereitung": "Seile kreuz und quer flach auf den Boden legen – das ist das Laser-Labyrinth. Am Ende steht ein Hütchen als Tresor.", "ablauf": ["Die Agenten stehen am Start. Die Betreuerin ist die Wache und macht die Augen zu.", "Nacheinander schleichen die Agenten durch das Labyrinth – kein Seil berühren!", "Hört die Wache ein Geräusch, ruft sie „Alarm!“. Wer sich gerade bewegt, geht zurück zum Start.", "Wer das Hütchen antippt, hat den Tresor geknackt und schleicht außen herum zurück."], "wenige": "Mehrere Durchgänge – nach jeder Runde baut ein Kind das Labyrinth um.", "viele": "Zwei Labyrinthe nebeneinander, oder je 3–4 Agenten starten mit Abstand.", "klasse1": "Weniger Seile und größere Lücken. Anfangs ohne Wache – nur „kein Seil berühren“ zählt.", "varianten": ["Auf allen vieren oder rückwärts durchschleichen.", "Zu zweit Hand in Hand durch das Labyrinth."], "sicherheit": "Über die Seile steigen, nicht springen. Seile liegen flach und locker auf dem Boden.", "feld": {"boden": "halle", "kinder": [{"x": 236, "y": 140, "c": "lila", "p": "steh", "flip": 1}, {"x": 98, "y": 78, "c": "blau", "p": "lauf"}, {"x": 170, "y": 88, "c": "blau", "p": "lauf"}, {"x": 8, "y": 20, "c": "blau", "p": "steh"}, {"x": 8, "y": 76, "c": "blau", "p": "steh"}, {"x": 8, "y": 136, "c": "blau", "p": "steh"}], "dinge": [{"typ": "linie", "x": 44, "text": "Start"}, {"typ": "seil", "x1": 78, "y1": 26, "x2": 118, "y2": 96, "welle": 0}, {"typ": "seil", "x1": 78, "y1": 176, "x2": 124, "y2": 112, "welle": 0}, {"typ": "seil", "x1": 152, "y1": 16, "x2": 152, "y2": 80, "welle": 0}, {"typ": "seil", "x1": 152, "y1": 122, "x2": 152, "y2": 186, "welle": 0}, {"typ": "seil", "x1": 184, "y1": 58, "x2": 232, "y2": 28, "welle": 0}, {"typ": "seil", "x1": 184, "y1": 144, "x2": 236, "y2": 174, "welle": 0}, {"typ": "seil", "x1": 200, "y1": 90, "x2": 242, "y2": 112, "welle": 0}, {"typ": "huetchen", "x": 270, "y": 100}, {"typ": "text", "x": 270, "y": 124, "text": "Tresor", "gr": 9}, {"typ": "text", "x": 251, "y": 136, "text": "Augen zu", "gr": 8}], "pfeile": [{"von": [60, 106], "nach": [96, 104], "dash": 1}, {"von": [132, 108], "nach": [168, 112], "dash": 1}]}, "legende": [["blau", "Agenten"], ["lila", "Wache (Betreuerin)"]]},
+{"id": "biathlon", "name": "Biathlon", "kategorie": "Teamspiel", "farbe": "blau", "neu": true, "kinder": [8, 30], "klassen": "1–4", "orte": ["halle", "draussen"], "material": ["Bälle (3 pro Team)", "Hütchen"], "dauer": "20–30", "energie": 4, "phasen": ["haupt"], "kurz": "Laufen und Zielen wie beim Biathlon: eine Runde laufen, dann auf Hütchen werfen – jedes stehende Hütchen kostet eine Strafrunde.", "foerdert": "Ausdauer, Zielen, Ruhe nach Belastung, Teamgeist", "vorbereitung": "Eine Laufrunde mit 4 Hütchen abstecken. Eine Wurflinie festlegen, pro Team 3 Bälle dort hinlegen und 3–4 m dahinter 3 Hütchen als Ziele aufstellen. Daneben eine kleine Strafrunde markieren.", "ablauf": ["Zwei bis vier Teams stellen sich am Start auf. Das erste Kind jedes Teams läuft eine Runde.", "An der Wurflinie wirft es die 3 Bälle nacheinander auf die Hütchen seines Teams.", "Für jedes Hütchen, das noch steht, läuft es eine kleine Strafrunde.", "Dann Bälle zurücklegen, Hütchen aufstellen und abklatschen – das nächste Kind startet.", "Welches Team ist zuerst fertig? Danach Teams neu mischen und noch einmal."], "wenige": "Jedes Kind läuft mehrere Durchgänge – gegen die eigene Zeit statt gegeneinander.", "viele": "Vier Teams mit eigener Wurfbahn. Ab 31 Kindern zwei Wettkämpfe parallel.", "klasse1": "Näher an die Ziele heran, Bälle rollen ist erlaubt, kürzere Laufrunde.", "varianten": ["Liegendschießen: auf dem Bauch liegend den Ball rollen.", "Zwei Laufrunden vor dem Werfen – für die Großen."], "sicherheit": "Hinter den Zielen steht niemand. Erst werfen, wenn die Bahn frei ist. Alle laufen in dieselbe Richtung.", "feld": {"boden": "halle", "kinder": [{"x": 120, "y": 8, "c": "blau", "p": "lauf"}, {"x": 76, "y": 98, "c": "blau", "p": "ruf"}, {"x": 76, "y": 142, "c": "rot", "p": "ruf"}, {"x": 236, "y": 20, "c": "rot", "p": "lauf"}, {"x": 8, "y": 98, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "rot", "p": "steh"}], "dinge": [{"typ": "huetchen", "x": 20, "y": 14}, {"typ": "huetchen", "x": 200, "y": 14}, {"typ": "huetchen", "x": 200, "y": 76}, {"typ": "huetchen", "x": 20, "y": 76}, {"typ": "text", "x": 120, "y": 66, "text": "Laufrunde", "gr": 10}, {"typ": "kreis", "cx": 252, "cy": 44, "r": 22}, {"typ": "text", "x": 252, "y": 82, "text": "Strafrunde", "gr": 9}, {"typ": "strich", "x1": 110, "y1": 98, "x2": 110, "y2": 190}, {"typ": "huetchen", "x": 220, "y": 110, "c": "blau"}, {"typ": "huetchen", "x": 236, "y": 122, "c": "blau"}, {"typ": "huetchen", "x": 220, "y": 134, "c": "blau"}, {"typ": "huetchen", "x": 220, "y": 156, "c": "rot"}, {"typ": "huetchen", "x": 236, "y": 168, "c": "rot"}, {"typ": "huetchen", "x": 220, "y": 180, "c": "rot"}], "pfeile": [{"von": [108, 118], "nach": [210, 120], "c": "blau"}, {"von": [108, 162], "nach": [210, 166], "c": "rot"}, {"von": [60, 30], "nach": [110, 24], "dash": 1}]}, "legende": [["blau", "Team Blau"], ["rot", "Team Rot"]]},
+{"id": "mini-olympiade", "name": "Mini-Olympiade", "kategorie": "Teamspiel", "farbe": "blau", "neu": true, "kinder": [8, 30], "klassen": "1–4", "orte": ["halle", "draussen"], "material": ["Bälle", "Reifen", "Seile", "Hütchen"], "dauer": "20–30", "energie": 3, "phasen": ["haupt"], "kurz": "Vier kleine Stationen, vier Teams – an jeder Station zeigt das Team, was es kann. Am Ende gibt es eine Siegerehrung für alle.", "foerdert": "Vielseitigkeit, Teamgeist, Ausdauer, Anfeuern", "vorbereitung": "Vier Stationen in die Ecken bauen: 1 Zielwurf (Reifen, Bälle), 2 Seilspringen (Seile), 3 Hütchen-Slalom, 4 Reifen-Hüpfen. Teams mit 2–7 Kindern bilden.", "ablauf": ["Jedes Team startet an einer Station. Die Betreuerin erklärt kurz alle vier Aufgaben.", "Station 1 – Zielwurf: Wie viele Bälle landen im Reifen?", "Station 2 – Seilspringen: Wie viele Sprünge schafft das Team zusammen?", "Station 3 und 4 – Slalom und Reifen-Hüpfen: Jedes Kind einmal, das Team feuert an.", "Nach 4–5 Minuten zweimal klatschen: Alle wechseln im Uhrzeigersinn. Zum Schluss Siegerehrung für alle Teams."], "wenige": "Nur zwei Stationen, alle als ein Team gegen die eigene Bestleistung.", "viele": "Jede Station doppelt aufbauen (8 Stationen), ab 31 Kindern zwei Olympiaden parallel.", "klasse1": "Seil flach auf den Boden legen und darüberhüpfen statt Seilspringen. Näher am Reifen werfen.", "varianten": ["Die Kinder erfinden selbst eine fünfte Station.", "Jedes Team versucht, in der zweiten Runde seine eigene Punktzahl zu schlagen."], "sicherheit": "Genug Abstand zwischen den Stationen. Beim Seilspringen steht niemand zu nah. Nicht in die Wurfrichtung laufen.", "feld": {"boden": "halle", "kinder": [{"x": 20, "y": 24, "c": "blau", "p": "ruf"}, {"x": 60, "y": 8, "c": "blau", "p": "arme"}, {"x": 206, "y": 22, "c": "rot", "p": "sprung"}, {"x": 60, "y": 122, "c": "gruen", "p": "lauf"}, {"x": 200, "y": 118, "c": "gelb", "p": "einbein"}, {"x": 135, "y": 58, "c": "lila", "p": "ruf"}], "dinge": [{"typ": "strich", "x1": 150, "y1": 10, "x2": 150, "y2": 190}, {"typ": "strich", "x1": 10, "y1": 100, "x2": 290, "y2": 100}, {"typ": "reifen", "x": 112, "y": 44, "r": 14, "c": "tuerkis"}, {"typ": "text", "x": 20, "y": 92, "text": "1", "gr": 14}, {"typ": "seil", "x1": 200, "y1": 74, "x2": 240, "y2": 74, "welle": 5}, {"typ": "text", "x": 280, "y": 92, "text": "2", "gr": 14}, {"typ": "huetchen", "x": 34, "y": 176}, {"typ": "huetchen", "x": 70, "y": 150}, {"typ": "huetchen", "x": 106, "y": 176}, {"typ": "huetchen", "x": 136, "y": 150}, {"typ": "text", "x": 20, "y": 122, "text": "3", "gr": 14}, {"typ": "reifen", "x": 186, "y": 176, "r": 12, "c": "gelb"}, {"typ": "reifen", "x": 216, "y": 176, "r": 12, "c": "gelb"}, {"typ": "reifen", "x": 246, "y": 176, "r": 12, "c": "gelb"}, {"typ": "reifen", "x": 276, "y": 176, "r": 12, "c": "gelb"}, {"typ": "text", "x": 280, "y": 122, "text": "4", "gr": 14}, {"typ": "ball", "x": 112, "y": 44}], "pfeile": [{"von": [52, 44], "nach": [96, 44], "c": "blau"}, {"von": [94, 160], "nach": [120, 150], "dash": 1, "c": "gruen"}]}, "legende": [["blau", "Team 1"], ["rot", "Team 2"], ["gruen", "Team 3"], ["gelb", "Team 4"], ["lila", "Betreuerin"]]}
 
 ];
 
@@ -3244,7 +3262,7 @@ kettenfangen: {
       haende:[[0,1],[5,3]], extra:[{typ:"blase",x:150,y:34,text:"Teilen!"}],
       pfeile:[{von:[72,90],nach:[50,120],bogen:6},{von:[242,134],nach:[262,108],bogen:-6}] },
     { kinder:[{x:40,y:84,c:"blau",p:"arme"},{x:70,y:84,c:"blau",p:"arme"},{x:100,y:84,c:"blau",p:"arme"},{x:200,y:84,c:"blau",p:"arme"},{x:230,y:84,c:"blau",p:"arme"},{x:170,y:84,c:"blau",p:"arme"}],
-      haende:[[0,1],[1,2],[5,3],[3,4]], extra:[{typ:"blase",x:150,y:52,text:"Alle gefangen – neue Runde!"}] }
+      haende:[[0,1],[1,2],[5,3],[3,4]], extra:[{typ:"blase",x:150,y:52,text:"Alle gefangen – neu!"}] }
   ]
 },
 "feuer-wasser-blitz": {
@@ -3319,6 +3337,8 @@ plumpsack: {
   ]
 }
 };
+// Neue Spiele (v2.5)
+Object.assign(SCHRITTE, {"leuchtturm": {"schrittDinge": [{"typ": "kreis", "cx": 150, "cy": 100, "r": 34}], "schritte": [{"kinder": [{"x": 135, "y": 76, "c": "rot", "p": "ruf"}, {"x": 12, "y": 12, "c": "gelb", "p": "steh"}, {"x": 250, "y": 12, "c": "gelb", "p": "steh", "flip": 1}, {"x": 12, "y": 140, "c": "gelb", "p": "steh"}, {"x": 250, "y": 140, "c": "gelb", "p": "steh", "flip": 1}, {"x": 12, "y": 76, "c": "gelb", "p": "steh"}], "pfeile": [{"von": [184, 74], "nach": [184, 128], "c": "rot", "bogen": 22}], "extra": [{"typ": "blase", "x": 150, "y": 52, "text": "Ich leuchte!"}]}, {"kinder": [{"x": 135, "y": 76, "c": "rot", "p": "ruf"}, {"x": 46, "y": 30, "c": "gelb", "p": "lauf"}, {"x": 216, "y": 30, "c": "gelb", "p": "lauf", "flip": 1}, {"x": 46, "y": 114, "c": "gelb", "p": "lauf"}, {"x": 216, "y": 114, "c": "gelb", "p": "lauf", "flip": 1}, {"x": 62, "y": 76, "c": "gelb", "p": "lauf"}], "pfeile": [{"von": [78, 58], "nach": [108, 76], "dash": 1}, {"von": [214, 140], "nach": [184, 128], "dash": 1}], "extra": [{"typ": "blase", "x": 150, "y": 186, "text": "Pssst …"}]}, {"kinder": [{"x": 135, "y": 76, "c": "rot", "p": "ruf"}, {"x": 46, "y": 30, "c": "gelb", "p": "steh"}, {"x": 216, "y": 30, "c": "gelb", "p": "steh", "flip": 1}, {"x": 46, "y": 114, "c": "gelb", "p": "steh"}, {"x": 216, "y": 114, "c": "gelb", "p": "arme", "flip": 1}, {"x": 62, "y": 76, "c": "gelb", "p": "steh"}], "pfeile": [{"von": [168, 104], "nach": [212, 130], "c": "rot"}], "extra": [{"typ": "blase", "x": 150, "y": 186, "text": "Licht! Erstarren!"}, {"typ": "kreis", "cx": 231, "cy": 138, "r": 26}]}, {"kinder": [{"x": 135, "y": 76, "c": "gelb", "p": "steh"}, {"x": 104, "y": 64, "c": "rot", "p": "arme"}, {"x": 216, "y": 30, "c": "gelb", "p": "steh", "flip": 1}, {"x": 46, "y": 114, "c": "gelb", "p": "steh"}, {"x": 250, "y": 140, "c": "gelb", "p": "lauf", "flip": 1}, {"x": 62, "y": 70, "c": "gelb", "p": "steh"}], "extra": [{"typ": "blase", "x": 118, "y": 50, "text": "Angetippt!"}]}]}, "nachtschmuggler": {"schrittDinge": [{"typ": "reifen", "x": 36, "y": 100, "r": 16, "c": "tuerkis"}, {"typ": "ball", "x": 30, "y": 96}, {"typ": "ball", "x": 42, "y": 104}, {"typ": "ball", "x": 34, "y": 108}, {"typ": "reifen", "x": 266, "y": 100, "r": 16, "c": "tuerkis"}, {"typ": "text", "x": 36, "y": 130, "text": "Lager", "gr": 9}, {"typ": "text", "x": 266, "y": 130, "text": "Versteck", "gr": 9}], "schritte": [{"kinder": [{"x": 135, "y": 76, "c": "blau", "p": "sitz"}, {"x": 8, "y": 30, "c": "gelb", "p": "steh"}, {"x": 48, "y": 30, "c": "gelb", "p": "steh"}, {"x": 8, "y": 132, "c": "gelb", "p": "steh"}, {"x": 48, "y": 132, "c": "gelb", "p": "steh"}, {"x": 70, "y": 82, "c": "gelb", "p": "arme"}], "extra": [{"typ": "text", "x": 150, "y": 70, "text": "Augen zu", "gr": 9}, {"typ": "ball", "x": 96, "y": 108}, {"typ": "blase", "x": 150, "y": 186, "text": "Jeder nimmt einen Ball"}]}, {"kinder": [{"x": 135, "y": 76, "c": "blau", "p": "sitz"}, {"x": 8, "y": 30, "c": "gelb", "p": "steh"}, {"x": 92, "y": 30, "c": "gelb", "p": "lauf"}, {"x": 8, "y": 132, "c": "gelb", "p": "steh"}, {"x": 48, "y": 132, "c": "gelb", "p": "steh"}, {"x": 100, "y": 120, "c": "gelb", "p": "lauf"}], "pfeile": [{"von": [130, 150], "nach": [180, 150], "dash": 1}, {"von": [124, 46], "nach": [170, 46], "dash": 1}], "extra": [{"typ": "text", "x": 150, "y": 70, "text": "Augen zu", "gr": 9}, {"typ": "ball", "x": 118, "y": 56}, {"typ": "ball", "x": 126, "y": 146}, {"typ": "blase", "x": 150, "y": 28, "text": "Pssst …"}]}, {"kinder": [{"x": 135, "y": 76, "c": "blau", "p": "ruf"}, {"x": 8, "y": 30, "c": "gelb", "p": "steh"}, {"x": 176, "y": 28, "c": "gelb", "p": "lauf"}, {"x": 8, "y": 132, "c": "gelb", "p": "steh"}, {"x": 48, "y": 132, "c": "gelb", "p": "steh"}, {"x": 100, "y": 120, "c": "gelb", "p": "lauf", "flip": 1}], "pfeile": [{"von": [98, 146], "nach": [62, 124], "dash": 1}], "extra": [{"typ": "ball", "x": 202, "y": 54}, {"typ": "ball", "x": 104, "y": 146}, {"typ": "blase", "x": 200, "y": 132, "text": "Halt!"}, {"typ": "kreis", "cx": 115, "cy": 143, "r": 26}]}, {"kinder": [{"x": 135, "y": 76, "c": "blau", "p": "sitz"}, {"x": 8, "y": 30, "c": "gelb", "p": "steh"}, {"x": 250, "y": 36, "c": "gelb", "p": "arme", "flip": 1}, {"x": 8, "y": 132, "c": "gelb", "p": "steh"}, {"x": 48, "y": 132, "c": "gelb", "p": "steh"}, {"x": 70, "y": 82, "c": "gelb", "p": "steh"}], "extra": [{"typ": "text", "x": 150, "y": 70, "text": "Augen zu", "gr": 9}, {"typ": "ball", "x": 270, "y": 104}, {"typ": "blase", "x": 150, "y": 186, "text": "Geschafft!"}]}, {"kinder": [{"x": 92, "y": 120, "c": "gelb", "p": "steh"}, {"x": 8, "y": 30, "c": "gelb", "p": "steh"}, {"x": 230, "y": 128, "c": "gelb", "p": "arme", "flip": 1}, {"x": 135, "y": 76, "c": "blau", "p": "sitz"}, {"x": 48, "y": 132, "c": "gelb", "p": "steh"}, {"x": 70, "y": 62, "c": "gelb", "p": "steh"}], "extra": [{"typ": "ball", "x": 262, "y": 96}, {"typ": "ball", "x": 270, "y": 104}, {"typ": "ball", "x": 260, "y": 108}, {"typ": "blase", "x": 150, "y": 186, "text": "3 Bälle – super!"}]}]}, "geheimagenten": {"schrittDinge": [{"typ": "linie", "x": 44, "text": "Start"}, {"typ": "seil", "x1": 78, "y1": 26, "x2": 118, "y2": 96, "welle": 0}, {"typ": "seil", "x1": 78, "y1": 176, "x2": 124, "y2": 112, "welle": 0}, {"typ": "seil", "x1": 152, "y1": 16, "x2": 152, "y2": 80, "welle": 0}, {"typ": "seil", "x1": 152, "y1": 122, "x2": 152, "y2": 186, "welle": 0}, {"typ": "seil", "x1": 184, "y1": 58, "x2": 232, "y2": 28, "welle": 0}, {"typ": "seil", "x1": 184, "y1": 144, "x2": 236, "y2": 174, "welle": 0}, {"typ": "seil", "x1": 200, "y1": 90, "x2": 242, "y2": 112, "welle": 0}, {"typ": "huetchen", "x": 270, "y": 100}, {"typ": "text", "x": 270, "y": 124, "text": "Tresor", "gr": 9}], "schritte": [{"kinder": [{"x": 236, "y": 140, "c": "lila", "p": "steh", "flip": 1}, {"x": 8, "y": 8, "c": "blau", "p": "steh"}, {"x": 8, "y": 54, "c": "blau", "p": "steh"}, {"x": 8, "y": 100, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "blau", "p": "steh"}, {"x": 36, "y": 77, "c": "blau", "p": "steh"}], "extra": [{"typ": "text", "x": 251, "y": 136, "text": "Augen zu", "gr": 8}, {"typ": "blase", "x": 150, "y": 106, "text": "Kein Seil berühren!"}]}, {"kinder": [{"x": 236, "y": 140, "c": "lila", "p": "steh", "flip": 1}, {"x": 8, "y": 8, "c": "blau", "p": "steh"}, {"x": 8, "y": 54, "c": "blau", "p": "steh"}, {"x": 8, "y": 100, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "blau", "p": "steh"}, {"x": 92, "y": 78, "c": "blau", "p": "lauf"}], "pfeile": [{"von": [124, 104], "nach": [160, 104], "dash": 1}], "extra": [{"typ": "text", "x": 251, "y": 136, "text": "Augen zu", "gr": 8}, {"typ": "blase", "x": 150, "y": 188, "text": "Pssst …"}]}, {"kinder": [{"x": 236, "y": 140, "c": "lila", "p": "ruf", "flip": 1}, {"x": 8, "y": 8, "c": "blau", "p": "steh"}, {"x": 8, "y": 54, "c": "blau", "p": "steh"}, {"x": 8, "y": 100, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "blau", "p": "steh"}, {"x": 160, "y": 84, "c": "blau", "p": "lauf", "flip": 1}], "pfeile": [{"von": [158, 112], "nach": [56, 112], "dash": 1, "bogen": 16}], "extra": [{"typ": "blase", "x": 226, "y": 124, "text": "Alarm!"}]}, {"kinder": [{"x": 236, "y": 140, "c": "lila", "p": "steh", "flip": 1}, {"x": 8, "y": 8, "c": "blau", "p": "steh"}, {"x": 228, "y": 62, "c": "blau", "p": "arme"}, {"x": 8, "y": 100, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "blau", "p": "steh"}, {"x": 36, "y": 77, "c": "blau", "p": "steh"}], "pfeile": [{"von": [244, 58], "nach": [210, 14], "dash": 1, "bogen": -10}], "extra": [{"typ": "text", "x": 251, "y": 136, "text": "Augen zu", "gr": 8}, {"typ": "blase", "x": 150, "y": 40, "text": "Tresor geknackt!"}]}]}, "biathlon": {"schrittDinge": [{"typ": "huetchen", "x": 20, "y": 14}, {"typ": "huetchen", "x": 200, "y": 14}, {"typ": "huetchen", "x": 200, "y": 76}, {"typ": "huetchen", "x": 20, "y": 76}, {"typ": "text", "x": 120, "y": 66, "text": "Laufrunde", "gr": 10}, {"typ": "kreis", "cx": 252, "cy": 44, "r": 22}, {"typ": "text", "x": 252, "y": 82, "text": "Strafrunde", "gr": 9}, {"typ": "strich", "x1": 110, "y1": 98, "x2": 110, "y2": 190}, {"typ": "huetchen", "x": 220, "y": 110, "c": "blau"}, {"typ": "huetchen", "x": 236, "y": 122, "c": "blau"}, {"typ": "huetchen", "x": 220, "y": 134, "c": "blau"}, {"typ": "huetchen", "x": 220, "y": 156, "c": "rot"}, {"typ": "huetchen", "x": 236, "y": 168, "c": "rot"}, {"typ": "huetchen", "x": 220, "y": 180, "c": "rot"}], "schritte": [{"kinder": [{"x": 60, "y": 8, "c": "blau", "p": "lauf"}, {"x": 8, "y": 98, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "rot", "p": "steh"}, {"x": 206, "y": 30, "c": "rot", "p": "lauf"}, {"x": 40, "y": 98, "c": "blau", "p": "steh"}, {"x": 40, "y": 146, "c": "rot", "p": "steh"}], "pfeile": [{"von": [96, 26], "nach": [170, 26], "dash": 1, "c": "blau"}, {"von": [226, 70], "nach": [180, 86], "dash": 1, "c": "rot"}], "extra": [{"typ": "blase", "x": 150, "y": 106, "text": "Eine Runde laufen!"}]}, {"kinder": [{"x": 76, "y": 98, "c": "blau", "p": "ruf"}, {"x": 8, "y": 98, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "rot", "p": "steh"}, {"x": 76, "y": 142, "c": "rot", "p": "ruf"}, {"x": 40, "y": 98, "c": "blau", "p": "steh"}, {"x": 40, "y": 146, "c": "rot", "p": "steh"}], "pfeile": [{"von": [108, 118], "nach": [214, 120], "c": "blau"}, {"von": [108, 162], "nach": [214, 166], "c": "rot"}], "extra": [{"typ": "ball", "x": 206, "y": 120}, {"typ": "ball", "x": 206, "y": 166}, {"typ": "blase", "x": 160, "y": 94, "text": "3 Würfe!"}]}, {"kinder": [{"x": 236, "y": 22, "c": "blau", "p": "lauf"}, {"x": 8, "y": 98, "c": "blau", "p": "steh"}, {"x": 8, "y": 146, "c": "rot", "p": "steh"}, {"x": 76, "y": 142, "c": "rot", "p": "arme"}, {"x": 40, "y": 98, "c": "blau", "p": "steh"}, {"x": 40, "y": 146, "c": "rot", "p": "steh"}], "dinge": [{"typ": "huetchen", "x": 20, "y": 14}, {"typ": "huetchen", "x": 200, "y": 14}, {"typ": "huetchen", "x": 200, "y": 76}, {"typ": "huetchen", "x": 20, "y": 76}, {"typ": "text", "x": 120, "y": 66, "text": "Laufrunde", "gr": 10}, {"typ": "kreis", "cx": 252, "cy": 44, "r": 22}, {"typ": "text", "x": 252, "y": 82, "text": "Strafrunde", "gr": 9}, {"typ": "strich", "x1": 110, "y1": 98, "x2": 110, "y2": 190}, {"typ": "huetchen", "x": 220, "y": 110, "c": "blau", "um": 1}, {"typ": "huetchen", "x": 236, "y": 122, "c": "blau"}, {"typ": "huetchen", "x": 220, "y": 134, "c": "blau", "um": 1}, {"typ": "huetchen", "x": 220, "y": 156, "c": "rot", "um": 1}, {"typ": "huetchen", "x": 236, "y": 168, "c": "rot", "um": 1}, {"typ": "huetchen", "x": 220, "y": 180, "c": "rot", "um": 1}], "pfeile": [{"von": [270, 30], "nach": [270, 64], "dash": 1, "c": "blau", "bogen": 14}], "extra": [{"typ": "blase", "x": 170, "y": 100, "text": "Strafrunde!"}, {"typ": "kreis", "cx": 236, "cy": 122, "r": 12}]}, {"kinder": [{"x": 8, "y": 98, "c": "blau", "p": "arme"}, {"x": 56, "y": 24, "c": "blau", "p": "lauf"}, {"x": 8, "y": 146, "c": "rot", "p": "steh"}, {"x": 186, "y": 146, "c": "rot", "p": "steh"}, {"x": 40, "y": 98, "c": "blau", "p": "arme"}, {"x": 40, "y": 146, "c": "rot", "p": "steh"}], "pfeile": [{"von": [92, 40], "nach": [150, 30], "dash": 1, "c": "blau"}], "extra": [{"typ": "blase", "x": 60, "y": 86, "text": "Abklatschen!"}]}, {"kinder": [{"x": 8, "y": 98, "c": "blau", "p": "arme"}, {"x": 40, "y": 98, "c": "blau", "p": "arme"}, {"x": 8, "y": 146, "c": "rot", "p": "steh"}, {"x": 76, "y": 142, "c": "rot", "p": "steh"}, {"x": 76, "y": 98, "c": "blau", "p": "arme"}, {"x": 40, "y": 146, "c": "rot", "p": "steh"}], "extra": [{"typ": "blase", "x": 150, "y": 86, "text": "Team Blau fertig!"}]}]}, "mini-olympiade": {"schrittDinge": [{"typ": "strich", "x1": 150, "y1": 10, "x2": 150, "y2": 190}, {"typ": "strich", "x1": 10, "y1": 100, "x2": 290, "y2": 100}, {"typ": "reifen", "x": 112, "y": 44, "r": 14, "c": "tuerkis"}, {"typ": "text", "x": 20, "y": 92, "text": "1", "gr": 14}, {"typ": "seil", "x1": 200, "y1": 74, "x2": 240, "y2": 74, "welle": 5}, {"typ": "text", "x": 280, "y": 92, "text": "2", "gr": 14}, {"typ": "huetchen", "x": 34, "y": 176}, {"typ": "huetchen", "x": 70, "y": 150}, {"typ": "huetchen", "x": 106, "y": 176}, {"typ": "huetchen", "x": 136, "y": 150}, {"typ": "text", "x": 20, "y": 122, "text": "3", "gr": 14}, {"typ": "reifen", "x": 186, "y": 176, "r": 12, "c": "gelb"}, {"typ": "reifen", "x": 216, "y": 176, "r": 12, "c": "gelb"}, {"typ": "reifen", "x": 246, "y": 176, "r": 12, "c": "gelb"}, {"typ": "reifen", "x": 276, "y": 176, "r": 12, "c": "gelb"}, {"typ": "text", "x": 280, "y": 122, "text": "4", "gr": 14}], "schritte": [{"kinder": [{"x": 20, "y": 24, "c": "blau", "p": "steh"}, {"x": 60, "y": 8, "c": "blau", "p": "steh"}, {"x": 206, "y": 22, "c": "rot", "p": "steh"}, {"x": 40, "y": 118, "c": "gruen", "p": "steh"}, {"x": 170, "y": 116, "c": "gelb", "p": "steh"}, {"x": 135, "y": 58, "c": "lila", "p": "ruf"}], "extra": [{"typ": "blase", "x": 150, "y": 186, "text": "4 Stationen – los!"}]}, {"kinder": [{"x": 20, "y": 24, "c": "blau", "p": "ruf"}, {"x": 60, "y": 8, "c": "blau", "p": "arme"}, {"x": 206, "y": 22, "c": "rot", "p": "steh"}, {"x": 40, "y": 118, "c": "gruen", "p": "steh"}, {"x": 170, "y": 116, "c": "gelb", "p": "steh"}, {"x": 135, "y": 58, "c": "lila", "p": "steh"}], "pfeile": [{"von": [52, 44], "nach": [98, 44], "c": "blau"}], "extra": [{"typ": "ball", "x": 112, "y": 44}, {"typ": "blase", "x": 90, "y": 110, "text": "Treffer = 1 Punkt"}]}, {"kinder": [{"x": 20, "y": 24, "c": "blau", "p": "steh"}, {"x": 60, "y": 8, "c": "blau", "p": "steh"}, {"x": 206, "y": 22, "c": "rot", "p": "sprung"}, {"x": 40, "y": 118, "c": "gruen", "p": "steh"}, {"x": 170, "y": 116, "c": "gelb", "p": "steh"}, {"x": 135, "y": 58, "c": "lila", "p": "steh"}], "extra": [{"typ": "blase", "x": 228, "y": 110, "text": "Wie viele Sprünge?"}]}, {"kinder": [{"x": 20, "y": 24, "c": "blau", "p": "arme"}, {"x": 60, "y": 8, "c": "blau", "p": "arme"}, {"x": 206, "y": 22, "c": "rot", "p": "arme"}, {"x": 60, "y": 122, "c": "gruen", "p": "lauf"}, {"x": 200, "y": 118, "c": "gelb", "p": "einbein"}, {"x": 135, "y": 58, "c": "lila", "p": "steh"}], "pfeile": [{"von": [94, 160], "nach": [120, 150], "dash": 1, "c": "gruen"}, {"von": [226, 150], "nach": [252, 154], "dash": 1, "c": "gelb"}], "extra": [{"typ": "blase", "x": 150, "y": 188, "text": "Alle feuern an!"}]}, {"kinder": [{"x": 206, "y": 30, "c": "blau", "p": "lauf"}, {"x": 170, "y": 8, "c": "blau", "p": "lauf"}, {"x": 230, "y": 112, "c": "rot", "p": "lauf"}, {"x": 20, "y": 40, "c": "gruen", "p": "lauf"}, {"x": 100, "y": 130, "c": "gelb", "p": "lauf", "flip": 1}, {"x": 135, "y": 58, "c": "lila", "p": "ruf"}], "pfeile": [{"von": [120, 30], "nach": [162, 30], "dash": 1, "c": "blau"}, {"von": [278, 66], "nach": [278, 108], "dash": 1, "c": "rot"}, {"von": [180, 160], "nach": [138, 156], "dash": 1, "c": "gelb"}, {"von": [36, 124], "nach": [36, 92], "dash": 1, "c": "gruen"}], "extra": [{"typ": "blase", "x": 150, "y": 188, "text": "Wechsel!"}]}]}});
 Object.assign(SCHRITTE, {
 "spiegelbild": {
   schritte: [
@@ -4666,7 +4686,7 @@ MODULE.push(
   stufen:[
     "Rampe hochkrabbeln, Brücke im Vierfüßlergang, vom Kasten hinunterklettern.",
     "Rampe hochgehen, Brücke frei balancieren, Strecksprung auf den Weichboden.",
-    "Brücke rückwärts oder mit Ball in den Händen, Sprung mit halber Drehung."
+    "Brücke rückwärts oder mit Ball in den Händen, Strecksprung mit Klatschen."
   ],
   sicherheit:"Die Bank tragen immer 4 Kinder. Der Haken muss ganz über dem Kastendeckel greifen – vorher selbst prüfen. Immer nur ein Kind auf der Brücke, der Weichboden muss frei sein.",
   feld:{ boden:"seite",
@@ -4776,7 +4796,7 @@ MODULE.push(
   stufen:[
     "Hochsteigen, oben hinsetzen und auf den Weichboden rutschen.",
     "Strecksprung oder Hocksprung, im Stand landen.",
-    "Sprung mit Figur (Hampelmann, halbe Drehung), Landung in den Sitz."
+    "Sprung mit Figur (Hampelmann, Klatschen), Landung im Stand."
   ],
   sicherheit:"Weichboden nie an eine Wand schieben. Das nächste Kind springt erst, wenn der Weichboden frei ist. Kastenteile tragen immer zwei Kinder.",
   feld:{ boden:"seite",
@@ -5151,7 +5171,7 @@ MODULE.push(
   stufen:[
     "Die Bank auf allen vieren überqueren und vom Kasten hinunterrutschen.",
     "Aufrecht balancieren und mit Strecksprung auf den Weichboden.",
-    "Rückwärts balancieren oder Sprung mit halber Drehung."
+    "Rückwärts balancieren oder Strecksprung mit Klatschen."
   ],
   sicherheit:"Haken vor dem Start selbst prüfen, die Bank muss waagerecht und fest auf dem Kastendeckel liegen. Die Betreuerin steht an der Wand, wo die Kinder auf die Bank umsteigen. Weichboden nie an eine Wand schieben, das nächste Kind springt erst, wenn er frei ist. Unter der Bank hält sich niemand auf.",
   feld:{ boden:"seite",
@@ -5207,7 +5227,7 @@ MODULE.push(
   stufen:[
     "Hochkrabbeln, oben hinsetzen und rückwärts auf die Matte hinunterklettern.",
     "Frei drüberklettern und vom hohen Kasten auf die Matte hinuntersteigen.",
-    "Ohne Hände hochsteigen oder vom hohen Kasten mit Strecksprung auf die Matte springen."
+    "Ohne Hände hochsteigen, oben kurz stehen und über den kleinen Kasten wieder hinuntersteigen."
   ],
   sicherheit:"Die Kästen stehen dicht aneinander und wackeln nicht. Die Matten oben dürfen nicht über die Kante hängen. Immer nur ein Kind auf dem Gebirge; die Betreuerin steht am hohen Kasten. Springen nur mit den Füßen voran.",
   feld:{ boden:"seite",
@@ -5396,14 +5416,14 @@ MODULE.push(
   foerdert:"Klettern, Kraft, Mut, Körpergefühl",
   ablauf:[
     "Einen Kasten mit 3 Teilen hinstellen und eine Turnmatte oben auf den Deckel legen.",
-    "Den Weichboden dicht an eine Kastenseite legen – vier Kinder tragen ihn.",
+    "Den Weichboden dicht an eine Kastenseite legen – 6–8 Kinder tragen ihn gemeinsam mit der Betreuerin.",
     "Eine Turnmatte vor die andere Kastenseite legen – hier wird hochgeklettert.",
     "Los geht's: auf den Kasten krabbeln, oben hinsetzen und mit den Füßen voran auf den Weichboden hinunterrutschen – dann seitlich runter und zurück zum Start."
   ],
   stufen:[
     "Mit Hilfe hochklettern, oben hinsetzen und langsam hinunterrutschen.",
     "Allein hochkrabbeln und auf dem Po hinunterrutschen.",
-    "Oben aufstehen und mit Strecksprung auf den Weichboden springen."
+    "Oben auf den Bauch drehen und mit den Füßen voran langsam hinunterrutschen."
   ],
   sicherheit:"Der Weichboden liegt lückenlos am Kasten. Immer nur ein Kind oben, das nächste startet erst, wenn der Weichboden frei ist. Nie mit dem Kopf voran rutschen oder springen. Die Betreuerin steht am Kasten.",
   feld:{ boden:"seite",
@@ -5429,7 +5449,7 @@ MODULE.push(
       extra:[{typ:"blase",x:122,y:40,text:"Matte oben drauf"}] },
     { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:62,y:143,c:"orange",p:"steh"},{x:168,y:127,c:"blau",p:"arme"},{x:200,y:127,c:"gruen",p:"steh"},{x:232,y:127,c:"rot",p:"arme"}],
       plus:[{typ:"weich",x:146,w:120}],
-      extra:[{typ:"blase",x:206,y:40,text:"Zu viert tragen!"},{typ:"kreis",cx:146,cy:176,r:12}] },
+      extra:[{typ:"blase",x:206,y:40,text:"6–8 + Betreuerin!"},{typ:"kreis",cx:146,cy:176,r:12}] },
     { kinder:[{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"arme"},{x:62,y:137,c:"orange",p:"arme"},{x:168,y:127,c:"blau",p:"steh"},{x:200,y:127,c:"gruen",p:"steh"},{x:232,y:127,c:"rot",p:"steh"}],
       plus:[{typ:"smatte",x:44,w:56}],
       extra:[{typ:"blase",x:72,y:40,text:"Ohne Lücke!"}] },
@@ -5662,7 +5682,7 @@ MODULE.push(
   kurz:"Kurzer Anlauf, beidbeinig ins Minitrampolin und mit einem Strecksprung auf den Weichboden.",
   foerdert:"Sprungkraft, Körperspannung, Mut, sicheres Landen",
   ablauf:[
-    "Den Weichboden an die Landestelle legen – 4 Kinder tragen ihn gemeinsam, die Betreuerin hilft.",
+    "Den Weichboden an die Landestelle legen – 6–8 Kinder tragen ihn gemeinsam mit der Betreuerin.",
     "Das Minitramp direkt vor den Weichboden stellen, die hohe Seite zeigt zum Weichboden. Tragen und Aufklappen übernimmt die Betreuerin, danach prüft sie, ob alle Beine eingerastet sind.",
     "Mit einem Hütchen den Start markieren (3–4 Laufschritte vor dem Minitramp). Die Betreuerin stellt sich seitlich neben das Minitramp, auf Höhe des Weichbodens.",
     "Los geht's: kurzer Anlauf, mit beiden Füßen gleichzeitig in die Mitte springen, Strecksprung (Arme hoch, Körper gestreckt) und auf dem Weichboden im Stand landen.",
@@ -5693,7 +5713,7 @@ MODULE.push(
   schritte:[
     { kinder:[{x:66,y:143,c:"orange",p:"steh"},{x:96,y:143,c:"blau",p:"steh"},{x:140,y:143,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:252,y:127,c:"rot",p:"arme"}],
       plus:[{typ:"weich",x:174,w:120,text:"Weichboden"}],
-      extra:[{typ:"blase",x:234,y:40,text:"Zu viert tragen!"}] },
+      extra:[{typ:"blase",x:208,y:40,text:"6–8 + Betreuerin!"}] },
     { kinder:[{x:50,y:143,c:"orange",p:"steh"},{x:76,y:143,c:"blau",p:"steh"},{x:100,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:252,y:127,c:"rot",p:"steh"}],
       plus:[{typ:"minitramp",x:124,w:46}],
       extra:[{typ:"blase",x:160,y:40,text:"Hohe Seite zum Weich"},{typ:"kreis",cx:147,cy:172,r:20}] },
@@ -5716,7 +5736,7 @@ MODULE.push(
   kurz:"Hände auf die Bank, mit beiden Füßen seitlich hinüber und zurück – im Zickzack bis zum Ende.",
   foerdert:"Sprungkraft, Stützkraft, Ausdauer, Rhythmus",
   ablauf:[
-    "Eine Bank flach in die Mitte stellen – zwei Kinder tragen sie, an jedem Ende eins.",
+    "Eine Bank flach in die Mitte stellen – vier Kinder tragen sie, zwei an jedem Ende.",
     "Rundherum etwa 1,5 m frei lassen und prüfen: Die Bank steht mit allen Füßen fest und wackelt nicht.",
     "Los geht's: Die Kinder stellen sich seitlich an den Bankanfang, stützen beide Hände auf die Bank und springen mit beiden Füßen gleichzeitig hinüber – und wieder zurück.",
     "Los geht's: Nach jedem Sprung rutschen die Hände ein Stück weiter, so geht es im Zickzack bis zum Ende. Das nächste Kind startet, wenn das vordere die Bankmitte erreicht hat."
@@ -5744,7 +5764,7 @@ MODULE.push(
   schritte:[
     { kinder:[{x:14,y:143,c:"orange",p:"arme"},{x:236,y:143,c:"blau",p:"arme",flip:1},{x:110,y:143,c:"gruen",p:"steh"},{x:140,y:143,c:"gelb",p:"steh"},{x:170,y:143,c:"lila",p:"steh"},{x:200,y:143,c:"rot",p:"steh"}],
       plus:[{typ:"sbank",x1:40,y1:172,x2:250,y2:172,beine:1}],
-      extra:[{typ:"blase",x:150,y:40,text:"Zu zweit tragen"}] },
+      extra:[{typ:"blase",x:150,y:40,text:"Zu viert tragen!"}] },
     { kinder:[{x:70,y:143,c:"orange",p:"steh"},{x:112,y:143,c:"blau",p:"steh"},{x:150,y:143,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:250,y:143,c:"rot",p:"steh",flip:1}],
       extra:[{typ:"blase",x:150,y:40,text:"Wackelt nichts?"},{typ:"kreis",cx:52,cy:179,r:12},{typ:"kreis",cx:238,cy:179,r:12}] },
     { kinder:[{x:62,y:129,c:"orange",p:"stuetz"},{x:112,y:143,c:"blau",p:"steh"},{x:170,y:129,c:"gruen",p:"stuetz",flip:1},{x:0,y:143,c:"gelb",p:"steh"},{x:22,y:143,c:"lila",p:"steh"},{x:258,y:143,c:"rot",p:"arme"}],
@@ -5826,7 +5846,7 @@ MODULE.push(
   ablauf:[
     "Einen Kasten mit 3 Teilen aufbauen – jedes Kastenteil tragen zwei Kinder, der Deckel kommt zuletzt drauf.",
     "Eine Turnmatte direkt vor den Kasten legen – hier springen die Kinder ab.",
-    "Den Weichboden direkt hinter den Kasten legen – 4 Kinder tragen ihn gemeinsam.",
+    "Den Weichboden direkt hinter den Kasten legen – 6–8 Kinder tragen ihn gemeinsam mit der Betreuerin.",
     "Los geht's: kurzer Anlauf, auf der Matte beidbeinig abspringen, Hände auf den Kastendeckel und auf den Kasten aufknien oder aufhocken.",
     "Los geht's: Oben langsam aufrichten, kurz stehen, dann Strecksprung auf den Weichboden und im Stand landen. Erst wenn der Weichboden frei ist, kommt das nächste Kind."
   ],
@@ -5861,7 +5881,7 @@ MODULE.push(
       extra:[{typ:"blase",x:94,y:40,text:"Direkt anlegen"}] },
     { kinder:[{x:52,y:143,c:"orange",p:"steh"},{x:180,y:127,c:"blau",p:"arme"},{x:210,y:127,c:"gruen",p:"arme"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:254,y:127,c:"rot",p:"arme"}],
       plus:[{typ:"weich",x:170,w:124,text:"Weichboden"}],
-      extra:[{typ:"blase",x:230,y:40,text:"Zu viert tragen!"}] },
+      extra:[{typ:"blase",x:208,y:40,text:"6–8 + Betreuerin!"}] },
     { kinder:[{x:46,y:143,c:"orange",p:"lauf"},{x:124,y:112,c:"blau",p:"krabbel",flip:1},{x:212,y:127,c:"gruen",p:"steh"},{x:0,y:143,c:"gelb",p:"steh"},{x:24,y:143,c:"lila",p:"steh"},{x:254,y:127,c:"rot",p:"steh"}],
       pfeile:[{von:[80,160],nach:[118,140],dash:1,bogen:-10}],
       extra:[{typ:"blase",x:130,y:40,text:"Hände auf den Kasten"}] },
@@ -5941,7 +5961,7 @@ MODULE.push(
   stufen:[
     "Seitlich wie ein Baumstamm den Rollberg hinunterrollen.",
     "Rolle vorwärts bergab aus der Hocke, unten im Sitz ankommen.",
-    "Rolle vorwärts und unten ohne Hände direkt in den Stand aufstehen."
+    "Rolle vorwärts bergab und unten im Hockstand ankommen – die Hände dürfen helfen."
   ],
   sicherheit:"Beide Haken müssen ganz über dem Kastendeckel liegen – vorher selbst prüfen. Die Matte muss die Bänke ganz bedecken und darf nicht rutschen. Kinn immer auf die Brust, nie über den Kopf abrollen. Die Betreuerin steht seitlich am oberen Ende und hilft beim Ansetzen.",
   feld:{ boden:"seite",
@@ -5989,7 +6009,7 @@ MODULE.push(
   kurz:"Unter einer Matte, die quer über zwei Bänken liegt, durch den Tunnel robben.",
   foerdert:"Kriechen, Körpergefühl, Orientierung, Mut",
   ablauf:[
-    "Zwei Bänke parallel nebeneinander aufstellen, etwa 1 m auseinander – je zwei Kinder tragen eine Bank.",
+    "Zwei Bänke parallel nebeneinander aufstellen, etwa 1 m auseinander – je vier Kinder tragen eine Bank.",
     "Die Turnmatte quer über beide Bänke legen – sie muss auf beiden Seiten mindestens eine Handbreit aufliegen. Zu viert tragen.",
     "Los geht's: Die Kinder robben auf dem Bauch zwischen den Bänken unter der Matte hindurch – vorn krabbeln sie hinein, im Tunnel geht es flach weiter.",
     "Los geht's: Am Ausgang aufstehen und außen zurück. Immer nur ein Kind im Tunnel – das nächste startet, wenn das vordere hinausschaut."
@@ -6087,7 +6107,7 @@ MODULE.push(
   ablauf:[
     "Den Kasten (3 Teile) etwa 2 m vor das hängende Tau stellen – je 2 Kinder tragen ein Teil.",
     "Zwei Matten als „Fluss“ zwischen Kasten und Landeplatz legen.",
-    "Den Weichboden hinter den Fluss legen – 4 Kinder tragen ihn gemeinsam.",
+    "Den Weichboden hinter den Fluss legen – 6–8 Kinder tragen ihn gemeinsam mit der Betreuerin.",
     "Los geht's: Die Betreuerin reicht das Tau zum Kasten. Das Kind greift hoch, stößt sich ab und schwingt über den Fluss.",
     "Über dem Weichboden loslassen und im Stand landen – erst wenn der Weichboden frei ist, steigt das nächste Kind auf den Kasten."
   ],
@@ -6128,7 +6148,7 @@ MODULE.push(
     { kinder:[{x:106,y:137,c:"orange",p:"steh"},{x:160,y:137,c:"blau",p:"steh"},{x:210,y:127,c:"gruen",p:"arme"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:262,y:127,c:"rot",p:"arme",flip:1}],
       plus:[{typ:"weich",x:204,w:90,text:"Weichboden"}],
       dinge:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:150},{typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},{typ:"text",x:128,y:176,text:"Fluss",gr:9},{typ:"weich",x:204,w:90,text:"Weichboden"}],
-      extra:[{typ:"blase",x:240,y:40,text:"Zu viert tragen!"}] },
+      extra:[{typ:"blase",x:208,y:40,text:"6–8 + Betreuerin!"}] },
     { kinder:[{x:62,y:112,c:"orange",p:"kletter"},{x:204,y:127,c:"blau",p:"steh",flip:1},{x:232,y:127,c:"gruen",p:"steh",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:266,y:127,c:"rot",p:"steh",flip:1}],
       dinge:[{typ:"kasten",x:56,w:44,teile:3},{typ:"tau",x:150,y:129,x2:73},{typ:"smatte",x:104,w:48},{typ:"smatte",x:152,w:48},{typ:"text",x:128,y:176,text:"Fluss",gr:9},{typ:"weich",x:204,w:90,text:"Weichboden"}],
       extra:[{typ:"blase",x:190,y:40,text:"Hoch greifen!"},{typ:"kreis",cx:78,cy:117,r:12}],
@@ -6153,7 +6173,7 @@ MODULE.push(
   stufen:[
     "Nur hängen: 5 Sekunden als Faultier an der Stange bleiben, dann Beine runter.",
     "Als Faultier bis zum anderen Ende hangeln.",
-    "Hin und zurück hangeln oder ein Kuscheltier auf dem Bauch mitnehmen."
+    "Hin und zurück hangeln und dabei langsam bis 10 zählen – wie ein echtes Faultier."
   ],
   sicherheit:"Die Stange bleibt niedrig, damit der Rücken knapp über der Matte ist. Nie nur mit den Kniekehlen hängen – die Hände bleiben immer an der Stange. Die Betreuerin steht am Reck und hilft beim Einhaken und Lösen der Beine. Spannseile und Bolzen vorher prüfen.",
   feld:{ boden:"seite",
@@ -6242,14 +6262,14 @@ MODULE.push(
   ablauf:[
     "Die Ringe herunterlassen und auf Brusthöhe der Kinder (etwa 1,1 m) einstellen – beide Ringe gleich hoch.",
     "Eine Matte unter die Ringe legen.",
-    "Den Weichboden etwa 1 m vor die Ringe in Schwungrichtung legen – 4 Kinder tragen ihn gemeinsam.",
+    "Den Weichboden etwa 1 m vor die Ringe in Schwungrichtung legen – 6–8 Kinder tragen ihn gemeinsam mit der Betreuerin.",
     "Los geht's: Ringe greifen, 2–3 Schritte anlaufen, die Beine anhocken und nach vorn schaukeln.",
     "Am vorderen Punkt loslassen und auf dem Weichboden im Stand landen. Erst wenn der Weichboden frei ist, startet das nächste Kind."
   ],
   stufen:[
     "Nur hin- und herschaukeln und hinten auf der Matte wieder abstellen.",
     "Einmal schaukeln, vorn loslassen, im Stand auf dem Weichboden landen.",
-    "Zweimal schaukeln und vorn in den Sitz landen oder weiter nach vorn fliegen."
+    "Zweimal schaukeln, vorn loslassen und im Stand landen – die Landung bis 3 „einfrieren“."
   ],
   sicherheit:"Ringe nur auf Brusthöhe, nie höher. Immer nur ein Kind an den Ringen, die anderen warten mit Abstand hinter der Anlaufmatte. Niemand steht vor oder neben den Ringen. Die Betreuerin steht seitlich am Weichboden und fängt bei Bedarf ab.",
   feld:{ boden:"seite",
@@ -6277,7 +6297,7 @@ MODULE.push(
       extra:[{typ:"blase",x:200,y:40,text:"Matte darunter"}] },
     { kinder:[{x:66,y:143,c:"blau",p:"steh"},{x:196,y:127,c:"gruen",p:"arme"},{x:236,y:127,c:"orange",p:"steh"},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:127,c:"lila",p:"arme",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
       plus:[{typ:"weich",x:190,w:100,text:"Weichboden"}],
-      extra:[{typ:"blase",x:240,y:40,text:"Zu viert tragen!"}] },
+      extra:[{typ:"blase",x:208,y:40,text:"6–8 + Betreuerin!"}] },
     { kinder:[{x:103,y:138,c:"blau",p:"sprung"},{x:70,y:143,c:"gruen",p:"steh"},{x:236,y:127,c:"orange",p:"steh",flip:1},{x:10,y:143,c:"gelb",p:"steh"},{x:262,y:127,c:"lila",p:"steh",flip:1},{x:40,y:143,c:"rot",p:"steh"}],
       extra:[{typ:"blase",x:200,y:40,text:"Beine anhocken"}],
       pfeile:[{von:[92,160],nach:[168,122],dash:1,bogen:16}] },
@@ -6344,21 +6364,21 @@ MODULE.push(
   id:"tau-aufstieg", name:"Tau-Aufstieg", kat:"Hangeln & Schwingen",
   kinder:4, klassen:"2–4", aufbau:3, platz:[4,2], wand:false,
   geraete:{taue:2, matte:2}, klein:[],
-  kurz:"Am Tau hochziehen, mit den Füßen klemmen und bis zur Markierung klettern – dann langsam wieder runter.",
+  kurz:"Am Tau hochziehen, mit den Füßen klemmen und bis zur Grenze klettern – dann langsam wieder runter.",
   foerdert:"Armkraft, Klemmtechnik, Körperspannung, Mut",
   ablauf:[
     "Die Betreuerin löst zwei Taue aus der Halterung und prüft, ob sie frei und gerade hängen.",
-    "Mit Klebeband eine Markierung auf etwa 1,5 m Höhe an jedes Tau kleben – höher geht es nicht.",
+    "Die Betreuerin legt die Grenze fest: Die Hände greifen höchstens so hoch, wie sie selbst mit ausgestrecktem Arm reicht – höher geht es nicht.",
     "Zwei Matten lückenlos unter die Taue legen.",
-    "Los geht's: Hoch greifen, hochziehen und das Tau zwischen den Füßen einklemmen. So Stück für Stück bis zur Markierung.",
+    "Los geht's: Hoch greifen, hochziehen und das Tau zwischen den Füßen einklemmen. So Stück für Stück bis zur Grenze.",
     "Hand unter Hand langsam wieder runterklettern – nicht rutschen! Pro Tau immer nur ein Kind."
   ],
   stufen:[
     "Am Tau hängen, Füße klemmen und 5 Sekunden festhalten.",
     "Zwei- bis dreimal nachgreifen und wieder runter.",
-    "Bis zur Markierung klettern, dort kurz „winken“ (eine Hand) und runter."
+    "Bis zur Grenze klettern, dort kurz innehalten und „Hallo!“ rufen, dann Hand unter Hand runter."
   ],
-  sicherheit:"Nie höher als die Markierung. Nicht am Tau herunterrutschen (Brandblasen), sondern Hand unter Hand klettern. Pro Tau nur ein Kind, die anderen warten neben den Matten. Die Betreuerin steht zwischen den Tauen.",
+  sicherheit:"Nie höher als die Grenze (ausgestreckte Hand der Betreuerin). Nicht am Tau herunterrutschen (Brandblasen), sondern Hand unter Hand klettern. Pro Tau nur ein Kind, die anderen warten neben den Matten. Die Betreuerin steht zwischen den Tauen.",
   feld:{ boden:"seite",
     kinder:[
       {x:95,y:111,c:"orange",p:"kletter"},
@@ -6371,7 +6391,7 @@ MODULE.push(
     dinge:[
       {typ:"tau",x:110,y:172},{typ:"tau",x:190,y:172},
       {typ:"strich",x1:102,y1:106,x2:118,y2:106},{typ:"strich",x1:182,y1:106,x2:198,y2:106},
-      {typ:"text",x:150,y:108,text:"Markierung",gr:8},
+      {typ:"text",x:150,y:108,text:"Grenze",gr:8},
       {typ:"smatte",x:80,w:70},{typ:"smatte",x:150,w:70}
     ],
     pfeile:[{von:[124,168],nach:[124,118],dash:1},{von:[206,120],nach:[206,166],dash:1}]
@@ -6381,8 +6401,8 @@ MODULE.push(
       plus:[{typ:"tau",x:110,y:172},{typ:"tau",x:190,y:172}],
       extra:[{typ:"blase",x:150,y:40,text:"Hängen die Taue frei?"}] },
     { kinder:[{x:70,y:143,c:"orange",p:"steh"},{x:140,y:143,c:"blau",p:"arme"},{x:230,y:143,c:"gruen",p:"steh",flip:1},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:256,y:143,c:"rot",p:"steh",flip:1}],
-      plus:[{typ:"strich",x1:102,y1:106,x2:118,y2:106},{typ:"strich",x1:182,y1:106,x2:198,y2:106},{typ:"text",x:150,y:108,text:"Markierung",gr:8}],
-      extra:[{typ:"blase",x:150,y:40,text:"Nur bis zum Band!"},{typ:"kreis",cx:110,cy:106,r:12},{typ:"kreis",cx:190,cy:106,r:12}] },
+      plus:[{typ:"strich",x1:102,y1:106,x2:118,y2:106},{typ:"strich",x1:182,y1:106,x2:198,y2:106},{typ:"text",x:150,y:108,text:"Grenze",gr:8}],
+      extra:[{typ:"blase",x:150,y:40,text:"Nur bis zur Grenze!"},{typ:"kreis",cx:110,cy:106,r:12},{typ:"kreis",cx:190,cy:106,r:12}] },
     { kinder:[{x:56,y:143,c:"orange",p:"steh"},{x:134,y:137,c:"blau",p:"arme"},{x:230,y:143,c:"gruen",p:"steh",flip:1},{x:4,y:143,c:"gelb",p:"steh"},{x:30,y:143,c:"lila",p:"steh"},{x:256,y:143,c:"rot",p:"steh",flip:1}],
       plus:[{typ:"smatte",x:80,w:70},{typ:"smatte",x:150,w:70}],
       extra:[{typ:"blase",x:150,y:40,text:"Ohne Lücke!"}] },
@@ -6401,7 +6421,7 @@ MODULE.push(
   kurz:"Unter quer gestellten Bänken durchrobben und dazwischen schnell aufstehen.",
   foerdert:"Ganzkörperkoordination, Wendigkeit, Körpergefühl",
   ablauf:[
-    "Zwei Bänke quer zur Laufrichtung aufstellen, mit etwa 1,5 m Lücke dazwischen – je 2 Kinder tragen eine Bank.",
+    "Zwei Bänke quer zur Laufrichtung aufstellen, mit etwa 1,5 m Lücke dazwischen – je 4 Kinder tragen eine Bank.",
     "Ein Hütchen als Start vor die erste und ein Hütchen als Ziel hinter die zweite Bank stellen.",
     "Los geht's: Flach auf den Bauch legen und unter der ersten Bank durchrobben, in der Lücke aufstehen und zur zweiten Bank.",
     "Unter der zweiten Bank durch, am Ziel-Hütchen abklatschen und außen herum zurück. Erst starten, wenn die erste Bank frei ist."
@@ -6501,7 +6521,7 @@ MODULE.push(
   kurz:"Bäuchlings auf der Bank liegen, sich nur mit den Armen nach vorn ziehen und am Ende auf die Matte abrollen.",
   foerdert:"Armkraft, Körperspannung, Gleichgewicht",
   ablauf:[
-    "Eine Bank flach hinstellen, Sitzfläche nach oben – 2 Kinder tragen sie.",
+    "Eine Bank flach hinstellen, Sitzfläche nach oben – 4 Kinder tragen sie.",
     "Eine Matte quer vor das Ende der Bank legen, ohne Lücke.",
     "Los geht's: Bäuchlings auf die Bank legen und sich nur mit den Armen nach vorn ziehen – die Beine bleiben lang und locker.",
     "Am Ende langsam auf die Matte gleiten und seitlich wie ein Baumstamm abrollen. Auf der Bank höchstens 2 Kinder mit Abstand."
@@ -6530,7 +6550,7 @@ MODULE.push(
   schritte:[
     { kinder:[{x:60,y:143,c:"orange",p:"arme"},{x:126,y:143,c:"blau",p:"steh"},{x:180,y:143,c:"gruen",p:"arme",flip:1},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:238,y:143,c:"rot",p:"steh",flip:1}],
       plus:[{typ:"sbank",x1:50,y1:172,x2:190,y2:172,beine:1}],
-      extra:[{typ:"blase",x:150,y:40,text:"Zu zweit tragen!"}] },
+      extra:[{typ:"blase",x:150,y:40,text:"Zu viert tragen!"}] },
     { kinder:[{x:60,y:143,c:"orange",p:"steh"},{x:126,y:143,c:"blau",p:"steh"},{x:200,y:137,c:"gruen",p:"arme"},{x:2,y:143,c:"gelb",p:"steh"},{x:26,y:143,c:"lila",p:"steh"},{x:238,y:137,c:"rot",p:"arme",flip:1}],
       plus:[{typ:"smatte",x:190,w:70}],
       extra:[{typ:"blase",x:200,y:40,text:"Ohne Lücke!"}] },
@@ -6555,6 +6575,7 @@ const PHASEN = {warm:"Aufwärmen",haupt:"Hauptteil",ritual:"Abschluss",raeumen:"
 const KINDER_GR = [["alle","Alle"],["3-5","3–5",3,5],["6-12","6–12",6,12],["13-20","13–20",13,20],["20+","20+",21,99]];
 const ENERGIE_GR = [["alle","Alle"],["wild","Austoben",4,5],["mittel","Mittel",3,3],["ruhig","Ruhig",1,2]];
 const MATERIAL_GR = [["alle","Egal"],["ohne","Ohne Material"]];
+const KLASSE_GR = [["alle","Alle"],["k1","Auch für Klasse 1"]];
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -6601,7 +6622,7 @@ function dingeSVG(dinge){
       let pts=[]; for(let i=0;i<=n;i++){ const o=Math.sin(i/n*Math.PI*3)*a; pts.push(`${(d.x1+dx*i+px*o).toFixed(1)},${(d.y1+dy*i+py*o).toFixed(1)}`); }
       s += `<polyline points="${pts.join(" ")}" fill="none" stroke="#9A6A3A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`; }
     if (d.typ==="linie") s += `<line x1="${d.x}" y1="14" x2="${d.x}" y2="186" stroke="#fff" stroke-width="5"/><text x="${d.x}" y="11" font-size="9" font-weight="800" text-anchor="middle" fill="${FARBEN.ink}">${esc(d.text)}</text>`;
-    if (d.typ==="huetchen" && d.c && FARBEN[d.c]) { s += `<g transform="translate(${d.x},${d.y})"><rect x="-9" y="5" width="18" height="4" rx="1.5" fill="${FARBEN[d.c]}" stroke="rgba(0,0,0,.25)"/><path d="M-6 5 L-1.5 -10 L1.5 -10 L6 5Z" fill="${FARBEN[d.c]}" stroke="rgba(0,0,0,.25)"/><path d="M-4 -1 L4 -1" stroke="#fff" stroke-width="2"/></g>`; continue; }
+    if (d.typ==="huetchen" && d.c && FARBEN[d.c]) { s += `<g transform="translate(${d.x},${d.y})${d.um?" rotate(80)":""}"><rect x="-9" y="5" width="18" height="4" rx="1.5" fill="${FARBEN[d.c]}" stroke="rgba(0,0,0,.25)"/><path d="M-6 5 L-1.5 -10 L1.5 -10 L6 5Z" fill="${FARBEN[d.c]}" stroke="rgba(0,0,0,.25)"/><path d="M-4 -1 L4 -1" stroke="#fff" stroke-width="2"/></g>`; continue; }
     if (d.typ==="huetchen") s += d.um
       ? `<g transform="translate(${d.x},${d.y})"><ellipse cx="0" cy="-6" rx="8" ry="3" fill="#E07A10"/><path d="M-8 -6 L-2 7 L2 7 L8 -6Z" fill="#F5A623"/><rect x="-6" y="7" width="12" height="3" rx="1" fill="#E07A10"/></g>`
       : `<g transform="translate(${d.x},${d.y})"><rect x="-9" y="5" width="18" height="4" rx="1.5" fill="#E07A10"/><path d="M-6 5 L-1.5 -10 L1.5 -10 L6 5Z" fill="#F5A623"/><path d="M-4 -1 L4 -1" stroke="#fff" stroke-width="2"/></g>`;
@@ -6823,7 +6844,7 @@ const matText = sp => sp.material.length ? sp.material.join(", ") : "ohne Materi
 const ohneMaterial = sp => sp.material.every(m => /optional/i.test(m));
 
 /* ===================== Spiele finden ===================== */
-const filter = {kinder:"alle", ort:"alle", energie:"alle", zeit:"alle", material:"alle", suche:""};
+const filter = {kinder:"alle", ort:"alle", energie:"alle", zeit:"alle", material:"alle", klasse:"alle", suche:""};
 const ORT_GR = [["alle","Alle"], ...Object.entries(ORTE)];
 
 /* ===================== Risiko-Stationen & Freigabe durch die Schule ===================== */
@@ -6867,6 +6888,7 @@ function passt(sp){
   if (e && e[2] && !(sp.energie>=e[2] && sp.energie<=e[3])) return false;
   if (filter.zeit!=="alle" && sp.dauer!==filter.zeit) return false;
   if (filter.material==="ohne" && !ohneMaterial(sp)) return false;
+  if (filter.klasse==="k1" && sp.klassen==="2–4") return false;
   if (filter.suche){ const q=filter.suche.toLowerCase();
     if (!(sp.name+" "+sp.kategorie+" "+sp.kurz).toLowerCase().includes(q)) return false; }
   return true;
@@ -6881,7 +6903,7 @@ function karteKlein(sp){
 }
 
 function renderListe(){
-  chipGruppe("kinder", KINDER_GR); chipGruppe("ort", ORT_GR); chipGruppe("energie", ENERGIE_GR); chipGruppe("zeit", ZEIT_GR); chipGruppe("material", MATERIAL_GR);
+  chipGruppe("kinder", KINDER_GR); chipGruppe("ort", ORT_GR); chipGruppe("energie", ENERGIE_GR); chipGruppe("zeit", ZEIT_GR); chipGruppe("material", MATERIAL_GR); chipGruppe("klasse", KLASSE_GR);
   const treffer = SPIELE.filter(passt);
   $("#anzahl").textContent = `${treffer.length} von ${SPIELE.length} Spielen`;
   const gruppen = {};
@@ -6893,7 +6915,7 @@ function renderListe(){
 }
 $("#liste").onclick = e => { const b=e.target.closest(".gcard"); if(b) zeige(b.dataset.id); };
 $("#suche").oninput = e => { filter.suche = e.target.value.trim(); renderListe(); };
-$("#reset").onclick = () => { Object.assign(filter,{kinder:"alle",ort:"alle",energie:"alle",zeit:"alle",material:"alle",suche:""}); $("#suche").value=""; renderListe(); };
+$("#reset").onclick = () => { Object.assign(filter,{kinder:"alle",ort:"alle",energie:"alle",zeit:"alle",material:"alle",klasse:"alle",suche:""}); $("#suche").value=""; renderListe(); };
 $("#zufall").onclick = () => {
   const pool = SPIELE.filter(sp=>passt(sp) && erlaubt(sp)); const liste = pool.length ? pool : SPIELE.filter(erlaubt);
   zeige(liste[Math.floor(Math.random()*liste.length)].id);
@@ -6977,12 +6999,24 @@ const RITUALE = [
 { id:"tierdehnen", name:"Tier-Dehnen", kurz:"Ruhiges Dehnen im Kreis – jede Übung ist ein Tier.",
   ablauf:["Giraffe: ganz lang nach oben strecken, auf die Zehenspitzen.","Katze: im Vierfüßlerstand einen Buckel machen, dann ins Hohlkreuz.","Frosch: tief in die Hocke, Hände auf den Boden.","Schlafender Igel: zusammenrollen und drei tiefe Atemzüge."] },
 { id:"klatschwelle", name:"Klatschwelle & Atmen", kurz:"Ein Klatschen wandert durch den Kreis, danach wird es ganz leise.",
-  ablauf:["Alle stehen im Kreis. Ein Kind klatscht und „gibt“ das Klatschen an den Nachbarn weiter.","Die Welle einmal langsam und einmal schnell herumschicken.","Zum Schluss: Arme heben beim Einatmen, senken beim Ausatmen – dreimal.","Leise verabschieden."] }
+  ablauf:["Alle stehen im Kreis. Ein Kind klatscht und „gibt“ das Klatschen an den Nachbarn weiter.","Die Welle einmal langsam und einmal schnell herumschicken.","Zum Schluss: Arme heben beim Einatmen, senken beim Ausatmen – dreimal.","Leise verabschieden."] },
+{ id:"wetterbericht", name:"Wetterbericht", kurz:"Jedes Kind zeigt mit dem Körper, wie das „Wetter“ in ihm heute war.",
+  ablauf:["Alle stehen im Kreis. Die Betreuerin erklärt: Sonne = Arme weit nach oben, Wolke = Arme rund vor dem Bauch, Regen = mit den Fingern nach unten tröpfeln.","Auf „3, 2, 1 – Wetter!“ zeigen alle gleichzeitig ihr Wetter.","2–3 Kinder dürfen kurz erzählen, warum.","Zum Schluss machen alle zusammen die Sonne und rufen „Tschüss!“."] },
+{ id:"ballonatmen", name:"Ballon-Atmen", kurz:"Mit den Armen einen großen Ballon aufpusten – und ganz langsam wieder Luft ablassen.",
+  ablauf:["Alle stehen im Kreis, die Hände liegen vor dem Bauch zusammen.","Beim Einatmen durch die Nase gehen die Arme langsam auseinander – der Ballon wird groß.","Beim Ausatmen durch den Mund „pfffff“ – die Arme kommen langsam zurück.","Dreimal wiederholen, beim letzten Mal ganz leise. Dann flüstern alle „Tschüss“."] },
+{ id:"haendedruck", name:"Stiller Händedruck", kurz:"Ein Händedruck wandert leise durch den Kreis – schafft er es einmal ganz herum?",
+  ablauf:["Alle stehen im Kreis und fassen sich an den Händen. Die Augen dürfen zu sein.","Die Betreuerin drückt die Hand ihres Nachbarn – der gibt den Druck sofort weiter.","Kommt der Druck wieder bei der Betreuerin an, sagt sie leise „Angekommen“.","Noch einmal in die andere Richtung – dann gemeinsam loslassen und verabschieden."] },
+{ id:"sternenhimmel", name:"Sternenhimmel", kurz:"Auf dem Rücken liegen, ganz still werden und einer kurzen Geschichte lauschen.",
+  ablauf:["Alle legen sich im Kreis auf den Rücken, die Köpfe zeigen zur Mitte.","Augen zu. Die Betreuerin erzählt leise: „Über uns ist ein Himmel voller Sterne. Jeder Stern ist etwas Schönes von heute …“","Eine Minute ganz still sein und an etwas Schönes denken.","Langsam strecken, auf die Seite rollen, aufsetzen und leise verabschieden."] },
+{ id:"dirigent", name:"Der Dirigent", kurz:"Ein Kind dirigiert den Kreis: laut, leise, ganz still – und zum Schluss ein großes Finale.",
+  ablauf:["Alle sitzen im Kreis. Ein Kind ist der Dirigent und steht in der Mitte.","Hände hoch = alle trommeln laut auf die Oberschenkel, Hände tief = ganz leise.","Hände zusammen = sofort Stille.","Zum Schluss ein großes Finale mit Klatschen – und alle verbeugen sich."] },
 ];
 
 /* ===================== AG planen ===================== */
 const MAX_KINDER = 60, GROSS = 30, MAX_BETREUER = 12;
-const team = {betreuer: 2};   // gilt für AG-Planer und Parcours gemeinsam   // ab mehr als GROSS Kindern: in 2 Gruppen parallel spielen
+const team = {betreuer: 2, klasse1: (()=>{ try { return localStorage.getItem("klasse1")==="nein" ? "nein" : "ja"; } catch(e){ return "ja"; } })()};   // klasse1: Sind Erstklässler dabei? (ja = Angebote nur für Klasse 2–4 weglassen)
+const klassePasst = x => team.klasse1!=="ja" || x.klassen!=="2–4";
+// team gilt für AG-Planer und Parcours gemeinsam. Ab mehr als GROSS Kindern: in 2 Gruppen parallel spielen
 const gruppeFuerSpiel = () => plan.kinder > GROSS ? Math.ceil(plan.kinder/2) : plan.kinder;
 const plan = {kinder:12, ort:"halle", stimmung:"normal", dauer:45, material:"ja", haupt:"spiele", listen:{}, idx:{}, parcours:[]};
 const mitParcours = () => plan.haupt==="parcours" && plan.ort==="halle";
@@ -7003,7 +7037,8 @@ function passtZurGruppe(sp){
       && (team.betreuer >= 2 || sp.energie <= 2)   // nur 1 Betreuer: nur ruhige, einfache Spiele
       && sp.orte.includes(plan.ort)
       && (plan.material==="ja" || ohneMaterial(sp))
-      && erlaubt(sp);   // Risiko-Übungen nur, wenn freigegeben
+      && erlaubt(sp)    // Risiko-Übungen nur, wenn freigegeben
+      && klassePasst(sp);   // Erstklässler dabei → keine Spiele „ab Klasse 2“
 }
 function mischen(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
@@ -7022,11 +7057,16 @@ function listeFuer(ph, minuten){
   return sortiert(echt).concat(echt.length < 3 ? sortiert(extra) : []);
 }
 
+// Abbau eines Parcours: etwa halb so lange wie der Aufbau (alle helfen), mindestens 5, höchstens 15 Minuten
+const abbauMin = wahl => wahl.length ? Math.max(5, Math.min(15, Math.round(wahl.reduce((a,m)=>a+m.aufbau,0)/2))) : 0;
 function bloecke(){
   const a = AUFBAU[plan.dauer], l = [{key:"warm", ph:"warm", min:a.warm}];
-  if (mitParcours()) l.push({key:"parcours", ph:"haupt", min:a.haupt.reduce((x,y)=>x+y,0), parcours:true});
+  const haupt = a.haupt.reduce((x,y)=>x+y,0);
+  // Beim Parcours geht die zusätzliche Abbauzeit vom Hauptteil ab (Hauptteil bleibt mindestens 10 Min)
+  const extra = mitParcours() ? Math.min(Math.max(0, abbauMin(plan.parcours) - a.raeumen), haupt - 10) : 0;
+  if (mitParcours()) l.push({key:"parcours", ph:"haupt", min:haupt - extra, parcours:true});
   else a.haupt.forEach((m,i)=>l.push({key:"haupt"+i, ph:"haupt", min:m, nr:a.haupt.length>1?i+1:0}));
-  l.push({key:"ritual", ph:"ritual", min:a.ritual}, {key:"raeumen", ph:"raeumen", min:a.raeumen});
+  l.push({key:"ritual", ph:"ritual", min:a.ritual}, {key:"raeumen", ph:"raeumen", min:a.raeumen + extra});
   return l;
 }
 
@@ -7054,13 +7094,20 @@ function auswahl(){
   return res;
 }
 
+// Frage „Klasse 1 dabei?“ – gilt für beide Planer gemeinsam
+function renderKlasse(){
+  const h = [["ja","Ja"],["nein","Nein, ab Klasse 2"]].map(([v,l]) => `<button class="opt ${team.klasse1===v?"on":""}" data-v="${v}">${l}</button>`).join("");
+  document.querySelectorAll(".k1wahl").forEach(el => el.innerHTML = h);
+}
+document.addEventListener("click", e => { const b = e.target.closest(".k1wahl button"); if (!b) return; team.klasse1 = b.dataset.v; try { localStorage.setItem("klasse1", team.klasse1); } catch(err){} renderKlasse(); });
 function renderFragen(){
-  $("#pkinder").value = plan.kinder; $("#pbetreuer").value = team.betreuer;
+  $("#pkinder").value = plan.kinder; $("#pbetreuer").value = team.betreuer; renderKlasse();
   optGruppe("ort", Object.entries(ORTE)); optGruppe("stimmung", STIMMUNG);
   optGruppe("dauer", [[30,"30 Min"],[45,"45 Min"],[60,"60 Min"]]);
   optGruppe("material", [["ja","Ja"],["nein","Nein, ohne"]]);
   optGruppe("haupt", [["spiele","Spiele"],["parcours","Parcours"]]);
   $("#q-haupt").hidden = plan.ort!=="halle";
+  $("#q-haupt-hof").hidden = plan.ort==="halle";
 }
 function optGruppe(key, liste){
   const el = document.querySelector(`[data-p="${key}"]`);
@@ -7068,12 +7115,23 @@ function optGruppe(key, liste){
   el.onclick = e => { const b=e.target.closest("button"); if(!b) return; plan[key] = key==="dauer" ? +b.dataset.v : b.dataset.v; renderFragen(); };
 }
 
+// Material zusammenfassen: gleiche Dinge nur einmal (Ball/Bälle, Seil/Seile …), Zusätze in Klammern gesammelt
+const MAT_EINS = {"Ball":"Bälle","Seil":"Seile","Matte":"Matten","Bank":"Bänke","Reifen":"Reifen","Hütchen":"Hütchen"};
+const matName = x => { const b = x.replace(/ \(.*\)/,"").trim(); return /(^|\s)(Ball|Bälle)$/.test(b) && !/^\d/.test(b) ? "Bälle" : (MAT_EINS[b] || b); };
+function matListe(liste, mitZusatz){
+  const g = new Map();
+  liste.forEach(x => { const n = matName(x), b = x.replace(/ \(.*\)/,"").trim(), z = [(/\((.*)\)/.exec(x)||[])[1]];
+    // „weicher Ball“ → Bälle (weich)
+    if (n==="Bälle" && /\s(Ball|Bälle)$/.test(b)) z.unshift(b.replace(/\s(Ball|Bälle)$/,"").split(/\s+/).map(w=>w.replace(/(er|es|e)$/,"")).join(", "));
+    if (!g.has(n)) g.set(n, new Set()); if (mitZusatz) z.filter(Boolean).forEach(t=>g.get(n).add(t)); });
+  return [...g].map(([n,z]) => z.size ? `${n} (${[...z].join("; ")})` : n);
+}
 const zeitKachel = b => `<div class="t" style="background:${PHASE_FARBE[b.ph]};${b.ph==="warm"?"color:var(--ink)":""}">${b.min} Min<small>${PHASEN[b.ph]}${b.nr?" "+b.nr:""}</small></div>`;
 
 function renderPlan(){
   const wahl = auswahl(), mat = new Set();
   const st = STIMMUNG.find(s=>s[0]===plan.stimmung)[1].replace("­","");
-  $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}`;
+  $("#p-sum").innerHTML = `<b>${plan.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${ORTE[plan.ort]} · ${plan.dauer} Min · ${st}${plan.material==="nein"?" · ohne Material":""}${mitParcours()?" · Parcours":""}${team.klasse1==="ja"?" · mit Klasse 1":" · ab Klasse 2"}`;
   let html = plan.kinder > GROSS ? `<div class="note gross"><b>Große Gruppe:</b> Bei ${plan.kinder} Kindern die Spiele in 2 Gruppen parallel spielen (je ca. ${gruppeFuerSpiel()} Kinder) – ${plan.ort==="halle"?"die Halle":"den Hof"} in zwei Hälften teilen.${mitParcours()?" Der Parcours läuft mit allen gemeinsam.":""}${team.betreuer<4 ? ` <b>Dafür sind 4 Betreuer vorgesehen (2 pro Spiel) – es fehlen ${4-team.betreuer}.</b>` : ""}</div>` : "";
   if (plan.kinder < 3) html += `<div class="note gross"><b>Nur ${plan.kinder} Kinder:</b> Eine Betreuerin spielt einfach mit – dann klappen alle Spiele ab 3.</div>`;
   if (team.betreuer < 2) html += `<div class="note gross"><b>Nur 1 Betreuer:</b> Für ein Spiel sind 2 Betreuer vorgesehen. Deshalb schlägt die App nur ruhige, einfache Spiele vor.</div>`;
@@ -7100,13 +7158,13 @@ function renderPlan(){
     } else {
       const m = [...mat].filter(x=>!/Musik/.test(x));
       html += `<div class="phase">${zeitKachel(b)}<div class="body"><span class="ico">🧺</span><span><h4>Aufräumen</h4>
-        <small>${plan.parcours.length ? "Parcours abbauen – alle Kinder helfen mit. " : ""}${m.length ? "Wegräumen: " + esc(m.map(x=>x.replace(/ \(.*\)/,"")).join(", ")) : (plan.parcours.length ? "" : "Nichts wegzuräumen – Zeit zum Trinken und Umziehen")}</small></span></div></div>`;
+        <small>${plan.parcours.length ? `Parcours abbauen (ca. ${abbauMin(plan.parcours)} Min) – alle Kinder helfen mit. ` : ""}${m.length ? "Wegräumen: " + esc(matListe(m,false).join(", ")) : (plan.parcours.length ? "" : "Nichts wegzuräumen – Zeit zum Trinken und Umziehen")}</small></span></div></div>`;
     }
   }
-  const m = [...mat];
+  const m = matListe([...mat], true);
   const pAufbau = plan.parcours.reduce((a,x)=>a+x.aufbau,0);
   $("#plan").innerHTML = html + `<div class="note"><b>Material:</b> ${m.length ? esc(m.join(", ")) : (plan.parcours.length ? "" : "nichts nötig ✔")}${plan.parcours.length ? `${m.length?" · ":""}${esc(geraetText(pg.s))}${pg.klein.length?", "+esc(pg.klein.join(", ")):""}` : ""}</div>
-    ${plan.parcours.length ? `<div class="note"><b>Parcours aufbauen:</b> ca. ${pAufbau} Min – am besten vor der AG oder gemeinsam mit den Kindern.</div>` : ""}
+    ${plan.parcours.length ? `<div class="note gross"><b>Parcours aufbauen:</b> ca. ${pAufbau} Min – das passt nicht in die AG-Zeit. Bitte <b>vor der AG</b> aufbauen (z. B. in der Pause). Der Abbau (ca. ${abbauMin(plan.parcours)} Min, alle helfen) ist in der Stunde schon eingeplant.</div>` : ""}
     <p class="hint">Tippen öffnet die Karte · ⟳ tauscht einen Block · 🎲 mischt die ganze Stunde neu.</p>`;
   if (typeof panelAktualisieren === "function") panelAktualisieren("ag");
 }
@@ -7162,6 +7220,7 @@ const halleMerken = () => merke("halle", JSON.stringify(halle));
 const geraetText = (g, kurz) => Object.entries(g).map(([k,n]) => `${n} ${n===1?GNAME[k][2]:GNAME[k][1]}`).join(kurz?", ":" · ") || "nur Kleinmaterial";
 const geraetePassen = (m, rest=halle) => Object.entries(m.geraete).every(([k,n]) => (rest[k]||0) >= n);
 const modulPasst = (m, rest=halle) => erlaubt(m) && geraetePassen(m, rest);
+const modulWaehlbar = (m, rest=halle) => modulPasst(m, rest) && klassePasst(m);
 
 /* ---------- Detailkarte eines Moduls ---------- */
 function modulHTML(m){
@@ -7269,6 +7328,40 @@ $("#freigabe-liste").onclick = e => { const b=e.target.closest("button[data-r]")
 $("#freigabe-alle").onclick = () => { RISIKO.forEach(r=>freigabe[r[0]]=true); freigabeMerken(); renderHalle(); renderModule(); renderListe(); };
 $("#freigabe-keine").onclick = () => { RISIKO.forEach(r=>freigabe[r[0]]=false); freigabeMerken(); renderHalle(); renderModule(); renderListe(); };
 
+/* ---------- Einstellungen (Halle + Freigabe) als Code/Link weitergeben ---------- */
+// Format: H<Anzahlen in GERAETE-Reihenfolge, mit Punkt>-F<0/1 je RISIKO-Gruppe>, z. B. H8.5.12…-F1111111
+const einstCode = () => "H" + GERAETE.map(g=>halle[g[0]]||0).join(".") + "-F" + RISIKO.map(r=>freigabe[r[0]]===false?0:1).join("");
+function einstLesen(code){
+  const m = /H([\d.]+)-F([01]+)/i.exec(String(code||"").replace(/\s+/g,"")); if (!m) return null;
+  const z = m[1].split(".").map(Number); if (z.length !== GERAETE.length || z.some(n=>isNaN(n)||n<0||n>60)) return null;
+  const f = m[2].split(""); if (f.length !== RISIKO.length) return null;
+  return {h:Object.fromEntries(GERAETE.map((g,i)=>[g[0],z[i]])), f:Object.fromEntries(RISIKO.map((r,i)=>[r[0],f[i]==="1"]))};
+}
+function einstUebernehmen(e){
+  Object.assign(halle, e.h); Object.assign(freigabe, e.f); halleMerken(); freigabeMerken();
+  renderHalle(); renderModule(); renderListe();
+  const gesperrt = RISIKO.filter(r=>freigabe[r[0]]===false).map(r=>r[1]);
+  $("#einst-status").textContent = `Übernommen ✔ ${MODULE.filter(m=>modulPasst(m)).length} von ${MODULE.length} Modulen möglich.` + (gesperrt.length ? ` Gesperrt: ${gesperrt.join(", ")}.` : " Alles freigegeben.");
+}
+function einstVorschlag(e){   // Code aus einem Link: erst fragen, dann übernehmen
+  const box = $("#einst-import"), gesperrt = RISIKO.filter(r=>e.f[r[0]]===false).map(r=>r[1]);
+  box.innerHTML = `<b>Eine Kollegin hat euch ihre Einstellungen geschickt.</b> ${esc(GERAETE.filter(g=>!g[4]&&e.h[g[0]]).map(g=>`${e.h[g[0]]} ${e.h[g[0]]===1?g[2]:g[1]}`).join(" · "))}${gesperrt.length?` · Gesperrt: ${esc(gesperrt.join(", "))}`:""}
+    <div class="row2" style="margin-top:8px"><button class="ghost" id="einst-nein">Nein, danke</button><button class="bigbtn" id="einst-ja">Übernehmen</button></div>`;
+  box.hidden = false;
+  $("#einst-ja").onclick = () => { einstUebernehmen(e); box.hidden = true; };
+  $("#einst-nein").onclick = () => { box.hidden = true; };
+}
+$("#einst-teilen").onclick = async () => {
+  const code = einstCode(), url = location.href.split("#")[0] + "#einstellungen=" + code;
+  const text = `Bewegungsspiele-App: Geräte unserer Halle und Freigaben.\nLink antippen – oder in der App unter Parcours → Unsere Halle diesen Code einfügen:\n${code}\n${url}`;
+  try { if (navigator.share){ await navigator.share({text}); $("#einst-status").textContent = "Geteilt ✔"; return; } } catch(err){ if (err && err.name==="AbortError") return; }
+  let kopiert=false; try { await navigator.clipboard.writeText(text); kopiert=true; } catch(err){}
+  $("#einst-status").innerHTML = (kopiert ? "Text kopiert – einfach in WhatsApp einfügen. " : `Code: <b>${esc(code)}</b> `) + `<a href="https://wa.me/?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">In WhatsApp öffnen</a>`;
+};
+$("#einst-los").onclick = () => { const e = einstLesen($("#einst-code").value);
+  if (!e){ $("#einst-status").textContent = "Dieser Code passt nicht. Bitte den ganzen Code einfügen (er beginnt mit H und enthält -F)."; return; }
+  einstUebernehmen(e); $("#einst-code").value = ""; };
+
 /* ---------- Parcours zusammenstellen ---------- */
 const pz = {kinder:12, fokus:"mix", stationen:0, wahl:[], zusatzIdx:0};
 const maxStationen = () => Math.max(1, Math.min(8, team.betreuer));
@@ -7290,7 +7383,7 @@ const PRO_STATION = 6;
 function zusatzGruppe(kinder, wahl, idx=0){
   const n = kinder - wahl.length*PRO_STATION; if (!wahl.length || n<=0) return null;
   if (n < 3) return {n, sp:null, anzahl:0, helfer:true};
-  const l = SPIELE.filter(sp => sp.orte.includes("halle") && sp.energie<=2 && sp.kinder[0]<=n && sp.kinder[1]>=n
+  const l = SPIELE.filter(sp => sp.orte.includes("halle") && sp.energie<=2 && sp.kinder[0]<=n && sp.kinder[1]>=n && erlaubt(sp) && klassePasst(sp)
     && !sp.material.some(m=>/Bank|Bänke|Matte|Kasten|Kästen/.test(m))).sort((a,b)=>a.energie-b.energie || a.name.localeCompare(b.name,"de"));
   return {n, sp: l.length ? l[idx % l.length] : null, anzahl: l.length};
 }
@@ -7302,7 +7395,7 @@ function parcoursVorschlag(kinder, fokus, anzahl){
   const pool = mischen(MODULE);
   for (let i=0;i<n;i++){
     const wert = m => (fokus!=="mix" && m.kat===fokus ? -2 : 0) + (kats[m.kat]||0)*(fokus!=="mix"&&m.kat===fokus?0.9:1.5) + (m.wand && wahl.filter(x=>x.wand).length>=2 ? 3 : 0);
-    const kand = pool.filter(m => !wahl.includes(m) && modulPasst(m, rest)).sort((a,b)=>wert(a)-wert(b));
+    const kand = pool.filter(m => !wahl.includes(m) && modulWaehlbar(m, rest)).sort((a,b)=>wert(a)-wert(b));
     if (!kand.length) break;
     const m = kand[0]; wahl.push(m); kats[m.kat]=(kats[m.kat]||0)+1;
     Object.entries(m.geraete).forEach(([k,c])=>rest[k]-=c);
@@ -7311,7 +7404,7 @@ function parcoursVorschlag(kinder, fokus, anzahl){
 }
 function stationTauschen(i){
   const rest = restGeraete(i), jetzt = pz.wahl[i];
-  const kand = MODULE.filter(m => !pz.wahl.includes(m) && modulPasst(m, rest));
+  const kand = MODULE.filter(m => !pz.wahl.includes(m) && modulWaehlbar(m, rest));
   if (!kand.length) return;
   const gleich = kand.filter(m=>m.kat===jetzt.kat), l = gleich.length && Math.random()<.5 ? gleich : kand;
   pz.wahl[i] = l[Math.floor(Math.random()*l.length)]; pz.wahl = ordneWand(pz.wahl);
@@ -7358,9 +7451,11 @@ function hallenplanSVG(wahl){
 function parcoursHTML(wahl, kinder, fuerDruck, zIdx=0){
   const {s, klein} = geraeteSumme(wahl);
   const aufbau = wahl.reduce((a,m)=>a+m.aufbau,0), proSt = Math.min(PRO_STATION, Math.max(1, Math.round(kinder/wahl.length))), z = zusatzGruppe(kinder, wahl, zIdx);
-  const ablauf = kinder <= wahl.length*2
+  const ablauf = wahl.length===1
+    ? "Eine Station: Die Kinder üben nacheinander. Wer fertig ist, stellt sich hinten wieder an – mit Abstand, nicht drängeln."
+    : kinder <= wahl.length*2
     ? "Rundlauf: Alle starten nacheinander an Station 1 und laufen den Parcours immer wieder ab – mit Abstand, nicht überholen."
-    : `Stationsbetrieb: Je ${proSt} Kinder pro Station (höchstens ${PRO_STATION}). Auf ein Signal (Pfiff oder Musik aus) geht jede Gruppe im Uhrzeigersinn eine Station weiter – etwa alle 3–4 Minuten.` + (z && !z.helfer ? ` Die ${z.n} übrigen Kinder spielen parallel am Rand; nach jeder Runde tauschen sie mit einer Stationsgruppe.` : "");
+    : `Stationsbetrieb: Je ${proSt} Kinder pro Station (höchstens ${PRO_STATION}). Auf ein Signal (zweimal klatschen oder Musik aus) geht jede Gruppe im Uhrzeigersinn eine Station weiter – etwa alle 3–4 Minuten.` + (z && !z.helfer ? ` Die ${z.n} übrigen Kinder spielen parallel am Rand; nach jeder Runde tauschen sie mit einer Stationsgruppe.` : "");
   return `
     <div class="hplan-box">${hallenplanSVG(wahl)}</div>
     <div class="stationen">${wahl.map((m,i)=>`<div class="phase"><div class="t" style="background:${FARBEN[m.farbe]}">${i+1}<small>Station</small></div>
@@ -7373,11 +7468,11 @@ function parcoursHTML(wahl, kinder, fuerDruck, zIdx=0){
         : `<span><h4>Ruhiges Spiel am Rand</h4><small>Für diese Gruppengröße bitte ein Spiel aus „Alle Spiele“ wählen.</small></span>`}</div></div>` : ""}</div>
     <div class="note"><b>Geräte:</b> ${esc(geraetText(s))}${klein.length?` · ${esc(klein.join(", "))}`:""}</div>
     ${betreuerHinweis(kinder, wahl, zIdx)}
-    <div class="note"><b>Aufbau:</b> ca. ${aufbau} Min – mit Kinderhilfe geht's schneller. Jede Station vor dem Start selbst prüfen.</div>
+    <div class="note"><b>Aufbau:</b> ca. ${aufbau} Min – mit Kinderhilfe geht's schneller. Jede Station vor dem Start selbst prüfen. <b>Abbau:</b> ca. ${abbauMin(wahl)} Min – dafür Zeit am Ende einplanen.</div>
     <div class="note"><b>So läuft's:</b> ${esc(ablauf)}</div>`;
 }
 function renderParcours(){
-  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${pz.wahl.length} Station${pz.wahl.length===1?"":"en"}${(()=>{ const z=zusatzGruppe(pz.kinder,pz.wahl); return z ? (z.helfer ? ` + ${z.n} Stationschef${z.n>1?"s":""}` : ` + ${z.n} im Zusatzspiel`) : ""; })()}${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}`;
+  $("#pz-sum").innerHTML = `<b>${pz.kinder} Kinder</b> · ${team.betreuer} Betreuer · ${pz.wahl.length} Station${pz.wahl.length===1?"":"en"}${(()=>{ const z=zusatzGruppe(pz.kinder,pz.wahl); return z ? (z.helfer ? ` + ${z.n} Stationschef${z.n>1?"s":""}` : ` + ${z.n} im Zusatzspiel`) : ""; })()}${pz.fokus!=="mix"?" · Schwerpunkt "+esc(pz.fokus):""}${team.klasse1==="ja"?" · mit Klasse 1":" · ab Klasse 2"}`;
   $("#pz-anz").textContent = pz.wahl.length;
   $("#pz-mehr").disabled = pz.wahl.length >= maxStationen(); $("#pz-weniger").disabled = pz.wahl.length <= 1;
   $("#pz-plan").innerHTML = pz.wahl.length ? parcoursHTML(pz.wahl, pz.kinder, false, pz.zusatzIdx)
@@ -7385,7 +7480,7 @@ function renderParcours(){
   if (typeof panelAktualisieren === "function") panelAktualisieren("pz");
 }
 function renderPzFragen(){
-  $("#pz-kinder").value = pz.kinder; $("#pz-betreuer").value = team.betreuer; renderHalleKurz();
+  $("#pz-kinder").value = pz.kinder; $("#pz-betreuer").value = team.betreuer; renderHalleKurz(); renderKlasse();
   const f = [["mix","Bunt gemischt"], ...Object.keys(PKAT).map(k=>[k,k])];
   $("#pz-fokus").innerHTML = f.map(([v,l]) => `<button class="opt ${pz.fokus===v?"on":""}" data-v="${esc(v)}">${esc(l)}</button>`).join("");
 }
@@ -7396,7 +7491,7 @@ $("#pz-los").onclick = () => { if (typeof QUELLEN !== "undefined") QUELLEN.pz.we
 $("#pz-mischen").onclick = () => { pz.zusatzIdx++; pz.wahl=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length); renderParcours(); };
 $("#pz-aendern").onclick = () => { $("#pz-ergebnis").hidden=true; $("#pz-fragen").hidden=false; window.scrollTo(0,0); };
 $("#pz-weniger").onclick = () => { if (pz.wahl.length>1){ pz.wahl.pop(); pz.wahl=ordneWand(pz.wahl); renderParcours(); } };
-$("#pz-mehr").onclick = () => { if (pz.wahl.length >= maxStationen()) return; const w=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length+1); if (w.length>pz.wahl.length){ const neu=w.find(m=>!pz.wahl.includes(m)&&modulPasst(m,restGeraete(-1))); if(neu){ pz.wahl.push(neu); pz.wahl=ordneWand(pz.wahl); } renderParcours(); } };
+$("#pz-mehr").onclick = () => { if (pz.wahl.length >= maxStationen()) return; const w=parcoursVorschlag(pz.kinder,pz.fokus,pz.wahl.length+1); if (w.length>pz.wahl.length){ const neu=w.find(m=>!pz.wahl.includes(m)&&modulWaehlbar(m,restGeraete(-1))); if(neu){ pz.wahl.push(neu); pz.wahl=ordneWand(pz.wahl); } renderParcours(); } };
 $("#pz-plan").onclick = e => {
   const s=e.target.closest(".swap"); if (s){ if (s.dataset.z) pz.zusatzIdx++; else stationTauschen(+s.dataset.i); renderParcours(); return; }
   const o=e.target.closest(".open"); if (o) zeige(o.dataset.id);
@@ -7478,8 +7573,8 @@ function einheitAG(){
   if (plan.kinder < 3) h.push("Nur 2 Kinder: eine Betreuerin spielt mit");
   if (team.betreuer < 2) h.push("Nur 1 Betreuer: nur ruhige, einfache Spiele");
   if (nSt){ const bb = betreuerBedarf(plan.kinder, plan.parcours, plan.zusatzIdx||0); if (bb.fehlen) h.push(`Parcours: es fehlen ${bb.fehlen} Betreuer`); }
-  const mat = new Set(); bl.forEach(e=>{ if (e.spiel) SP(e.spiel).material.forEach(m=>{ if(!/Musik/.test(m)) mat.add(m.replace(/ \(.*\)/,"")); }); });
-  const material = [[...mat].join(", "), nSt ? geraetText(geraeteSumme(plan.parcours).s) : ""].filter(Boolean).join(" · ") || "nichts nötig";
+  const mat = new Set(); bl.forEach(e=>{ if (e.spiel) SP(e.spiel).material.forEach(m=>{ if(!/Musik/.test(m)) mat.add(m); }); });
+  const material = [matListe([...mat],false).join(", "), nSt ? geraetText(geraeteSumme(plan.parcours).s) : ""].filter(Boolean).join(" · ") || "nichts nötig";
   return {art:"ag", titel:q.titel||"AG-Stunde", beginn:zuMin(q.beginn), kinder:plan.kinder, ort:plan.ort, nSt, wer:{...q.wer},
     hinweise:h, material, aufbau: plan.parcours.reduce((a,m)=>a+m.aufbau,0), bloecke:bl};
 }
@@ -7592,7 +7687,8 @@ function einheitSeiten(E){
         ms.forEach((m,i)=>a.absatz(`${i+1}  ${m.name} (${m.kat}) – ${werText(E, "st"+i, 1)}`, 30, false, INK, 2));
         if (b.zusatz && !b.zusatz.helfer) a.absatz(`+ ${b.zusatz.n} Kinder: ${b.zusatz.spiel?SP(b.zusatz.spiel).name:"ruhiges Spiel am Rand"} – ${werText(E,"zusatz",2)}`, 30, true, FARBEN.lila, 2);
         if (b.zusatz && b.zusatz.helfer) a.absatz(`+ ${b.zusatz.n} Stationschef${b.zusatz.n>1?"s":""}: helfen an einer Station mit`, 28, false, GRAU, 2);
-        a.absatz(`Wechsel alle 3–4 Minuten auf Signal, im Uhrzeigersinn. Höchstens ${PRO_STATION} Kinder pro Station.`, 28, false, GRAU, 3);
+        a.absatz(ms.length===1 ? `Eine Station: nacheinander üben, hinten wieder anstellen. Höchstens ${PRO_STATION} Kinder.` : `Wechsel alle 3–4 Minuten auf Signal, im Uhrzeigersinn. Höchstens ${PRO_STATION} Kinder pro Station.`, 28, false, GRAU, 3);
+        a.absatz(`Abbau am Ende: ca. ${abbauMin(ms)} Min – alle helfen.`, 26, false, INK, 2);
         a.absatz(`Aufbau vorher: ca. ${ms.reduce((x,m)=>x+m.aufbau,0)} Min · Geräte: ${geraetText(geraeteSumme(ms).s)}`, 26, false, INK, 4); }));
       ms.forEach((m,i) => seiten.push(seiteSVG(FARBEN[m.farbe], m.farbe==="gelb", `Station ${i+1} · ${m.kat} · 👤 ${werText(E,"st"+i,1)}`, m.name, a => {
         a.bild(feldSVG(m,false)); a.absatz(m.kurz, 30, false, GRAU, 3); a.absatz("Geräte: "+geraetText(m.geraete), 28, true, INK, 2);
@@ -7876,7 +7972,7 @@ const HILFE = [
      `Nicht weiter? Oben rechts auf ${D.weiss("❓ Hilfe")} tippen.`],
    tour:[ T(".navtabs", "Ganz oben in Orange sind die Reiter. Ein Reiter ist wie eine Seite in einem Ordner. Man tippt drauf, dann kommt diese Seite.", {vorher:agFragen}),
      T('.navtabs [data-view="plan"]', "„AG planen“: Die App stellt eine ganze Stunde für die AG zusammen."),
-     T('.navtabs [data-view="spiele"]', "„Alle Spiele“: Hier sind alle 100 Spiele mit Anleitung."),
+     T('.navtabs [data-view="spiele"]', "„Alle Spiele“: Hier sind alle Spiele mit Anleitung."),
      T('.navtabs [data-view="parcours"]', "„Parcours“: Stationen mit Bänken, Kästen und Matten planen."),
      T('.navtabs [data-view="tag"]', "„Tag“: Hier sammelt man alles, was heute ansteht."),
      T('.navtabs [data-view="idee"]', "„＋ Idee“: Hier kann man eine eigene Spielidee schicken."),
@@ -7887,6 +7983,7 @@ const HILFE = [
    lesen:[`Oben auf ${D.tab("AG planen")} tippen.`,
      "Wie viele Kinder? Mit − und + ändern. Oder auf die Zahl tippen, dann kommt die Tastatur, und die Zahl eintippen.",
      "Genauso: Wie viele Betreuer sind dabei?",
+     "Sind Kinder aus Klasse 1 dabei? Dann „Ja“ antippen – die App lässt Spiele weg, die erst ab Klasse 2 passen.",
      "Bei den weiteren Fragen jeweils eine Antwort antippen: Wo seid ihr? Wie ist die Stimmung? Wie lange dauert die AG? Habt ihr Material? Die gewählte Antwort hat einen blauen Rahmen.",
      "In der Turnhalle kommt noch: Spiele oder Parcours im Hauptteil?",
      `Ganz unten auf ${D.blau("Stunde zusammenstellen →")} tippen.`,
@@ -7898,6 +7995,7 @@ const HILFE = [
      T("#pkinder", "Erste Frage: Wie viele Kinder sind da? Mit − wird es weniger, mit + mehr.", {vorher:agFragen}),
      T("#pkinder", "Du kannst auch auf die Zahl tippen. Dann kommt unten die Tastatur. Zahl eintippen, dann auf „Fertig“ oder „OK“ tippen."),
      T("#pbetreuer", "Zweite Frage: Wie viele Erwachsene sind dabei? Das geht genauso."),
+     T("#p-klasse", "Sind Kinder aus Klasse 1 dabei? Dann „Ja“ – die App lässt Spiele weg, die erst ab Klasse 2 passen."),
      T('[data-p="ort"]', "Wo seid ihr – Turnhalle oder Schulhof? Einfach antippen. Die gewählte Antwort hat einen blauen Rahmen."),
      T('[data-p="stimmung"]', "Wie sind die Kinder heute drauf? Wild – normal – sollen ruhiger werden. Eins antippen."),
      T('[data-p="dauer"]', "Wie lange dauert die AG? 30, 45 oder 60 Minuten."),
@@ -7944,7 +8042,7 @@ const HILFE = [
      TIPP("#zurueck", "Fertig gelesen? Tippe oben links auf „Zurück“.") ]},
  { id:"parcours", icon:"🧗", titel:"Einen Parcours planen", kurz:"Stationen aus Turngeräten, mit Plan für die Halle.",
    lesen:[`Oben auf ${D.tab("Parcours")} tippen. Darunter muss ${D.weiss("Planen")} dunkel sein.`,
-     "Wie viele Kinder? Wie viele Betreuer? Pro Station braucht es einen Erwachsenen.",
+     "Wie viele Kinder? Wie viele Betreuer? Pro Station braucht es einen Erwachsenen. Sind Erstklässler dabei?",
      "Einen Schwerpunkt antippen – oder einfach „Bunt gemischt“.",
      "Im Kasten „Eure Halle“ steht, welche Geräte ihr habt. Die App nimmt nur Stationen, die ihr damit aufbauen könnt.",
      `Auf ${D.blau("Parcours zusammenstellen →")} tippen.`,
@@ -7956,6 +8054,7 @@ const HILFE = [
      T("#pz-tabs", "Der Parcours hat drei Teile: Planen, Alle Module und Unsere Halle. Jetzt sind wir bei „Planen“.", {vorher:pzFragen}),
      T("#pz-kinder", "Wie viele Kinder sind da? Mit − und + ändern oder auf die Zahl tippen."),
      T("#pz-betreuer", "Wie viele Erwachsene? Pro Station braucht es einen Erwachsenen."),
+     T("#pz-klasse", "Sind Erstklässler dabei? Dann „Ja“ – Stationen erst ab Klasse 2 kommen dann nicht."),
      T("#pz-fokus", "Was sollen die Kinder vor allem üben? Eins antippen. Oder „Bunt gemischt“."),
      T("#pz-hallekurz", "Hier steht, welche Geräte eure Halle hat. Die App nimmt nur Stationen, die ihr damit aufbauen könnt. Ändern: auf „Geräte ändern“ tippen."),
      TIPP("#pz-los", "Tippe jetzt auf „Parcours zusammenstellen“."),
@@ -7969,7 +8068,7 @@ const HILFE = [
      T("#sheet .steps", "Hier steht der Aufbau Schritt für Schritt zum Lesen."),
      T("#sheet .boxes", "Darunter: Aufgaben in leicht, mittel und schwer – und rot, worauf man achten muss."),
      TIPP("#zurueck", "Tippe oben links auf „Zurück“."),
-     T("#pz-plan .note", "Unten steht: welche Geräte ihr braucht, wie viele Betreuer und wie lange der Aufbau dauert.", {vorher:detailZu}),
+     T("#pz-plan .note", "Unten steht: welche Geräte ihr braucht, wie viele Betreuer und wie lange Auf- und Abbau dauern.", {vorher:detailZu}),
      T("#pz-druck", "Den ganzen Parcours kann man hier als Karte ansehen oder ausdrucken."),
      T("#pz-teilen-auf", "Mit „Teilen“ geht er ans Team, mit „Zum Tagesplan“ in den Tagesplan.") ]},
  { id:"halle", icon:"🏟", titel:"Geräte der Halle eintragen", kurz:"Einmal eintragen, was es in eurer Halle gibt.",
@@ -7978,7 +8077,9 @@ const HILFE = [
      "Dann bei jedem Gerät, das ihr habt, die Zahl ändern: mit + hochzählen, oder auf die Zahl tippen und eintippen.",
      "„in 5 Modulen“ heißt: So viele Stationen brauchen dieses Gerät.",
      "Unten stehen die kleinen Sachen: Reifen, Hütchen, Seile, Bälle.",
-     "Ganz unten steht, wie viele Stationen ihr aufbauen könnt. Das Handy merkt sich alles – man macht das nur einmal."],
+     "Darunter steht, wie viele Stationen ihr aufbauen könnt. Das Handy merkt sich alles – man macht das nur einmal.",
+     "<b>Freigabe durch die Schule:</b> Übungen, die die Schule nicht erlaubt (z. B. Minitrampolin), auf „gesperrt“ tippen. Dann schlägt die App sie nicht mehr vor.",
+     `<b>An Kolleginnen schicken:</b> Ganz unten auf ${D.blau("📤 An Kolleginnen schicken")} tippen und per WhatsApp senden. Die Kollegin tippt den Link an – oder fügt den Code in der App unter „Unsere Halle“ ein und tippt „Übernehmen“.`],
    tour:[ TIPP('.navtabs [data-view="parcours"]', "Tippe oben auf „Parcours“.", {vorher:()=>{ detailZu(); geheZuReiter("plan"); }}),
      TIPP('#pz-tabs [data-t="halle"]', "Tippe jetzt auf „Unsere Halle“."),
      T("#halle-null", "Tipp: Erst hier auf „Alles auf 0“ tippen. Dann zählt man nur, was wirklich da ist.", {vorher:()=>pzReiter("halle")}),
@@ -7987,7 +8088,8 @@ const HILFE = [
      T("#halle-liste .hst", "Mit + wird die Zahl größer, mit − kleiner. Oder auf die Zahl tippen, eintippen und auf „Fertig“ tippen."),
      T(()=>document.querySelectorAll("#halle-liste .hkopf")[1], "Weiter unten kommen die kleinen Sachen: Reifen, Hütchen, Seile, Bälle."),
      T("#halle-info", "Hier steht, wie viele Stationen ihr damit aufbauen könnt. Das Handy merkt sich alles."),
-     T("#freigabe-box", "Ganz unten: Freigabe durch die Schule. Was die Schule nicht erlaubt, auf „gesperrt“ tippen – dann schlägt die App es nicht mehr vor. Fertig!") ]},
+     T("#freigabe-box", "Darunter: Freigabe durch die Schule. Was die Schule nicht erlaubt, auf „gesperrt“ tippen – dann schlägt die App es nicht mehr vor."),
+     T("#einst-teilen", "Ganz unten: Hier schickst du alles an die Kolleginnen – dann müssen sie nichts selbst eintragen. Fertig!") ]},
  { id:"teilen", icon:"📤", titel:"Plan ans Team schicken", kurz:"Als Bild per WhatsApp oder als PDF zum Drucken.",
    lesen:["Erst eine AG-Stunde oder einen Parcours planen.", `Unter dem Plan auf ${D.gruen("📤 Teilen")} tippen.`,
      "Einen Titel eintippen, zum Beispiel „Bewegungs-AG Klasse 2“. Datum und Uhrzeit prüfen.",
@@ -8050,7 +8152,13 @@ const HILFE = [
    lesen:["<b>iPhone:</b> Den Link in <b>Safari</b> öffnen (der blaue Kompass). Unten in der Mitte auf das Teilen-Zeichen tippen (Viereck mit Pfeil nach oben). Nach oben wischen und „Zum Home-Bildschirm“ antippen. Oben rechts „Hinzufügen“ tippen.",
      "<b>Android:</b> Den Link in <b>Chrome</b> öffnen (der bunte Kreis). Oben rechts auf die drei Punkte ⋮ tippen. „App installieren“ oder „Zum Startbildschirm hinzufügen“ antippen. Dann „Installieren“ tippen.",
      "Jetzt liegt auf dem Startbildschirm ein oranges Symbol „Bewegungsspiele“. Das antippen öffnet die App.",
-     "Einmal mit Internet geöffnet, geht die App danach auch ohne Internet."], tour:null }
+     "Einmal mit Internet geöffnet, geht die App danach auch ohne Internet."], tour:null },
+ { id:"datenschutz", icon:"🔒", titel:"Datenschutz: Was wird gespeichert?", kurz:"Kurz erklärt – ohne Fachchinesisch.",
+   lesen:["Alles, was du einträgst (Geräte, Freigaben, Namen im Tagesplan, Titel), bleibt <b>nur auf deinem Handy</b>. Es wird nirgendwohin geschickt.",
+     "Namen von Kindern gehören nicht in die App. Für Betreuerinnen reichen Vornamen oder Kürzel.",
+     "Wenn du einen Plan teilst, entscheidest du selbst, wem du das Bild oder PDF schickst.",
+     "Die App zählt anonym, wie oft sie geöffnet und benutzt wird (Dienst „GoatCounter“, ohne Cookies, ohne Namen). So sehen wir, ob sie gebraucht wird.",
+     "Löschst du die Browserdaten oder bekommst ein neues Handy, sind deine Einträge weg. Tipp: Hallen-Einstellungen mit „An Kolleginnen schicken“ auch an dich selbst senden."], tour:null }
 ];
 
 function renderHilfe(){
@@ -8145,7 +8253,7 @@ document.querySelectorAll(".navtabs button").forEach(b => b.onclick = () => {
 $("#zufall").style.display = "none";
 
 $("#subtitle").textContent = `AG-Planer · ${SPIELE.length} Spiele · Klasse 1–4`;
-$("#version").textContent = VERSION;
+$("#version").textContent = `${VERSION} · ${SPIELE.length} Spiele · ${MODULE.length} Parcours-Module · ${RITUALE.length} Rituale`;
 renderListe(); renderFragen();
 
 /* ===================== Spiel vorschlagen ===================== */
@@ -8176,6 +8284,16 @@ $("#i-teilen").onclick = async () => {
   $("#i-status").innerHTML = (kopiert ? "Text kopiert – einfach in WhatsApp einfügen. " : "") +
     `<a href="https://wa.me/?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Direkt in WhatsApp öffnen</a>`;
 };
+
+/* ===================== Einstellungen aus einem Link ===================== */
+(function(){
+  const m = /einstellungen=([^&]+)/.exec(location.hash); if (!m) return;
+  const e = einstLesen(decodeURIComponent(m[1]));
+  try { history.replaceState(null, "", location.href.split("#")[0]); } catch(err){}
+  if (!e) return;
+  geheZuReiter("parcours"); const b = document.querySelector('#pz-tabs button[data-t="halle"]'); if (b) b.click();
+  einstVorschlag(e); setTimeout(()=>$("#einst-box").scrollIntoView({block:"start"}), 300);
+})();
 
 /* ===================== App-Installation & Offline ===================== */
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {

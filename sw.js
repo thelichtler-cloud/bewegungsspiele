@@ -1,10 +1,13 @@
 /* Offline-Speicher für die Bewegungsspiele-App.
-   WICHTIG: Bei jedem Update die Versionsnummer unten erhöhen. */
-const VERSION = "bewegung-v2.3";
-const DATEIEN = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
+   WICHTIG: Bei jedem Update die Versionsnummer unten erhöhen (gleiche Nummer wie in index.html). */
+const VERSION = "bewegung-v2.5";
+const PFLICHT = ["./", "./index.html"];   // ohne diese geht offline nichts
+const EXTRA = ["./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];   // fehlt eine, geht es trotzdem
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(DATEIEN)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION)
+    .then(c => c.addAll(PFLICHT).then(() => Promise.allSettled(EXTRA.map(d => c.add(d)))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", e => {
